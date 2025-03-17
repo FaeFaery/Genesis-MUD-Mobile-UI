@@ -13,14 +13,22 @@ function injectMinifiedHTML() {
 function positionPopupNav() {
     const popupNav = document.getElementById("popupnav-container");
     const mudOutput = document.getElementById("mudoutput");
-
+    const mobileNav = document.getElementById("mobile-nav");
+    
     if (!popupNav || !mudOutput) return;
 
     const mudRect = mudOutput.getBoundingClientRect();
 
-    popupNav.style.position = "absolute"; // Ensure absolute positioning
     popupNav.style.top = `${mudRect.top}px`;
     popupNav.style.left = `${mudRect.left}px`;
+    popupNav.style.top = `${mudRect.top}px`;
+    mobileNav.style.top = `${mudRect.top}px`;
+    mobileNav.style.left = `${mudRect.left}px`;
+    mobileNav.style.width = `${target.offsetWidth*0.75}px`;
+    mobileNav.style.height = `${target.offsetHeight*0.20}px`;
+    window.mapCanvas.height = target.offsetHeight*0.20*2;
+    window.mapCanvas.width = target.offsetWidth*0.75*2;
+    window.zoomSlider.value = 150;
 }
 
 injectMinifiedCSS();
@@ -57,11 +65,6 @@ window.magicMapElement = document.getElementById('magicmap');
 window.zoomSlider = document.getElementById('zoom-slider');
 window.zoomInBtn = document.getElementById('zoom-in');
 window.zoomOutBtn = document.getElementById('zoom-out');
-
-// Initialize canvas
-window.mapCanvas.height = 600;
-window.mapCanvas.width = 600;
-window.zoomSlider.value = 100;
 
 // Trick source code into thinking sidebar is visible hehe
 const originalIs = $.fn.is;
