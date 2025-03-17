@@ -27,7 +27,6 @@ function positionPopupNav() {
 }
 
 injectMinifiedCSS();
-positionPopupNav();
 injectMinifiedHTML().then(() => {
     // Cache DOM elements
     window.mapCanvas = document.getElementById('magicmap-canvas');
@@ -142,7 +141,7 @@ injectMinifiedHTML().then(() => {
         window.cameraOffset.y = Math.max(-window.maxOffsetY, Math.min(window.maxOffsetY, newY));
     }
 
-    function centerPlayer() {
+    window.centerPlayer = function () {
         window.cameraOffset.x = -window.playerCoords.x + (window.mapCanvas.width / (2 * window.cameraZoom));
         window.cameraOffset.y = -window.playerCoords.y + (window.mapCanvas.height / (2 * window.cameraZoom));
         window.requestRedraw();
@@ -181,6 +180,7 @@ injectMinifiedHTML().then(() => {
         }
 
         window.needsRedraw = false;
+        window.storedMap = window.magicMapElement.innerHTML;
         const contents = window.getMapContents();
 
         // Clear canvas
@@ -203,12 +203,16 @@ injectMinifiedHTML().then(() => {
     }
 
     window.drawMapContents = function (contents) {
+        window.isPlayerSeen = false;
         window.mapContext.fillStyle = "white";
 
         for (let i = 0; i < contents.length; i++) {
             if (contents[i] !== 'X') {
                 window.mapContext.fillText(contents[i], 0, 21 * (i + 1));
             } else {
+                // Handle when there is no highlight of player position
+                window.isPlayerSeen = true;
+              
                 // Handle player position (red X)
                 const prevLineWidth = window.mapContext.measureText(contents[i - 1]).width;
 
@@ -231,13 +235,14 @@ injectMinifiedHTML().then(() => {
                 contents.splice(i, 2);
                 i--;
             }
-
+          
+            $(".center-icon").toggle(window.isPlayerSeen);
             window.drawingEnd = 21 * (i + 1);
         }
     }
 
     // UI toggle functions
-    function showMap() {
+    window.showMap = function () {
         const navButtons = document.getElementById("popupnav-container");
         const map = document.querySelector(".popup-map");
 
@@ -251,7 +256,7 @@ injectMinifiedHTML().then(() => {
         window.requestRedraw();
     }
 
-    function closeMap() {
+    window.closeMap = function () {
         const navButtons = document.getElementById("popupnav-container");
         const map = document.querySelector(".popup-map");
         const chatVisible = document.querySelector(".popup-chat")?.style.display === "block";
@@ -268,7 +273,7 @@ injectMinifiedHTML().then(() => {
     }
 
     // Call the function when chat is opened
-    function showChat() {
+    window.showChat = function () {
         const navButtons = document.getElementById("popupnav-container");
         const chat = document.querySelector(".popup-chat");
 
@@ -288,7 +293,7 @@ injectMinifiedHTML().then(() => {
         if (chat) chat.style.display = "block";
     }
 
-    function closeChat() {
+    window.closeChat = function () {
         const navButtons = document.getElementById("popupnav-container");
         const chat = document.querySelector(".popup-chat");
         const mapVisible = document.querySelector(".popup-map")?.style.display === "block";
@@ -422,22 +427,23 @@ injectMinifiedHTML().then(() => {
         }
     }
 
-    document.querySelector(".chat-content").addEventListener("scroll", (event) => {
+    window.chatScroll = function () {
         const scrollButton = document.getElementById("scroll-to-bottom");
         const newMsgDivider = document.querySelector(".new-message-divider");
-        const chatContent = event.target;
+        const chatContent = document.querySelector(".chat-content");
         const justOpened = chatContent.classList.contains("justOpened");
         const atBottom = chatContent.scrollHeight - chatContent.scrollTop <= chatContent.clientHeight + 10;
         if (scrollButton && atBottom) scrollButton.remove();
         if (newMsgDivider && atBottom && !justOpened) newMsgDivider.remove();
-    });
+    }
 
     // Chat notifications
-    window.setupChatObserver = function () {
+    window.setupSidebarObserver = function () {
         const communicationElement = document.getElementById('communication');
-        if (!communicationElement) return;
+        const mapElement = document.getElementById('map');
+        const sidebarElement = document.getElementById('sidebar');
 
-        const chatObserver = new MutationObserver(function(mutations) {
+        const sidebarObserver = new MutationObserver(function(mutations) {
             mutations.forEach(function(mutation) {
                 if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
                     const chatPopupVisible = document.querySelector(".popup-chat")?.style.display === 'block';
@@ -450,13 +456,15 @@ injectMinifiedHTML().then(() => {
                         chatContentElement.innerHTML = communicationElement.innerHTML;
                         chatContentElement.scrollTop = chatContentElement.scrollHeight;
                     }
+
+                   if (!window.storedMap === window.magicMapElement.innerHTML) window.requestRedraw();
                 }
             });
         });
 
-        chatObserver.observe(communicationElement, {
+        sidebarObserver.observe(sidebarElement, {
             childList: true,
-            subtree: false
+            subtree: true
         });
     }
 
@@ -567,11 +575,13 @@ injectMinifiedHTML().then(() => {
         window.zoomOutBtn.addEventListener('click', zoomOut);
 
         // Popup events
-        $('.map-icon').on( "click", showMap());
-        $('.chat-icon').on( "click", showChat());
-        $('.popup-map .exit-icon').on( "click", closeMap());
-        $('.center-icon').on( "click", centerPlayer());
-        $('.popup-chat .exit-icon').on( "click", closeChat());
+        $('.map-icon').on( "click", window.showMap());
+        $('.chat-icon').on( "click", window.showChat());
+        $('.popup-map .exit-icon').on( "click", window.closeMap());
+        $('.center-icon').on( "click", window.centerPlayer());
+        $('.popup-chat .exit-icon').on( "click", window.closeChat());
+        $('.chat-content').on( "scroll", window.chatScroll());
+        positionPopupNav();
     }
 
     // Initialize everything
@@ -581,7 +591,7 @@ injectMinifiedHTML().then(() => {
         window.makeResizableDiv('.popup-chat');
 
         // Initialize chat notification system
-        window.setupChatObserver();
+        window.setupSidebarObserver();
 
         // Set up event listeners
         initializeEventListeners();
