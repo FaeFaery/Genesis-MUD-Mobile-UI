@@ -30,49 +30,41 @@ injectMinifiedCSS();
 positionPopupNav();
 injectMinifiedHTML().then(() => {
     // Cache DOM elements
-    const mapCanvas = document.getElementById('magicmap-canvas');
-    const mapContext = mapCanvas.getContext('2d');
-    const magicMapElement = document.getElementById('magicmap');
-    const zoomSlider = document.getElementById('zoom-slider');
-    const zoomInBtn = document.getElementById('zoom-in');
-    const zoomOutBtn = document.getElementById('zoom-out');
+    window.mapCanvas = document.getElementById('magicmap-canvas');
+    window.mapContext = window.mapCanvas.getContext('2d');
+    window.magicMapElement = document.getElementById('magicmap');
+    window.zoomSlider = document.getElementById('zoom-slider');
+    window.zoomInBtn = document.getElementById('zoom-in');
+    window.zoomOutBtn = document.getElementById('zoom-out');
 
     // Constants
-    const LINE_HEIGHT = 21; // 10.5 * 2
-    const MIN_ZOOM = 1.0;
-    const MAX_ZOOM = 2.5;
-    const ZOOM_INCREMENT = 0.1;
-    const PAN_SENSITIVITY = 0.07;
-    const MIN_SIZE = 180;
-    const MAX_SIZE = 500;
-    const CHAT_MIN_SIZE = 50;
-    const FONT_SIZE = 15;
-    const FONT_FAMILY = "Source Code Pro, sans-serif";
+    window.FONT_SIZE = 15;
+    window.FONT_FAMILY = "Source Code Pro, sans-serif";
 
     // State variables
-    let cameraOffset = {
+    window.cameraOffset = {
         x: 0,
         y: 0
     };
-    let dragStart = {
+    window.dragStart = {
         x: 0,
         y: 0
     };
-    let playerCoords = {
+    window.playerCoords = {
         x: 0,
         y: 0
     };
-    let cameraZoom = 1;
-    let isDragging = false;
-    let drawingEnd = 0;
-    let maxOffsetX = 0;
-    let maxOffsetY = 0;
-    let needsRedraw = true;
+    window.cameraZoom = 1;
+    window.isDragging = false;
+    window.drawingEnd = 0;
+    window.maxOffsetX = 0;
+    window.maxOffsetY = 0;
+    window.needsRedraw = true;
 
     // Initialize canvas
-    mapCanvas.height = 600;
-    mapCanvas.width = 600;
-    zoomSlider.value = 100;
+    window.mapCanvas.height = 600;
+    window.mapCanvas.width = 600;
+    window.zoomSlider.value = 100;
 
     // Trick source code into thinking sidebar is visible hehe
     const originalIs = $.fn.is;
@@ -90,13 +82,13 @@ injectMinifiedHTML().then(() => {
     }
 
     function requestRedraw() {
-        needsRedraw = true;
+        window.needsRedraw = true;
     }
 
     // Event handling
     function getEventLocation(e) {
         if (e.touches && e.touches.length === 1) {
-            const rect = mapCanvas.getBoundingClientRect();
+            const rect = window.mapCanvas.getBoundingClientRect();
             return {
                 x: (e.touches[0].clientX - rect.left) * 2,
                 y: (e.touches[0].clientY - rect.top) * 2
@@ -111,20 +103,20 @@ injectMinifiedHTML().then(() => {
     }
 
     function handlePointerDown(e) {
-        isDragging = true;
+        window.isDragging = true;
         const location = getEventLocation(e);
         if (location) {
-            dragStart.x = location.x;
-            dragStart.y = location.y;
+            window.dragStart.x = location.x;
+            window.dragStart.y = location.y;
         }
     }
 
     function handlePointerUp() {
-        isDragging = false;
+        window.isDragging = false;
     }
 
     function handlePointerMove(e) {
-        if (!isDragging) return;
+        if (!window.isDragging) return;
 
         const location = getEventLocation(e);
         if (!location) return;
@@ -135,74 +127,74 @@ injectMinifiedHTML().then(() => {
 
     function updateCameraPosition(location) {
         const contents = getMapContents();
-        maxOffsetX = mapContext.measureText(longestLine(contents)).width;
-        maxOffsetY = drawingEnd;
+        window.maxOffsetX = window.mapContext.measureText(longestLine(contents)).width;
+        window.maxOffsetY = window.drawingEnd;
 
-        const deltaX = (location.x - dragStart.x) * PAN_SENSITIVITY;
-        const deltaY = (location.y - dragStart.y) * PAN_SENSITIVITY;
+        const deltaX = (location.x - window.dragStart.x) * 0.07;
+        const deltaY = (location.y - window.dragStart.y) * 0.07;
 
         // Calculate potential new positions
-        let newX = cameraOffset.x + deltaX;
-        let newY = cameraOffset.y + deltaY;
+        let newX = window.cameraOffset.x + deltaX;
+        let newY = window.cameraOffset.y + deltaY;
 
         // Constrain within boundaries
-        cameraOffset.x = Math.max(-maxOffsetX, Math.min(maxOffsetX, newX));
-        cameraOffset.y = Math.max(-maxOffsetY, Math.min(maxOffsetY, newY));
+        window.cameraOffset.x = Math.max(-window.maxOffsetX, Math.min(window.maxOffsetX, newX));
+        window.cameraOffset.y = Math.max(-window.maxOffsetY, Math.min(window.maxOffsetY, newY));
     }
 
     function centerPlayer() {
-        cameraOffset.x = -playerCoords.x + (mapCanvas.width / (2 * cameraZoom));
-        cameraOffset.y = -playerCoords.y + (mapCanvas.height / (2 * cameraZoom));
+        window.cameraOffset.x = -window.playerCoords.x + (window.mapCanvas.width / (2 * window.cameraZoom));
+        window.cameraOffset.y = -window.playerCoords.y + (window.mapCanvas.height / (2 * window.cameraZoom));
         requestRedraw();
     }
 
     // Zoom controls
     function handleZoomSlider() {
-        cameraZoom = parseFloat(this.value) / 100;
+        window.cameraZoom = parseFloat(this.value) / 100;
         requestRedraw();
     }
 
     function zoomIn() {
-        cameraZoom = Math.min(cameraZoom + ZOOM_INCREMENT, MAX_ZOOM);
-        zoomSlider.value = cameraZoom * 100;
+        window.cameraZoom = Math.min(window.cameraZoom + 0.1, 2.5);
+        window.zoomSlider.value = window.cameraZoom * 100;
         requestRedraw();
     }
 
     function zoomOut() {
-        cameraZoom = Math.max(cameraZoom - ZOOM_INCREMENT, MIN_ZOOM);
-        zoomSlider.value = cameraZoom * 100;
+        window.cameraZoom = Math.max(window.cameraZoom - 0.1, 1.0);
+        window.zoomSlider.value = window.cameraZoom * 100;
         requestRedraw();
     }
 
     // Map rendering
     function getMapContents() {
-        if (!magicMapElement) return [];
-        return magicMapElement.innerHTML
+        if (!window.magicMapElement) return [];
+        return window.magicMapElement.innerHTML
             .split(/\n|<font color="red">|<\/font>/)
             .filter(value => value.length > 0);
     }
 
     function draw() {
-        if (!needsRedraw) {
+        if (!window.needsRedraw) {
             window.requestAnimationFrame(draw);
             return;
         }
 
-        needsRedraw = false;
+        window.needsRedraw = false;
         const contents = getMapContents();
 
         // Clear canvas
-        mapContext.setTransform(1, 0, 0, 1, 0, 0);
-        mapContext.clearRect(0, 0, mapCanvas.width, mapCanvas.height);
+        window.mapContext.setTransform(1, 0, 0, 1, 0, 0);
+        window.mapContext.clearRect(0, 0, window.mapCanvas.width, window.mapCanvas.height);
 
         // Apply camera transformations
-        mapContext.scale(cameraZoom, cameraZoom);
-        mapContext.translate(cameraOffset.x, cameraOffset.y);
+        window.mapContext.scale(window.cameraZoom, window.cameraZoom);
+        window.mapContext.translate(window.cameraOffset.x, window.cameraOffset.y);
 
         // Set initial style
-        mapContext.font = `${FONT_SIZE}px ${FONT_FAMILY}`;
-        mapContext.fillStyle = "black";
-        mapContext.fillRect(0, 0, mapCanvas.width, mapCanvas.height);
+        window.mapContext.font = `${window.FONT_SIZE}px ${window.FONT_FAMILY}`;
+        window.mapContext.fillStyle = "black";
+        window.mapContext.fillRect(0, 0, window.mapCanvas.width, window.mapCanvas.height);
 
         // Draw text content
         drawMapContents(contents);
@@ -211,36 +203,36 @@ injectMinifiedHTML().then(() => {
     }
 
     function drawMapContents(contents) {
-        mapContext.fillStyle = "white";
+        window.mapContext.fillStyle = "white";
 
         for (let i = 0; i < contents.length; i++) {
             if (contents[i] !== 'X') {
-                mapContext.fillText(contents[i], 0, LINE_HEIGHT * (i + 1));
+                window.mapContext.fillText(contents[i], 0, 21 * (i + 1));
             } else {
                 // Handle player position (red X)
-                const prevLineWidth = mapContext.measureText(contents[i - 1]).width;
+                const prevLineWidth = window.mapContext.measureText(contents[i - 1]).width;
 
-                mapContext.fillStyle = "rgb(255, 49, 49)";
-                mapContext.font = `bold ${FONT_SIZE}px ${FONT_FAMILY}`;
-                mapContext.fillText(contents[i], prevLineWidth, LINE_HEIGHT * i);
+                window.mapContext.fillStyle = "rgb(255, 49, 49)";
+                window.mapContext.font = `bold ${window.FONT_SIZE}px ${window.FONT_FAMILY}`;
+                window.mapContext.fillText(contents[i], prevLineWidth, 21 * i);
 
                 // Store player coordinates
-                playerCoords.x = prevLineWidth;
-                playerCoords.y = LINE_HEIGHT * i;
+                window.playerCoords.x = prevLineWidth;
+                window.playerCoords.y = 21 * i;
 
                 // Reset style and draw remainder of line
-                mapContext.font = `${FONT_SIZE}px ${FONT_FAMILY}`;
-                mapContext.fillStyle = "white";
+                window.mapContext.font = `${window.FONT_SIZE}px ${window.FONT_FAMILY}`;
+                window.mapContext.fillStyle = "white";
 
-                const combinedWidth = mapContext.measureText(contents[i - 1] + contents[i]).width;
-                mapContext.fillText(contents[i + 1], combinedWidth, LINE_HEIGHT * i);
+                const combinedWidth = window.mapContext.measureText(contents[i - 1] + contents[i]).width;
+                window.mapContext.fillText(contents[i + 1], combinedWidth, 21 * i);
 
                 // Adjust array and index
                 contents.splice(i, 2);
                 i--;
             }
 
-            drawingEnd = LINE_HEIGHT * (i + 1);
+            window.drawingEnd = 21 * (i + 1);
         }
     }
 
@@ -367,7 +359,7 @@ injectMinifiedHTML().then(() => {
             let newY = originalY;
 
             // Minimum size based on element type
-            const minSize = element.classList.contains('popup-map') ? MIN_SIZE : CHAT_MIN_SIZE;
+            const minSize = element.classList.contains('popup-map') ? 180 : 50;
 
             // Calculate new dimensions based on which resizer is active
             switch (true) {
@@ -394,28 +386,28 @@ injectMinifiedHTML().then(() => {
             }
 
             // Apply width constraints
-            if (newWidth > minSize && newWidth < MAX_SIZE) {
+            if (newWidth > minSize && newWidth < 500) {
                 document.querySelectorAll('.resizable').forEach(popup => {
                     popup.style.width = `${newWidth}px`;
                 });
 
                 if (container) container.style.left = `${newX}px`;
 
-                if (mapCanvas) {
-                    mapCanvas.width = newWidth * 2;
-                    mapCanvas.style.width = `${newWidth}px`;
+                if (window.mapCanvas) {
+                    window.mapCanvas.width = newWidth * 2;
+                    window.mapCanvas.style.width = `${newWidth}px`;
                     requestRedraw();
                 }
             }
 
             // Apply height constraints
-            if (newHeight > minSize && newHeight < MAX_SIZE) {
+            if (newHeight > minSize && newHeight < 500) {
                 element.style.height = `${newHeight}px`;
                 if (container) container.style.top = `${newY}px`;
 
-                if (element.classList.contains("popup-map") && mapCanvas) {
-                    mapCanvas.height = newHeight * 2;
-                    mapCanvas.style.height = `${newHeight}px`;
+                if (element.classList.contains("popup-map") && window.mapCanvas) {
+                    window.mapCanvas.height = newHeight * 2;
+                    window.mapCanvas.style.height = `${newHeight}px`;
                     requestRedraw();
                 }
             }
@@ -558,21 +550,21 @@ injectMinifiedHTML().then(() => {
     // Set up event listeners
     function initializeEventListeners() {
         // Canvas events
-        mapCanvas.addEventListener("mousedown", handlePointerDown);
-        mapCanvas.addEventListener("mouseup", handlePointerUp);
-        mapCanvas.addEventListener("mousemove", handlePointerMove);
-        mapCanvas.addEventListener("touchstart", handlePointerDown, {
+        window.mapCanvas.addEventListener("mousedown", handlePointerDown);
+        window.mapCanvas.addEventListener("mouseup", handlePointerUp);
+        window.mapCanvas.addEventListener("mousemove", handlePointerMove);
+        window.mapCanvas.addEventListener("touchstart", handlePointerDown, {
             passive: true
         });
-        mapCanvas.addEventListener("touchend", handlePointerUp);
-        mapCanvas.addEventListener("touchmove", handlePointerMove, {
+        window.mapCanvas.addEventListener("touchend", handlePointerUp);
+        window.mapCanvas.addEventListener("touchmove", handlePointerMove, {
             passive: true
         });
 
         // Zoom controls
-        zoomSlider.addEventListener('input', handleZoomSlider);
-        zoomInBtn.addEventListener('click', zoomIn);
-        zoomOutBtn.addEventListener('click', zoomOut);
+        window.zoomSlider.addEventListener('input', handleZoomSlider);
+        window.zoomInBtn.addEventListener('click', zoomIn);
+        window.zoomOutBtn.addEventListener('click', zoomOut);
     }
 
     // Initialize everything
