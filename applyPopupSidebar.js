@@ -53,11 +53,6 @@ window.maxOffsetX = 0;
 window.maxOffsetY = 0;
 window.needsRedraw = true;
 
-// Initialize canvas
-window.mapCanvas.height = 600;
-window.mapCanvas.width = 600;
-window.zoomSlider.value = 100;
-
 // Cache DOM elements
 window.mapCanvas = document.getElementById('magicmap-canvas');
 window.mapContext = window.mapCanvas.getContext('2d');
@@ -65,6 +60,11 @@ window.magicMapElement = document.getElementById('magicmap');
 window.zoomSlider = document.getElementById('zoom-slider');
 window.zoomInBtn = document.getElementById('zoom-in');
 window.zoomOutBtn = document.getElementById('zoom-out');
+
+// Initialize canvas
+window.mapCanvas.height = 600;
+window.mapCanvas.width = 600;
+window.zoomSlider.value = 100;
 
 // Trick source code into thinking sidebar is visible hehe
 const originalIs = $.fn.is;
