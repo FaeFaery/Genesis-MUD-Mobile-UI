@@ -4,7 +4,7 @@ function injectMinifiedCSS() {
   document.head.appendChild(style);
 }
 
-function injectMinifiedHTML() {
+async function injectMinifiedHTML() {
   const container = document.createElement('div');
   const popupNav = document.getElementById('popupnav-container');
   if (popupNav) return;
