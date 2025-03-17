@@ -1,17 +1,3 @@
-function injectMinifiedCSS() {
-    const style = document.createElement('style');
-    style.textContent = '#magicmap-canvas{display:relative;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;background:#000;width:100%;height:100%;opacity:.9}#magicmap-img{object-fit:cover}#popup-buttons{position:absolute;user-select:none;top:6px;right:0;z-index:1;display:flex;flex-direction:column;background-color:rgba(0,0,0,.3)}#popupnav-container{position:absolute;user-select:none;top:0;left:0;display:flex;padding:10px;flex-direction:row;background-color:rgba(0,0,0,.1);gap:5px}#popupnav-container>*{margin-right:5px}#mobile-nav{position:absolute;top:100px;left:100px;display:flex;flex-direction:column}.popup-map{width:300px;height:300px;display:none;position:relative;border:1px solid #fff}.popup-chat{width:300px;height:100px;display:none;position:relative;overflow:hidden;border:1px solid #fff;background-color:rgba(0,0,0,.9)}.chat-content{height:100%;width:100%;color:#d0d0d0;font-family:Source Code Pro,sans-serif;overflow-y:scroll;font-size:14px;margin-left:5px;padding-right:10px;box-sizing:content-box}.resizable .resizers{width:100%;height:100%;box-sizing:border-box}.resizable .resizers .resizer{width:15px;height:15px;border-radius:50%;position:absolute}.resizable .resizers .resizer.top-left{left:-5px;top:-5px;cursor:nwse-resize}.resizable .resizers .resizer.top-right{right:-5px;top:-5px;cursor:nesw-resize}.resizable .resizers .resizer.bottom-left{left:-5px;bottom:-5px;cursor:nesw-resize}.resizable .resizers .resizer.bottom-right{right:-5px;bottom:-5px;cursor:nwse-resize}.exit-icon{cursor:pointer;user-select:none;width:30px;height:30px;color:#fff;font-size:30px;margin-bottom:-3px;font-variation-settings:\'FILL\' 0,\'wght\' 400,\'GRAD\' 0,\'opsz\' 24}.map-icon{cursor:pointer;display:block;user-select:none;color:#fff;font-size:20px;font-variation-settings:\'FILL\' 0,\'wght\' 300,\'GRAD\' 0,\'opsz\' 24}.center-icon{cursor:pointer;width:30px;height:30px;color:#fff;font-size:30px;font-variation-settings:\'FILL\' 0,\'wght\' 350,\'GRAD\' 0,\'opsz\' 24}.chat-icon{cursor:pointer;width:30px;height:30px;color:#fff;font-size:30px;font-variation-settings:\'FILL\' 0,\'wght\' 250,\'GRAD\' 0,\'opsz\' 24}.chat-icon-container{position:relative;display:inline-block}.chat-badge{font-family:Source Code Pro,sans-serif;position:absolute;top:-5px;right:2px;background-color:red;color:#fff;border-radius:50%;width:15px;height:15px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;padding:0;line-height:1;box-sizing:border-box;text-align:center}.new-message-divider{text-align:center;font-size:12px;color:#888;background:rgba(200,200,200,.3);padding:3px 0;margin:5px 0;transition:opacity 1s ease-out}#scroll-to-bottom{position:absolute;bottom:0;right:50%;padding:5px 10px;background:rgba(0,0,0,.5);color:#fff;border:none;border-radius:50%;cursor:pointer;animation:bobbing 1s ease-in-out infinite}@keyframes bobbing{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}.zoom-controls{user-select:none;display:flex;z-index:1;flex-direction:column;align-items:center;position:absolute;left:10px;top:9px;padding:5px 1px;background-color:rgba(255,255,255,.1);border-radius:4px}.zoom-slider{width:30px;height:100px;margin:10px 0;-webkit-appearance:slider-vertical;writing-mode:bt-lr}.zoom-btn{width:20px;height:20px;color:rgba(255,255,255);border-radius:4px;background-color:rgba(245,245,245,.3);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}';
-    document.head.appendChild(style);
-}
-
-async function injectMinifiedHTML() {
-    const container = document.createElement('div');
-    const popupNav = document.getElementById('popupnav-container');
-    if (popupNav) return;
-    container.innerHTML = `<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" /><div id="popupnav-container"><span class='map-icon material-symbols-outlined'>explore</span><div class='chat-icon-container'><span class='chat-icon material-symbols-outlined'>chat_bubble</span></div></div><div id="mobile-nav"><div class='resizable popup-map'><div id="popup-buttons"><span class='exit-icon material-symbols-outlined'>close</span><span class='center-icon material-symbols-outlined'>center_focus_strong</span><div class='chat-icon-container'><span class='chat-icon material-symbols-outlined'>chat_bubble</span></div></div><div class="zoom-controls"><button id="zoom-in" class="zoom-btn">+</button><input type="range" id="zoom-slider" class="zoom-slider" min="100" max="250" value="100" orient="vertical"><button id="zoom-out" class="zoom-btn">−</button></div><div class='resizers'><canvas id='magicmap-canvas'></canvas><div class='resizer top-left'></div><div class='resizer top-right'></div><div class='resizer bottom-left'></div><div class='resizer bottom-right'></div></div></div><div class='resizable popup-chat'><div id="popup-buttons"><span class='exit-icon material-symbols-outlined'>close</span><span class='map-icon material-symbols-outlined'>explore</span></div><div class='resizers'><div class='chat-content'></div><div class='resizer bottom-left'></div><div class='resizer bottom-right'></div></div></div></div>`;
-    document.body.appendChild(container);
-}
-
 function positionPopupNav() {
     const popupNav = document.getElementById("popup-nav-container");
     const mudOutput = document.getElementById("mudoutput");
@@ -75,17 +61,17 @@ injectMinifiedHTML().then(() => {
     };
 
     // Helper functions
-    function longestLine(lines) {
+    window.longestLine = function (lines) {
         return lines.reduce((longest, current) =>
             current.length > longest.length ? current : longest, "");
     }
 
-    function requestRedraw() {
+    window.requestRedraw() = function () {
         window.needsRedraw = true;
     }
 
     // Event handling
-    function getEventLocation(e) {
+    window.getEventLocation = function (e) {
         if (e.touches && e.touches.length === 1) {
             const rect = window.mapCanvas.getBoundingClientRect();
             return {
@@ -103,7 +89,7 @@ injectMinifiedHTML().then(() => {
 
     function handlePointerDown(e) {
         window.isDragging = true;
-        const location = getEventLocation(e);
+        const location = window.getEventLocation(e);
         if (location) {
             window.dragStart.x = location.x;
             window.dragStart.y = location.y;
@@ -117,16 +103,16 @@ injectMinifiedHTML().then(() => {
     function handlePointerMove(e) {
         if (!window.isDragging) return;
 
-        const location = getEventLocation(e);
+        const location = window.getEventLocation(e);
         if (!location) return;
 
-        updateCameraPosition(location);
-        requestRedraw();
+        window.updateCameraPosition(location);
+        window.requestRedraw();
     }
 
-    function updateCameraPosition(location) {
-        const contents = getMapContents();
-        window.maxOffsetX = window.mapContext.measureText(longestLine(contents)).width;
+    window.updateCameraPosition = function (location) {
+        const contents = window.getMapContents();
+        window.maxOffsetX = window.mapContext.measureText(window.longestLine(contents)).width;
         window.maxOffsetY = window.drawingEnd;
 
         const deltaX = (location.x - window.dragStart.x) * 0.07;
@@ -144,43 +130,43 @@ injectMinifiedHTML().then(() => {
     function centerPlayer() {
         window.cameraOffset.x = -window.playerCoords.x + (window.mapCanvas.width / (2 * window.cameraZoom));
         window.cameraOffset.y = -window.playerCoords.y + (window.mapCanvas.height / (2 * window.cameraZoom));
-        requestRedraw();
+        window.requestRedraw();
     }
 
     // Zoom controls
     function handleZoomSlider() {
         window.cameraZoom = parseFloat(this.value) / 100;
-        requestRedraw();
+        window.requestRedraw();
     }
 
     function zoomIn() {
         window.cameraZoom = Math.min(window.cameraZoom + 0.1, 2.5);
         window.zoomSlider.value = window.cameraZoom * 100;
-        requestRedraw();
+        window.requestRedraw();
     }
 
     function zoomOut() {
         window.cameraZoom = Math.max(window.cameraZoom - 0.1, 1.0);
         window.zoomSlider.value = window.cameraZoom * 100;
-        requestRedraw();
+        window.requestRedraw();
     }
 
     // Map rendering
-    function getMapContents() {
+    window.getMapContents = function () {
         if (!window.magicMapElement) return [];
         return window.magicMapElement.innerHTML
             .split(/\n|<font color="red">|<\/font>/)
             .filter(value => value.length > 0);
     }
 
-    function draw() {
+    window.draw = function () {
         if (!window.needsRedraw) {
-            window.requestAnimationFrame(draw);
+            window.requestAnimationFrame(window.draw);
             return;
         }
 
         window.needsRedraw = false;
-        const contents = getMapContents();
+        const contents = window.getMapContents();
 
         // Clear canvas
         window.mapContext.setTransform(1, 0, 0, 1, 0, 0);
@@ -196,12 +182,12 @@ injectMinifiedHTML().then(() => {
         window.mapContext.fillRect(0, 0, window.mapCanvas.width, window.mapCanvas.height);
 
         // Draw text content
-        drawMapContents(contents);
+        window.drawMapContents(contents);
 
-        window.requestAnimationFrame(draw);
+        window.requestAnimationFrame(window.draw);
     }
 
-    function drawMapContents(contents) {
+    window.drawMapContents = function (contents) {
         window.mapContext.fillStyle = "white";
 
         for (let i = 0; i < contents.length; i++) {
@@ -247,7 +233,7 @@ injectMinifiedHTML().then(() => {
             icon.style.display = "none";
         });
 
-        requestRedraw();
+        window.requestRedraw();
     }
 
     function closeMap() {
@@ -281,8 +267,8 @@ injectMinifiedHTML().then(() => {
             badge.remove();
         });
 
-        initChatPopup();
-        addScrollToBottomButton();
+        window.initChatPopup();
+        window.addScrollToBottomButton();
 
         if (chat) chat.style.display = "block";
     }
@@ -306,7 +292,7 @@ injectMinifiedHTML().then(() => {
     }
 
     // Resizable functionality
-    function makeResizableDiv(selector) {
+    window.makeResizableDiv = function (selector) {
         const element = document.querySelector(selector);
         if (!element) return;
 
@@ -318,13 +304,13 @@ injectMinifiedHTML().then(() => {
         let activeResizer = null;
 
         resizers.forEach(resizer => {
-            resizer.addEventListener("mousedown", initResize);
-            resizer.addEventListener("touchstart", initResize, {
+            resizer.addEventListener("mousedown", window.initResize);
+            resizer.addEventListener("touchstart", window.initResize, {
                 passive: false
             });
         });
 
-        function initResize(e) {
+        window.initResize = function (e) {
             e.preventDefault();
             activeResizer = e.target;
             originalWidth = element.offsetWidth;
@@ -334,15 +320,15 @@ injectMinifiedHTML().then(() => {
             originalMouseX = e.pageX || e.touches[0].pageX;
             originalMouseY = e.pageY || e.touches[0].pageY;
 
-            window.addEventListener("mousemove", resize);
-            window.addEventListener("mouseup", stopResize);
-            window.addEventListener("touchmove", resize, {
+            window.addEventListener("mousemove", window.resize);
+            window.addEventListener("mouseup", window.stopResize);
+            window.addEventListener("touchmove", window.resize, {
                 passive: false
             });
-            window.addEventListener("touchend", stopResize);
+            window.addEventListener("touchend", window.stopResize);
         }
 
-        function resize(e) {
+        window.resize = function (e) {
             if (!activeResizer) return;
             e.preventDefault();
 
@@ -395,7 +381,7 @@ injectMinifiedHTML().then(() => {
                 if (window.mapCanvas) {
                     window.mapCanvas.width = newWidth * 2;
                     window.mapCanvas.style.width = `${newWidth}px`;
-                    requestRedraw();
+                    window.requestRedraw();
                 }
             }
 
@@ -407,16 +393,16 @@ injectMinifiedHTML().then(() => {
                 if (element.classList.contains("popup-map") && window.mapCanvas) {
                     window.mapCanvas.height = newHeight * 2;
                     window.mapCanvas.style.height = `${newHeight}px`;
-                    requestRedraw();
+                    window.requestRedraw();
                 }
             }
         }
 
-        function stopResize() {
-            window.removeEventListener("mousemove", resize);
-            window.removeEventListener("mouseup", stopResize);
-            window.removeEventListener("touchmove", resize);
-            window.removeEventListener("touchend", stopResize);
+        window.stopResize = function () {
+            window.removeEventListener("mousemove", window.resize);
+            window.removeEventListener("mouseup", window.stopResize);
+            window.removeEventListener("touchmove", window.resize);
+            window.removeEventListener("touchend", window.stopResize);
             activeResizer = null;
         }
     }
@@ -432,7 +418,7 @@ injectMinifiedHTML().then(() => {
     });
 
     // Chat notifications
-    function setupChatObserver() {
+    window.setupChatObserver = function () {
         const communicationElement = document.getElementById('communication');
         if (!communicationElement) return;
 
@@ -442,7 +428,7 @@ injectMinifiedHTML().then(() => {
                     const chatPopupVisible = document.querySelector(".popup-chat")?.style.display === 'block';
 
                     if (!chatPopupVisible) {
-                        updateChatNotificationBadge();
+                        window.updateChatNotificationBadge();
                     } else {
                         const chatContentElement = document.querySelector(".chat-content");
                         if (!communicationElement || !chatContentElement) return;
@@ -459,7 +445,7 @@ injectMinifiedHTML().then(() => {
         });
     }
 
-    function updateChatNotificationBadge() {
+    window.updateChatNotificationBadge = function () {
         const communicationElement = document.getElementById('communication');
         const chatContentElement = document.querySelector(".chat-content");
 
@@ -481,7 +467,7 @@ injectMinifiedHTML().then(() => {
         badge.text(newMessages);
     }
 
-    function initChatPopup() {
+    window.initChatPopup = function () {
         const communicationElement = document.getElementById('communication');
         const chatContentElement = document.querySelector(".chat-content");
 
@@ -527,7 +513,7 @@ injectMinifiedHTML().then(() => {
     }
 
     // Scroll-to-bottom button
-    function addScrollToBottomButton() {
+    window.addScrollToBottomButton = function () {
         const chatPopup = document.querySelector(".popup-chat");
         const chatContent = document.querySelector(".chat-content");
         const newMsgDivider = document.querySelector(".new-message-divider");
@@ -576,18 +562,18 @@ injectMinifiedHTML().then(() => {
     // Initialize everything
     function initialize() {
         // Create resizable elements
-        makeResizableDiv('.popup-map');
-        makeResizableDiv('.popup-chat');
+        window.makeResizableDiv('.popup-map');
+        window.makeResizableDiv('.popup-chat');
 
         // Initialize chat notification system
-        setupChatObserver();
+        window.setupChatObserver();
 
         // Set up event listeners
         initializeEventListeners();
 
         // Start the rendering loop
-        requestRedraw();
-        draw();
+        window.requestRedraw();
+        window.draw();
     }
 
     // Run initialization
