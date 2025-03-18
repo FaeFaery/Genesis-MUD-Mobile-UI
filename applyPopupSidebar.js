@@ -24,10 +24,10 @@ function positionPopupNav() {
     popupNav.style.top = `${mudRect.top}px`;
     mobileNav.style.top = `${mudRect.top}px`;
     mobileNav.style.left = `${mudRect.left}px`;
-    mobileNav.style.width = `${target.offsetWidth*0.75}px`;
-    mobileNav.style.height = `${target.offsetHeight*0.20}px`;
-    window.mapCanvas.height = target.offsetHeight*0.20*2;
-    window.mapCanvas.width = target.offsetWidth*0.75*2;
+    mobileNav.style.width = `${mudRect.offsetWidth*0.75}px`;
+    mobileNav.style.height = `${mudRect.offsetHeight*0.20}px`;
+    window.mapCanvas.height = mudRect.offsetHeight*0.20*2;
+    window.mapCanvas.width = mudRect.offsetWidth*0.75*2;
     window.zoomSlider.value = 150;
 }
 
