@@ -61,7 +61,6 @@ function initMapExtension() {
     window.drawingEnd = 0;
     window.maxOffsetX = 0;
     window.maxOffsetY = 0;
-    window.needsRedraw = true;
 
     // Cache DOM elements
     window.mapCanvas = document.getElementById('magicmap-canvas');
@@ -181,10 +180,7 @@ function initMapExtension() {
     }
 
     window.draw = function() {
-        if (!window.needsRedraw) {
-            window.requestAnimationFrame(window.draw);
-            return;
-        }
+        if (!window.needsRedraw) return;
 
         window.needsRedraw = false;
         window.storedMap = window.magicMapElement.innerHTML;
@@ -259,8 +255,6 @@ function initMapExtension() {
         document.querySelectorAll(".map-icon").forEach(icon => {
             icon.style.display = "none";
         });
-
-        window.needsRedraw = true;
     }
 
     window.closeMap = function() {
@@ -321,46 +315,53 @@ function initMapExtension() {
     // Resizable functionality
     window.makeResizableDiv = function(selector) {
         const element = document.querySelector(selector);
-        if (!element) return;
+        if (!element) {
+            console.warn(`Element not found for selector: ${selector}`);
+            return;
+        }
 
         const container = document.getElementById("mobile-nav");
-        if (!container) return;
+        if (!container) {
+            console.warn("Mobile nav container not found");
+            return;
+        }
 
         const resizers = element.querySelectorAll('.resizer');
+        if (resizers.length === 0) {
+            console.warn(`No resizers found in element: ${selector}`);
+        }
+
         let originalWidth, originalHeight, originalX, originalY, originalMouseX, originalMouseY;
         let activeResizer = null;
 
-        resizers.forEach(resizer => {
-            resizer.addEventListener("mousedown", window.initResize);
-            resizer.addEventListener("touchstart", window.initResize, {
-                passive: false
-            });
-        });
-
-        window.initResize = function(e) {
+        // Define handlers within the correct scope
+        function initResize(e) {
             e.preventDefault();
             activeResizer = e.target;
             originalWidth = element.offsetWidth;
             originalHeight = element.offsetHeight;
             originalX = container.offsetLeft;
             originalY = container.offsetTop;
-            originalMouseX = e.pageX || e.touches[0].pageX;
-            originalMouseY = e.pageY || e.touches[0].pageY;
+            originalMouseX = e.pageX || (e.touches && e.touches[0].pageX);
+            originalMouseY = e.pageY || (e.touches && e.touches[0].pageY);
 
-            window.addEventListener("mousemove", window.resize);
-            window.addEventListener("mouseup", window.stopResize);
-            window.addEventListener("touchmove", window.resize, {
+            window.addEventListener("mousemove", resize);
+            window.addEventListener("mouseup", stopResize);
+            window.addEventListener("touchmove", resize, {
                 passive: false
             });
-            window.addEventListener("touchend", window.stopResize);
+            window.addEventListener("touchend", stopResize);
         }
 
-        window.resize = function(e) {
+        function resize(e) {
             if (!activeResizer) return;
             e.preventDefault();
 
-            const pageX = e.pageX || e.touches[0].pageX;
-            const pageY = e.pageY || e.touches[0].pageY;
+            const pageX = e.pageX || (e.touches && e.touches[0].pageX);
+            const pageY = e.pageY || (e.touches && e.touches[0].pageY);
+
+            if (pageX === undefined || pageY === undefined) return;
+
             const deltaX = pageX - originalMouseX;
             const deltaY = pageY - originalMouseY;
 
@@ -399,13 +400,10 @@ function initMapExtension() {
 
             // Apply width constraints
             if (newWidth > minSize && newWidth < 500) {
-                document.querySelectorAll('.resizable').forEach(popup => {
-                    popup.style.width = `${newWidth}px`;
-                });
-
+                element.style.width = `${newWidth}px`;
                 if (container) container.style.left = `${newX}px`;
 
-                if (window.mapCanvas) {
+                if (window.mapCanvas && element.classList.contains("popup-map")) {
                     window.mapCanvas.width = newWidth * 2;
                     window.mapCanvas.style.width = `${newWidth}px`;
                     window.needsRedraw = true;
@@ -425,13 +423,21 @@ function initMapExtension() {
             }
         }
 
-        window.stopResize = function() {
-            window.removeEventListener("mousemove", window.resize);
-            window.removeEventListener("mouseup", window.stopResize);
-            window.removeEventListener("touchmove", window.resize);
-            window.removeEventListener("touchend", window.stopResize);
+        function stopResize() {
+            window.removeEventListener("mousemove", resize);
+            window.removeEventListener("mouseup", stopResize);
+            window.removeEventListener("touchmove", resize);
+            window.removeEventListener("touchend", stopResize);
             activeResizer = null;
         }
+
+        // Add event listeners to each resizer
+        resizers.forEach(resizer => {
+            resizer.addEventListener("mousedown", initResize);
+            resizer.addEventListener("touchstart", initResize, {
+                passive: false
+            });
+        });
     }
 
     window.chatScroll = function() {
@@ -462,10 +468,10 @@ function initMapExtension() {
                         if (!communicationElement || !chatContentElement) return;
                         chatContentElement.innerHTML = communicationElement.innerHTML;
                         chatContentElement.scrollTop = chatContentElement.scrollHeight;
-                    } 
-                    
+                    }
+
                     window.magicMapElement = document.getElementById('magicmap');
-                    if (!window.storedMap === window.magicMapElement.innerHTML) window.needsRedraw = true;
+                    if (!window.storedMap === window.magicMapElement.innerHTML && !window.needsRedraw) window.needsRedraw = true;
                 }
             });
         });
@@ -639,4 +645,3 @@ document.addEventListener('DOMContentLoaded', initMapExtension);
 if (document.readyState === 'complete' || document.readyState === 'interactive') {
     setTimeout(initMapExtension, 100);
 }
-
