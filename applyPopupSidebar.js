@@ -19,7 +19,7 @@ function initMapExtension() {
     function injectMinifiedHTML() {
         try {
             const container = document.createElement('div');
-            container.innerHTML = `<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" /><div id="popupnav-container"><span class='map-icon material-symbols-outlined'>explore</span><div class='chat-icon-container'><span class='chat-icon material-symbols-outlined'>chat_bubble</span></div></div><div id="mobile-nav"><div class='resizable popup-map'><div id="popup-buttons"><span class='exit-icon material-symbols-outlined'>close</span><span class='center-icon material-symbols-outlined'>center_focus_strong</span><div class='chat-icon-container'><span class='chat-icon material-symbols-outlined'>chat_bubble</span></div></div><div class="zoom-controls"><button id="zoom-in" class="zoom-btn">+</button><input type="range" id="zoom-slider" class="zoom-slider" min="100" max="250" value="100" style="writing-mode: vertical-lr; direction: rtl"><button id="zoom-out" class="zoom-btn">−</button></div><div class='resizers'><canvas id='magicmap-canvas'></canvas><div class='resizer top-left'></div><div class='resizer top-right'></div><div class='resizer bottom-left'></div><div class='resizer bottom-right'></div></div></div><div class='resizable popup-chat'><div id="popup-buttons"><span class='exit-icon material-symbols-outlined' style="padding-top: 10px;">close</span><span class='map-icon material-symbols-outlined'>explore</span></div><div class='resizers'><div class='chat-content'></div><div class='resizer bottom-left'></div><div class='resizer bottom-right'></div></div></div></div>`;
+            container.innerHTML = `<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" /><div id="popupnav-container"><span class='map-icon material-symbols-outlined'>explore</span><div class='chat-icon-container'><span class='chat-icon material-symbols-outlined'>chat_bubble</span></div></div><div id="mobile-nav"><div class='resizable popup-map'><div id="popup-buttons"><span class='exit-icon material-symbols-outlined'>close</span><span class='center-icon material-symbols-outlined'>center_focus_strong</span><div class='chat-icon-container'><span class='chat-icon material-symbols-outlined'>chat_bubble</span></div></div><div class="zoom-controls"><button id="zoom-in" class="zoom-btn">+</button><input type="range" id="zoom-slider" class="zoom-slider" min="100" max="250" value="100" style="writing-mode: vertical-lr; direction: rtl"><button id="zoom-out" class="zoom-btn">−</button></div><div class='resizers'><canvas id='magicmap-canvas'></canvas><div class='resizer top-left'></div><div class='resizer top-right'></div><div class='resizer bottom-left'></div><div class='resizer bottom-right'></div></div></div><div class='resizable popup-chat'><div id="popup-buttons"><span class='exit-icon material-symbols-outlined' style="padding-top: 5px;">close</span><span class='map-icon material-symbols-outlined'>explore</span></div><div class='resizers'><div class='chat-content'></div><div class='resizer bottom-left'></div><div class='resizer bottom-right'></div></div></div></div>`;
             document.body.appendChild(container);
         } catch (error) {
             console.error('Failed to inject HTML:', error);
@@ -214,7 +214,7 @@ function initMapExtension() {
 
         for (let i = 0; i < contents.length; i++) {
             if (contents[i] !== 'X') {
-                window.mapContext.fillText(contents[i], 0, 21 * (i + 1));
+                window.mapContext.fillText(decodeHTML(contents[i]), 0, 21 * (i + 1));
             } else {
                 // Handle when there is no highlight of player position
                 window.isPlayerSeen = true;
@@ -453,36 +453,23 @@ function initMapExtension() {
         if (newMsgDivider && atBottom && !justOpened) newMsgDivider.remove();
     }
 
-    // Chat notifications
-    window.setupSidebarObserver = function() {
-        const communicationElement = document.getElementById('communication');
-        const mapElement = document.getElementById('map');
-        const sidebarElement = document.getElementById('sidebar');
+    window.observeChildChanges = function(targetId, callback) {
+        const targetNode = document.getElementById(targetId);
+        if (!targetNode) return; // Ensure element exists
 
-        const sidebarObserver = new MutationObserver(function(mutations) {
-            mutations.forEach(function(mutation) {
-                if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
-                    const chatPopupVisible = document.querySelector(".popup-chat")?.style.display === 'block';
-
-                    if (!chatPopupVisible) {
-                        window.updateChatNotificationBadge();
-                    } else {
-                        const chatContentElement = document.querySelector(".chat-content");
-                        if (!communicationElement || !chatContentElement) return;
-                        chatContentElement.innerHTML = communicationElement.innerHTML;
-                        chatContentElement.scrollTop = chatContentElement.scrollHeight;
-                    }
-
-                    window.magicMapElement = document.getElementById('magicmap');
-                    if (!window.storedMap === window.magicMapElement.innerHTML && !window.needsRedraw) window.needsRedraw = true;
+        const observer = new MutationObserver(mutations => {
+            for (const mutation of mutations) {
+                if (mutation.type === "childList") {
+                    callback();
+                    break; // Exit early since we only need one match
                 }
-            });
+            }
         });
 
-        sidebarObserver.observe(sidebarElement, {
+        observer.observe(targetNode, {
             childList: true,
             subtree: true
-        });
+        }); // Watch all children
     }
 
     window.updateChatNotificationBadge = function() {
@@ -632,11 +619,30 @@ function initMapExtension() {
         window.draw();
 
         // Initialize map and chat observer
-        window.setupSidebarObserver();
+        window.observeChildChanges("communication", () => {
+            const chatPopupVisible = document.querySelector(".popup-chat")?.style.display === "block";
+
+            if (!chatPopupVisible) {
+                window.updateChatNotificationBadge();
+            } else {
+                const chatContentElement = document.querySelector(".chat-content");
+                const communicationElement = document.getElementById("communication");
+                if (!communicationElement || !chatContentElement) return;
+                chatContentElement.innerHTML = communicationElement.innerHTML;
+                chatContentElement.scrollTop = chatContentElement.scrollHeight;
+            }
+        });
+
+        observeChildChanges("magicmap", () => {
+            window.magicMapElement = document.getElementById("magicmap");
+            if (window.storedMap !== window.magicMapElement.innerHTML && !window.needsRedraw) {
+                window.needsRedraw = true;
+                window.centerPlayer();
+            }
+        });
     }
 
     // Start initialization AFTER everything is defined
-    // Add a small delay to ensure DOM is fully ready
     setTimeout(initialize, 100);
 }
 
