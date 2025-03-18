@@ -242,13 +242,20 @@ function initMapExtension() {
         requestAnimationFrame(window.draw);
     }
 
+    window.decodeHTML = function(html) {
+        const txt = document.createElement("textarea");
+        txt.innerHTML = html;
+        return txt.value;
+    }
+    
     window.drawMapContents = function(contents) {
         window.isPlayerSeen = false;
         window.mapContext.fillStyle = "white";
 
         for (let i = 0; i < contents.length; i++) {
             if (contents[i] !== 'X') {
-                window.mapContext.fillText(decodeHTML(contents[i]), 0, 21 * (i + 1));
+                const txt = document.createElement("textarea");
+                window.mapContext.fillText(window.decodeHTML(contents[i]), 0, 21 * (i + 1));
             } else {
                 // Handle when there is no highlight of player position
                 window.isPlayerSeen = true;
