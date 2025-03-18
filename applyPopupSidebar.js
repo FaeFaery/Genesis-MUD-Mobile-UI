@@ -9,7 +9,7 @@ function initMapExtension() {
     function injectMinifiedCSS() {
         try {
             const style = document.createElement('style');
-            style.textContent = '#magicmap-canvas{display:relative;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;background:#000;width:100%;height:100%;opacity:.9}#magicmap-img{object-fit:cover}#popup-buttons{position:absolute;user-select:none;top:6px;right:0;z-index:1;display:flex;flex-direction:column;background-color:rgba(0,0,0,.3)}#popupnav-container{position:absolute;user-select:none;top:0;left:0;display:flex;padding:10px;flex-direction:row;background-color:rgba(0,0,0,.1);gap:5px}#popupnav-container>*{margin-right:5px}#mobile-nav{position:absolute;top:100px;left:100px;display:flex;flex-direction:column}.popup-map{width:300px;height:300px;display:none;position:relative;border:1px solid #fff}.popup-chat{width:300px;height:100px;display:none;position:relative;overflow:hidden;border:1px solid #fff;background-color:rgba(0,0,0,.9)}.chat-content{height:100%;width:100%;color:#d0d0d0;font-family:Source Code Pro,sans-serif;overflow-y:scroll;font-size:14px;margin-left:5px;padding-right:10px;padding-top:10px;box-sizing:content-box}.resizable .resizers{width:100%;height:100%;box-sizing:border-box}.resizable .resizers .resizer{width:15px;height:15px;border-radius:50%;position:absolute}.resizable .resizers .resizer.top-left{left:-5px;top:-5px;cursor:nwse-resize}.resizable .resizers .resizer.top-right{right:-5px;top:-5px;cursor:nesw-resize}.resizable .resizers .resizer.bottom-left{left:-5px;bottom:-5px;cursor:nesw-resize}.resizable .resizers .resizer.bottom-right{right:-5px;bottom:-5px;cursor:nwse-resize}.exit-icon{cursor:pointer;user-select:none;width:30px;height:30px;color:#fff;font-size:30px;margin-bottom:-3px;font-variation-settings:\'FILL\' 0,\'wght\' 400,\'GRAD\' 0,\'opsz\' 24}.map-icon{cursor:pointer;display:block;user-select:none;color:#fff;font-size:20px;font-variation-settings:\'FILL\' 0,\'wght\' 300,\'GRAD\' 0,\'opsz\' 24}.center-icon{cursor:pointer;width:30px;height:30px;color:#fff;font-size:30px;font-variation-settings:\'FILL\' 0,\'wght\' 350,\'GRAD\' 0,\'opsz\' 24}.chat-icon{cursor:pointer;width:30px;height:30px;color:#fff;font-size:30px;font-variation-settings:\'FILL\' 0,\'wght\' 250,\'GRAD\' 0,\'opsz\' 24}.chat-icon-container{position:relative;display:inline-block}.chat-badge{font-family:Source Code Pro,sans-serif;position:absolute;top:-5px;right:2px;background-color:red;color:#fff;border-radius:50%;width:15px;height:15px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;padding:0;line-height:1;box-sizing:border-box;text-align:center}.new-message-divider{text-align:center;font-size:12px;color:#888;background:rgba(200,200,200,.3);padding:3px 0;margin:5px 0;transition:opacity 1s ease-out}#scroll-to-bottom{position:absolute;bottom:0;right:50%;padding:5px 10px;background:rgba(0,0,0,.5);color:#fff;border:none;border-radius:50%;cursor:pointer;animation:bobbing 1s ease-in-out infinite}@keyframes bobbing{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}.zoom-controls{user-select:none;display:flex;z-index:1;flex-direction:column;align-items:center;position:absolute;left:10px;top:9px;padding:5px 1px;background-color:rgba(255,255,255,.1);border-radius:4px}.zoom-slider{width:30px;height:100px;margin:10px 0;}.zoom-btn{width:20px;height:20px;color:rgba(255,255,255);border-radius:4px;background-color:rgba(245,245,245,.3);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}';
+            style.textContent = '#magicmap-canvas{display:relative;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;background:#000;width:100%;height:100%;opacity:.9}#magicmap-img{object-fit:cover}#popup-buttons{position:absolute;user-select:none;top:6px;right:0;z-index:1;display:flex;flex-direction:column;background-color:rgba(0,0,0,.3)}#popupnav-container{position:absolute;user-select:none;top:0;right:0;display:flex;padding:10px;flex-direction:row;background-color:rgba(0,0,0,.25);gap:5px}#popupnav-container>*{margin-right:5px}#mobile-nav{position:absolute;top:100px;left:100px;display:flex;flex-direction:column}.popup-map{width:300px;height:300px;display:none;position:relative;border:1px solid #fff}.popup-chat{width:300px;height:100px;display:none;position:relative;overflow:hidden;border:1px solid #fff;background-color:rgba(0,0,0,.9)}.chat-content{height:100%;width:100%;color:#d0d0d0;font-family:Source Code Pro,sans-serif;overflow-y:scroll;font-size:14px;margin-left:5px;padding-right:10px;padding-top:10px;box-sizing:content-box}.resizable .resizers{width:100%;height:100%;box-sizing:border-box}.resizable .resizers .resizer{width:15px;height:15px;border-radius:50%;position:absolute}.resizable .resizers .resizer.top-left{left:-5px;top:-5px;cursor:nwse-resize}.resizable .resizers .resizer.top-right{right:-5px;top:-5px;cursor:nesw-resize}.resizable .resizers .resizer.bottom-left{left:-5px;bottom:-5px;cursor:nesw-resize}.resizable .resizers .resizer.bottom-right{right:-5px;bottom:-5px;cursor:nwse-resize}.exit-icon{cursor:pointer;user-select:none;width:30px;height:30px;color:#fff;font-size:30px;margin-bottom:-3px;font-variation-settings:\'FILL\' 0,\'wght\' 400,\'GRAD\' 0,\'opsz\' 24}.map-icon{cursor:pointer;display:block;user-select:none;color:#fff;font-size:20px;font-variation-settings:\'FILL\' 0,\'wght\' 300,\'GRAD\' 0,\'opsz\' 24}.center-icon{cursor:pointer;width:30px;height:30px;color:#fff;font-size:30px;font-variation-settings:\'FILL\' 0,\'wght\' 350,\'GRAD\' 0,\'opsz\' 24}.chat-icon{cursor:pointer;width:30px;height:30px;color:#fff;font-size:30px;font-variation-settings:\'FILL\' 0,\'wght\' 250,\'GRAD\' 0,\'opsz\' 24}.chat-icon-container{position:relative;display:inline-block}.chat-badge{font-family:Source Code Pro,sans-serif;position:absolute;top:-5px;right:2px;background-color:red;color:#fff;border-radius:50%;width:15px;height:15px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;padding:0;line-height:1;box-sizing:border-box;text-align:center}.new-message-divider{text-align:center;font-size:12px;color:#888;background:rgba(200,200,200,.3);padding:3px 0;margin:5px 0;transition:opacity 1s ease-out}#scroll-to-bottom{position:absolute;bottom:0;right:50%;padding:5px 10px;background:rgba(0,0,0,.5);color:#fff;border:none;border-radius:50%;cursor:pointer;animation:bobbing 1s ease-in-out infinite}@keyframes bobbing{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}.zoom-controls{user-select:none;display:flex;z-index:1;flex-direction:column;align-items:center;position:absolute;left:10px;top:9px;padding:5px 1px;background-color:rgba(255,255,255,.1);border-radius:4px}.zoom-slider{width:30px;height:100px;margin:10px 0;}.zoom-btn{width:20px;height:20px;color:rgba(255,255,255);border-radius:4px;background-color:rgba(245,245,245,.3);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}';
             document.head.appendChild(style);
         } catch (error) {
             console.error('Failed to inject CSS:', error);
@@ -19,7 +19,7 @@ function initMapExtension() {
     function injectMinifiedHTML() {
         try {
             const container = document.createElement('div');
-            container.innerHTML = `<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" /><div id="popupnav-container"><span class='map-icon material-symbols-outlined'>explore</span><div class='chat-icon-container'><span class='chat-icon material-symbols-outlined'>chat_bubble</span></div></div><div id="mobile-nav"><div class='resizable popup-map'><div id="popup-buttons"><span class='exit-icon material-symbols-outlined'>close</span><span class='center-icon material-symbols-outlined'>center_focus_strong</span><div class='chat-icon-container'><span class='chat-icon material-symbols-outlined'>chat_bubble</span></div></div><div class="zoom-controls"><button id="zoom-in" class="zoom-btn">+</button><input type="range" id="zoom-slider" class="zoom-slider" min="100" max="250" value="100" style="writing-mode: vertical-lr; direction: rtl"><button id="zoom-out" class="zoom-btn">−</button></div><div class='resizers'><canvas id='magicmap-canvas'></canvas><div class='resizer top-left'></div><div class='resizer top-right'></div><div class='resizer bottom-left'></div><div class='resizer bottom-right'></div></div></div><div class='resizable popup-chat'><div id="popup-buttons"><span class='exit-icon material-symbols-outlined' style="padding-top: 5px;">close</span><span class='map-icon material-symbols-outlined'>explore</span></div><div class='resizers'><div class='chat-content'></div><div class='resizer bottom-left'></div><div class='resizer bottom-right'></div></div></div></div>`;
+            container.innerHTML = `<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" /><div id="popupnav-container"><span class='map-icon material-symbols-outlined'>explore</span><div class='chat-icon-container'><span class='chat-icon material-icons-outlined'>chat_bubble</span></div></div><div id="mobile-nav"><div class='resizable popup-map'><div id="popup-buttons"><span class='exit-icon material-symbols-outlined'>close</span><span class='center-icon material-symbols-outlined'>center_focus_strong</span><div class='chat-icon-container'><span class='chat-icon material-icons-outlined'>chat_bubble</span></div></div><div class="zoom-controls"><button id="zoom-in" class="zoom-btn">+</button><input type="range" id="zoom-slider" class="zoom-slider" min="100" max="250" value="100" style="writing-mode: vertical-lr; direction: rtl"><button id="zoom-out" class="zoom-btn">−</button></div><div class='resizers'><canvas id='magicmap-canvas'></canvas><div class='resizer top-left'></div><div class='resizer top-right'></div><div class='resizer bottom-left'></div><div class='resizer bottom-right'></div></div></div><div class='resizable popup-chat'><div id="popup-buttons"><span class='exit-icon material-symbols-outlined' style="padding-top: 5px;">close</span><span class='map-icon material-symbols-outlined'>explore</span></div><div class='resizers'><div class='chat-content'></div><div class='resizer bottom-left'></div><div class='resizer bottom-right'></div></div></div></div>`;
             document.body.appendChild(container);
         } catch (error) {
             console.error('Failed to inject HTML:', error);
@@ -58,6 +58,7 @@ function initMapExtension() {
     };
     window.cameraZoom = 1;
     window.isDragging = false;
+    window.playerMoved = false;
     window.drawingEnd = 0;
     window.maxOffsetX = 0;
     window.maxOffsetY = 0;
@@ -79,15 +80,14 @@ function initMapExtension() {
         const mudRect = mudOutput.getBoundingClientRect();
 
         popupNav.style.top = `${mudRect.top}px`;
-        popupNav.style.left = `${mudRect.left}px`;
-        popupNav.style.top = `${mudRect.top}px`;
+        popupNav.style.right = `${mudRect.right}px`;
     }
 
 
     // Helper functions
     window.longestLine = function(lines) {
         return lines.reduce((longest, current) =>
-            current.length > longest.length ? current : longest, "");
+            window.decodeHTML(current).length > longest.length ? current : longest, "");
     }
 
     // Event handling
@@ -189,7 +189,7 @@ function initMapExtension() {
         window.storedMap = window.magicMapElement.innerHTML;
         const contents = window.getMapContents();
 
-        if (contents === 'There is no map for this area') {
+        if (contents[0] === 'There is no map for this area') {
             window.mapCanvas.style.display = "none";
             const popupMap = document.querySelector(".popup-map");
 
@@ -283,6 +283,11 @@ function initMapExtension() {
                 i--;
             }
 
+            if (window.playerMoved) {
+                window.centerPlayer();
+                window.playerMoved = false;
+            }
+    
             $(".center-icon").toggle(window.isPlayerSeen);
             window.drawingEnd = 21 * (i + 1);
         }
@@ -678,7 +683,7 @@ function initMapExtension() {
             window.magicMapElement = document.getElementById("magicmap");
             if (window.storedMap !== window.magicMapElement.innerHTML && !window.needsRedraw) {
                 window.needsRedraw = true;
-                window.centerPlayer();
+                window.playerMoved = true;
             }
         });
     }
