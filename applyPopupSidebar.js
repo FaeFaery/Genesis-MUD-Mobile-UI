@@ -10,7 +10,7 @@ function injectMinifiedHTML() {
     document.body.appendChild(container);
 }
 
-function positionPopupNav() {
+window.positionPopupNav = function () {
     const popupNav = document.getElementById("popupnav-container");
     const mudOutput = document.getElementById("mudoutput");
     const mobileNav = document.getElementById("mobile-nav");
@@ -572,13 +572,17 @@ function initializeEventListeners() {
     window.zoomOutBtn.addEventListener('click', zoomOut);
 
     // Popup events
-    $('.map-icon').on("click", window.showMap());
-    $('.chat-icon').on("click", window.showChat());
-    $('.popup-map .exit-icon').on("click", window.closeMap());
-    $('.center-icon').on("click", window.centerPlayer());
-    $('.popup-chat .exit-icon').on("click", window.closeChat());
-    $('.chat-content').on("scroll", window.chatScroll());
-    positionPopupNav();
+    $('.map-icon').on("click", window.showMap);
+    $('.chat-icon').on("click", window.showChat);
+    $('.popup-map .exit-icon').on("click", window.closeMap);
+    $('.center-icon').on("click", window.centerPlayer);
+    $('.popup-chat .exit-icon').on("click", window.closeChat);
+    $('.chat-content').on("scroll", window.chatScroll);
+    const observer = new ResizeObserver(() => {
+        window.positionPopupNav();
+    });
+
+    observer.observe(document.querySelector("#mudoutput"));
 }
 
 // Initialize everything
