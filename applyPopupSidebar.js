@@ -189,6 +189,40 @@ function initMapExtension() {
         window.storedMap = window.magicMapElement.innerHTML;
         const contents = window.getMapContents();
 
+        if (contents === 'There is no map for this area') {
+            window.mapCanvas.style.display = "none";
+            const popupMap = document.querySelector(".popup-map");
+
+            // Create the text element
+            const noMapText = document.createElement("div");
+            noMapText.id = "noMapPlaceholder"; 
+            noMapText.textContent = "There is no map for this area";
+
+            // Apply styles
+            Object.assign(noMapText.style, {
+                color: "#d0d0d0",
+                fontFamily: "'Source Code Pro', sans-serif",
+                fontSize: "14px",
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                textAlign: "center",
+                whiteSpace: "nowrap"
+            });
+
+            // Append to the parent
+            popupMap.appendChild(noMapText);
+            requestAnimationFrame(window.draw);
+            return;
+        }
+
+        const noMapText = document.getElementById("noMapPlaceholder");
+        if (noMapText) {
+            noMapText.remove();
+            window.mapCanvas.style.display = "block";
+        }
+        
         // Clear canvas
         window.mapContext.setTransform(1, 0, 0, 1, 0, 0);
         window.mapContext.clearRect(0, 0, window.mapCanvas.width, window.mapCanvas.height);
