@@ -81,10 +81,6 @@ window.longestLine = function(lines) {
         current.length > longest.length ? current : longest, "");
 }
 
-window.requestRedraw() = function() {
-    window.needsRedraw = true;
-}
-
 // Event handling
 window.getEventLocation = function(e) {
     if (e.touches && e.touches.length === 1) {
@@ -122,7 +118,7 @@ function handlePointerMove(e) {
     if (!location) return;
 
     window.updateCameraPosition(location);
-    window.requestRedraw();
+    window.needsRedraw = true;
 }
 
 window.updateCameraPosition = function(location) {
@@ -145,25 +141,25 @@ window.updateCameraPosition = function(location) {
 window.centerPlayer = function() {
     window.cameraOffset.x = -window.playerCoords.x + (window.mapCanvas.width / (2 * window.cameraZoom));
     window.cameraOffset.y = -window.playerCoords.y + (window.mapCanvas.height / (2 * window.cameraZoom));
-    window.requestRedraw();
+    window.needsRedraw = true;
 }
 
 // Zoom controls
 function handleZoomSlider() {
     window.cameraZoom = parseFloat(this.value) / 100;
-    window.requestRedraw();
+    window.needsRedraw = true;
 }
 
 function zoomIn() {
     window.cameraZoom = Math.min(window.cameraZoom + 0.1, 2.5);
     window.zoomSlider.value = window.cameraZoom * 100;
-    window.requestRedraw();
+    window.needsRedraw = true;
 }
 
 function zoomOut() {
     window.cameraZoom = Math.max(window.cameraZoom - 0.1, 1.0);
     window.zoomSlider.value = window.cameraZoom * 100;
-    window.requestRedraw();
+    window.needsRedraw = true;
 }
 
 // Map rendering
@@ -254,7 +250,7 @@ window.showMap = function() {
         icon.style.display = "none";
     });
 
-    window.requestRedraw();
+    window.needsRedraw = true;
 }
 
 window.closeMap = function() {
@@ -402,7 +398,7 @@ window.makeResizableDiv = function(selector) {
             if (window.mapCanvas) {
                 window.mapCanvas.width = newWidth * 2;
                 window.mapCanvas.style.width = `${newWidth}px`;
-                window.requestRedraw();
+                window.needsRedraw = true;
             }
         }
 
@@ -414,7 +410,7 @@ window.makeResizableDiv = function(selector) {
             if (element.classList.contains("popup-map") && window.mapCanvas) {
                 window.mapCanvas.height = newHeight * 2;
                 window.mapCanvas.style.height = `${newHeight}px`;
-                window.requestRedraw();
+                window.needsRedraw = true;
             }
         }
     }
@@ -458,7 +454,7 @@ window.setupSidebarObserver = function() {
                     chatContentElement.scrollTop = chatContentElement.scrollHeight;
                 }
 
-                if (!window.storedMap === window.magicMapElement.innerHTML) window.requestRedraw();
+                if (!window.storedMap === window.magicMapElement.innerHTML) window.needsRedraw = true;
             }
         });
     });
@@ -598,7 +594,7 @@ function initialize() {
     initializeEventListeners();
 
     // Start the rendering loop
-    window.requestRedraw();
+    window.needsRedraw = true;
     window.draw();
 }
 
