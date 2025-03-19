@@ -81,6 +81,13 @@ function initMapExtension() {
         const mudRect = mudOutput.getBoundingClientRect();
         const bodyRect = document.body.getBoundingClientRect();
 
+        if (window.innerWidth <= 768) {
+            const controls = document.getElementById("controls");
+            popupNav.style.top = `${controls.offsetHeight}px`;
+            popupNav.style.right = `${bodyRect.width - mudRect.right + 5}px`;
+            return;
+        }
+        
         popupNav.style.top = `${mudRect.top - 10}px`;
         popupNav.style.right = `${bodyRect.width - mudRect.right + 5}px`;
     }
@@ -659,7 +666,12 @@ function initMapExtension() {
         const mobileChat = document.querySelector(".popup-chat");
         const mobileNav = document.getElementById("mobile-nav");
         const mudRect = mudOutput.getBoundingClientRect();
-        mobileNav.style.top = `${mudRect.top}px`;
+        if (window.innerWidth <= 768) {
+            const controls = document.getElementById("controls");
+            mobileNav.style.top = `${controls.offsetHeight}px`;
+        } else {
+            mobileNav.style.top = `${mudRect.top}px`;
+        }
         mobileNav.style.left = `${mudRect.left}px`;
         mobileMap.style.width = `${Math.min(Math.max(mudOutput.offsetWidth * 0.75, 340), 500)}px`;
         mobileChat.style.width = `${Math.min(Math.max(mudOutput.offsetWidth * 0.75, 340), 500)}px`;
