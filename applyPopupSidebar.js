@@ -186,6 +186,7 @@ function initMapExtension() {
     window.getMapContents = function() {
         if (!window.magicMapElement) return [];
         return window.magicMapElement.innerHTML
+            .replace(/<\/font>\n/, "</font> \n")
             .split(/\n|<font color="red">|<\/font>/)
             .filter(value => value.length > 0);
     }
