@@ -185,7 +185,8 @@ function initMapExtension() {
     // Map rendering
     window.getMapContents = function() {
         if (!window.magicMapElement) return [];
-        return window.magicMapElement.innerHTML
+        let contents = window.magicMapElement.innerHTML;
+        return contents
             .replace(/<\/font>\n/, "</font> \n")
             .split(/\n|<font color="red">|<\/font>/)
             .filter(value => value.length > 0);
@@ -508,7 +509,7 @@ function initMapExtension() {
         const chat = document.querySelector(".popup-chat");
         const chatContent = document.querySelector(".chat-content");
         const justOpened = chatContent.classList.contains("justOpened");
-        const atBottom = chatContent.scrollHeight - chatContent.scrollTop <= chat.clientHeight;
+        const atBottom = chatContent.scrollHeight - chatContent.scrollTop <= chat.clientHeight + 10;
         if (scrollButton && atBottom) scrollButton.remove();
         if (newMsgDivider && atBottom && !justOpened) newMsgDivider.remove();
         if (!atBottom && !scrollButton) window.addScrollToBottomButton();
