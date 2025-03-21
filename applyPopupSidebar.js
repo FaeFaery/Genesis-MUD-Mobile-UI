@@ -29,7 +29,7 @@
                 container.id = "mobileNav-wrapper";
 
                 // Use innerHTML once for better performance
-                container.innerHTML = `<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" /><div id="popupnav-container"><span class='map-icon material-symbols-outlined'>explore</span><div class='chat-icon-container'><span class='chat-icon material-symbols-outlined'>chat_bubble</span></div></div><div id="mobile-nav"><div class='resizable popup-map'><div id="popup-buttons"><span class='exit-icon material-symbols-outlined'>close</span><span class='center-icon material-symbols-outlined'>center_focus_strong</span><div class='chat-icon-container'><span class='chat-icon material-symbols-outlined'>chat_bubble</span></div><span class="zoom-icon material-symbols-outlined">zoom_in</span></div><span class="settings-icon material-symbols-outlined">settings</span><div class="zoom-controls"><button id="zoom-in" class="zoom-btn">+</button><input type="range" id="zoom-slider" class="zoom-slider" min="100" max="250" value="100" style="writing-mode: vertical-lr; direction: rtl"><button id="zoom-out" class="zoom-btn">−</button></div><div class='resizers'><canvas id='magicmap-canvas'></canvas><div class='resizer top-left'></div><div class='resizer top-right'></div><div class='resizer bottom-left'></div><div class='resizer bottom-right'></div></div></div><div class='resizable popup-chat'><div id="popup-buttons"><span class='exit-icon material-symbols-outlined' style="padding-top: 5px;">close</span><span class='map-icon material-symbols-outlined'>explore</span></div><span class="settings-icon material-symbols-outlined">settings</span><div class='resizers'><div class='chat-content'></div><div class='resizer bottom-left'></div><div class='resizer bottom-right'></div></div></div></div>`;
+                container.innerHTML = `<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" /><div id="popupnav-container"><span class="settings-icon material-symbols-outlined">settings</span><span class='map-icon material-symbols-outlined'>explore</span><div class='chat-icon-container'><span class='chat-icon material-symbols-outlined'>chat_bubble</span></div></div><div id="mobile-nav"><div class='resizable popup-map'><div id="popup-buttons"><span class='exit-icon material-symbols-outlined'>close</span><span class='center-icon material-symbols-outlined'>center_focus_strong</span><div class='chat-icon-container'><span class='chat-icon material-symbols-outlined'>chat_bubble</span></div><span class="zoom-icon material-symbols-outlined">zoom_in</span></div><div class="zoom-controls"><button id="zoom-in" class="zoom-btn">+</button><input type="range" id="zoom-slider" class="zoom-slider" min="100" max="250" value="100" style="writing-mode: vertical-lr; direction: rtl"><button id="zoom-out" class="zoom-btn">−</button></div><div class='resizers'><canvas id='magicmap-canvas'></canvas><div class='resizer top-left'></div><div class='resizer top-right'></div><div class='resizer bottom-left'></div><div class='resizer bottom-right'></div></div></div><div class='resizable popup-chat'><div id="popup-buttons"><span class='exit-icon material-symbols-outlined' style="padding-top: 5px;">close</span><span class='map-icon material-symbols-outlined'>explore</span></div><div class='resizers'><div class='chat-content'></div><div class='resizer bottom-left'></div><div class='resizer bottom-right'></div></div></div></div>`;
 
                 document.body.appendChild(container);
             } catch (error) {
@@ -417,21 +417,10 @@
 
             toggleSettings: function(event) {
                 const settingsPopup = document.querySelector(".popup-settings");
-                const isInsideChat = event.target.closest(".popup-chat") !== null;
-                const isInsideMap = event.target.closest(".popup-map") !== null;
                 
                 // Toggle visibility of settings popup and settings icon
                 settingsPopup.style.display = (settingsPopup.style.display === "block") ? "none" : "block";
                 event.target.style.display = (toggleButton.style.display === "block") ? "none" : "block"; 
-
-                // Hide the other settings icon depending on which was clicked and display corresponding settings popup
-                if (isInsideChat) {
-                    document.querySelector(".popup-map .settings-button")?.style.display = "none";
-                    document.querySelector(".popup-chat .popup-settings")?.style.display = "block";
-                } else if (isInsideMap) {
-                    document.querySelector(".popup-chat .settings-button")?.style.display = "none";
-                    document.querySelector(".popup-map .popup-settings")?.style.display = "block";
-                }
             },
 
             makeResizableDiv: function(selector) {
