@@ -12,7 +12,7 @@
         function injectMinifiedCSS() {
             try {
                 const style = document.createElement('style');
-                style.textContent = '#magicmap-canvas{display:relative;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;background:#000;width:100%;height:100%;opacity:.9}#magicmap-img{object-fit:cover}#popup-buttons{position:absolute;user-select:none;top:6px;right:0;z-index:1;display:flex;flex-direction:column;background-color:rgba(0,0,0,.3)}#popupnav-container{position:absolute;user-select:none;top:0;right:0;display:flex;padding:10px;flex-direction:row;gap:5px}#popupnav-container>*{margin-right:5px}#mobile-nav{position:absolute;top:100px;left:100px;display:flex;flex-direction:column}.popup-map{width:300px;height:300px;position:relative;border:1px solid #fff;background:#000;opacity:.9}.popup-chat{width:300px;height:100px;position:relative;overflow:hidden;border:1px solid #fff;background-color:rgba(0,0,0,.9)}.chat-content{height:calc(100% - 10px);width:100%;color:#d0d0d0;font-family:Source Code Pro,sans-serif;overflow-y:scroll;overflow-x:hidden;word-wrap:break-word;white-space:normal;overflow-wrap:break-word;font-size:14px;padding-right:10px;padding-left:10px;padding-top:10px;box-sizing:content-box}.resizable .resizers{width:100%;height:100%;box-sizing:border-box}.resizable .resizers .resizer{width:15px;height:15px;border-radius:50%;position:absolute}.resizable .resizers .resizer.top-left{left:-5px;top:-5px;cursor:nwse-resize}.resizable .resizers .resizer.top-right{right:-5px;top:-5px;cursor:nesw-resize}.resizable .resizers .resizer.bottom-left{left:-5px;bottom:-5px;cursor:nesw-resize}.resizable .resizers .resizer.bottom-right{right:-5px;bottom:-5px;cursor:nwse-resize}.exit-icon{cursor:pointer;user-select:none;width:30px;height:30px;color:#fff;font-size:30px;margin-bottom:-3px;font-variation-settings:\'FILL\' 0,\'wght\' 400,\'GRAD\' 0,\'opsz\' 24}.map-icon{cursor:pointer;display:block;user-select:none;color:#fff;font-size:20px;font-variation-settings:\'FILL\' 1,\'wght\' 300,\'GRAD\' 0,\'opsz\' 24}.center-icon{cursor:pointer;width:30px;height:30px;color:#fff;font-size:30px;font-variation-settings:\'FILL\' 0,\'wght\' 350,\'GRAD\' 0,\'opsz\' 24}.chat-icon{cursor:pointer;width:30px;height:30px;color:#fff;font-size:30px;font-variation-settings:\'FILL\' 1,\'wght\' 250,\'GRAD\' 0,\'opsz\' 24}.chat-icon-container{position:relative;display:inline-block}.chat-badge{font-family:Source Code Pro,sans-serif;position:absolute;top:-5px;right:2px;background-color:red;color:#fff;border-radius:50%;width:15px;height:15px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;padding:0;line-height:1;box-sizing:border-box;text-align:center}.new-message-divider{position:relative;justify-content:center;padding-left:0;padding-right:0;box-sizing:border-box;padding-top:5px;width:calc(100% - 20px);margin-left:0;margin-right:0;display:flex;align-items:center;font-size:8px;font-weight:bold;text-transform:uppercase;color:#fff;font-family:Arial,sans-serif;color:white;user-select:none}.new-message-divider::before,.new-message-divider::after{content:"";flex-grow:0.7;height:1px;background:rgba(255,255,255,0.1);margin:0 8px}.new-message-divider>span{background-color:#ff2d2d;padding:4px 10px;border-radius:8px}#scroll-to-bottom{position:absolute;bottom:0;right:50%;padding:5px 10px;background:rgba(0,0,0,.5);color:#fff;border:none;border-radius:50%;cursor:pointer;-webkit-box-shadow:none;animation:bobbing 1s ease-in-out infinite}@keyframes bobbing{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}.zoom-controls{user-select:none;display:flex;z-index:1;flex-direction:column;align-items:center;position:absolute;left:10px;top:9px;padding:5px 1px;background-color:rgba(255,255,255,.1);border-radius:4px}.zoom-slider{width:30px;height:100px;margin:10px 0}.zoom-btn{width:20px;height:20px;color:rgba(255,255,255);border-radius:4px;background-color:rgba(245,245,245,.3);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}';
+                style.textContent = '#magicmap-canvas{display:relative;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;background:#000;width:100%;height:100%;opacity:.9}#magicmap-img{object-fit:cover}#popup-buttons{position:absolute;user-select:none;top:6px;right:0;z-index:1;display:flex;flex-direction:column;background-color:rgba(0,0,0,.3)}#popupnav-container{position:absolute;user-select:none;top:0;right:0;display:flex;padding:10px;flex-direction:row;gap:5px}#popupnav-container>*{margin-right:5px}#mobile-nav{position:absolute;top:100px;left:100px;display:flex;flex-direction:column}.popup-map{width:300px;height:300px;position:relative;border:1px solid #fff;background:#000;opacity:.9}.popup-chat{width:300px;height:100px;position:relative;overflow:hidden;border:1px solid #fff;background-color:rgba(0,0,0,.9)}.chat-content{height:calc(100% - 10px);width:100%;color:#d0d0d0;font-family:Source Code Pro,sans-serif;overflow-y:scroll;overflow-x:hidden;word-wrap:break-word;white-space:normal;overflow-wrap:break-word;font-size:14px;padding-right:10px;padding-left:10px;padding-top:10px;box-sizing:content-box}.resizable .resizers{width:100%;height:100%;box-sizing:border-box}.resizable .resizers .resizer{width:15px;height:15px;border-radius:50%;position:absolute}.resizable .resizers .resizer.top-left{left:-5px;top:-5px;cursor:nwse-resize}.resizable .resizers .resizer.top-right{right:-5px;top:-5px;cursor:nesw-resize}.resizable .resizers .resizer.bottom-left{left:-5px;bottom:-5px;cursor:nesw-resize}.resizable .resizers .resizer.bottom-right{right:-5px;bottom:-5px;cursor:nwse-resize}.exit-icon{cursor:pointer;user-select:none;width:30px;height:30px;color:#fff;font-size:30px;margin-bottom:-3px;font-variation-settings:\'FILL\' 0,\'wght\' 400,\'GRAD\' 0,\'opsz\' 24}.map-icon{cursor:pointer;display:block;user-select:none;color:#fff;font-size:20px;font-variation-settings:\'FILL\' 1,\'wght\' 300,\'GRAD\' 0,\'opsz\' 24}.center-icon{cursor:pointer;width:30px;height:30px;color:#fff;font-size:30px;font-variation-settings:\'FILL\' 0,\'wght\' 350,\'GRAD\' 0,\'opsz\' 24}.chat-icon{cursor:pointer;width:30px;height:30px;color:#fff;font-size:30px;font-variation-settings:\'FILL\' 1,\'wght\' 250,\'GRAD\' 0,\'opsz\' 24}.zoom-icon {cursor: pointer;width: 30px;height: 30px;color: #fff;font-size: 30px;font-variation-settings: \'FILL\' 0, \'wght\' 250, \'GRAD\' 0, \'opsz\' 24}.settings-icon{cursor: pointer;width: 30px;height: 30px;color: #999999;font-size: 30px;position: absolute;user-select: none;top: 0;left: 0;padding: 10px;font-variation-settings: \'FILL\' 1, \'wght\' 250, \'GRAD\' 0, \'opsz\' 24}.chat-icon-container{position:relative;display:inline-block}.chat-badge{font-family:Source Code Pro,sans-serif;position:absolute;top:-5px;right:2px;background-color:red;color:#fff;border-radius:50%;width:15px;height:15px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;padding:0;line-height:1;box-sizing:border-box;text-align:center}.new-message-divider{position:relative;justify-content:center;padding-left:0;padding-right:0;box-sizing:border-box;padding-top:5px;width:calc(100% - 20px);margin-left:0;margin-right:0;display:flex;align-items:center;font-size:8px;font-weight:bold;text-transform:uppercase;color:#fff;font-family:Arial,sans-serif;color:white;user-select:none}.new-message-divider::before,.new-message-divider::after{content:"";flex-grow:0.7;height:1px;background:rgba(255,255,255,0.1);margin:0 8px}.new-message-divider>span{background-color:#ff2d2d;padding:4px 10px;border-radius:8px}#scroll-to-bottom{position:absolute;bottom:0;right:50%;padding:5px 10px;background:rgba(0,0,0,.5);color:#fff;border:none;border-radius:50%;cursor:pointer;-webkit-box-shadow:none;animation:bobbing 1s ease-in-out infinite}@keyframes bobbing{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}.zoom-controls{user-select:none;display:none;z-index:1;flex-direction:column;align-items:center;position:absolute;left:10px;top: 50%;transform: translateY(-50%);padding:5px 1px;background-color:rgba(255,255,255,.1);border-radius:4px}.zoom-slider{width:30px;height:100px;margin:10px 0}.zoom-btn{width:20px;height:20px;color:rgba(255,255,255);border-radius:4px;background-color:rgba(245,245,245,.3);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}';
                 document.head.appendChild(style);
             } catch (error) {
                 console.error('Failed to inject CSS:', error);
@@ -29,7 +29,7 @@
                 container.id = "mobileNav-wrapper";
 
                 // Use innerHTML once for better performance
-                container.innerHTML = `<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" /><div id="popupnav-container"><span class='map-icon material-symbols-outlined'>explore</span><div class='chat-icon-container'><span class='chat-icon material-symbols-outlined'>chat_bubble</span></div></div><div id="mobile-nav"><div class='resizable popup-map'><div id="popup-buttons"><span class='exit-icon material-symbols-outlined'>close</span><span class='center-icon material-symbols-outlined'>center_focus_strong</span><div class='chat-icon-container'><span class='chat-icon material-symbols-outlined'>chat_bubble</span></div></div><div class="zoom-controls"><button id="zoom-in" class="zoom-btn">+</button><input type="range" id="zoom-slider" class="zoom-slider" min="100" max="250" value="100" style="writing-mode: vertical-lr; direction: rtl"><button id="zoom-out" class="zoom-btn">−</button></div><div class='resizers'><canvas id='magicmap-canvas'></canvas><div class='resizer top-left'></div><div class='resizer top-right'></div><div class='resizer bottom-left'></div><div class='resizer bottom-right'></div></div></div><div class='resizable popup-chat'><div id="popup-buttons"><span class='exit-icon material-symbols-outlined' style="padding-top: 5px;">close</span><span class='map-icon material-symbols-outlined'>explore</span></div><div class='resizers'><div class='chat-content'></div><div class='resizer bottom-left'></div><div class='resizer bottom-right'></div></div></div></div>`;
+                container.innerHTML = `<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" /><div id="popupnav-container"><span class='map-icon material-symbols-outlined'>explore</span><div class='chat-icon-container'><span class='chat-icon material-symbols-outlined'>chat_bubble</span></div></div><div id="mobile-nav"><div class='resizable popup-map'><div id="popup-buttons"><span class='exit-icon material-symbols-outlined'>close</span><span class='center-icon material-symbols-outlined'>center_focus_strong</span><div class='chat-icon-container'><span class='chat-icon material-symbols-outlined'>chat_bubble</span></div><span class="zoom-icon material-symbols-outlined">zoom_in</span></div><span class="settings-icon material-symbols-outlined">settings</span><div class="zoom-controls"><button id="zoom-in" class="zoom-btn">+</button><input type="range" id="zoom-slider" class="zoom-slider" min="100" max="250" value="100" style="writing-mode: vertical-lr; direction: rtl"><button id="zoom-out" class="zoom-btn">−</button></div><div class='resizers'><canvas id='magicmap-canvas'></canvas><div class='resizer top-left'></div><div class='resizer top-right'></div><div class='resizer bottom-left'></div><div class='resizer bottom-right'></div></div></div><div class='resizable popup-chat'><div id="popup-buttons"><span class='exit-icon material-symbols-outlined' style="padding-top: 5px;">close</span><span class='map-icon material-symbols-outlined'>explore</span></div><span class="settings-icon material-symbols-outlined">settings</span><div class='resizers'><div class='chat-content'></div><div class='resizer bottom-left'></div><div class='resizer bottom-right'></div></div></div></div>`;
 
                 document.body.appendChild(container);
             } catch (error) {
@@ -37,7 +37,7 @@
             }
         }
 
-        // Set up jQuery
+        // Bypass the webclient method to prevent map updates when map isn't visible hehe :3
         const setupJQuery = () => {
             const originalIs = $.fn.is;
             $.fn.is = function(selector) {
@@ -88,6 +88,7 @@
                 return this.textDecoder.value;
             },
 
+            // Function to find the longest line in the map for drawing canvas
             longestLine: function(lines) {
                 return this.decodeHTML(
                     lines.reduce((longest, current) =>
@@ -95,6 +96,7 @@
                 );
             },
 
+            // Get cursor location on click/touch
             getEventLocation: function(e) {
                 if (e.touches && e.touches.length === 1) {
                     const rect = elements.mapCanvas.getBoundingClientRect();
@@ -111,6 +113,10 @@
                 return null;
             },
 
+            // Grab map contents
+            // Add a space in between player highlight and new line just in case
+            // Split into an array of map lines and isolate player highlight
+            // Exclude any empty objects
             getMapContents: function() {
                 if (!elements.magicMapElement) return [];
                 const contents = elements.magicMapElement.innerHTML;
@@ -120,6 +126,7 @@
                     .filter(value => value.length > 0);
             },
 
+            // Ensure the map and chat buttons stay aligned to the top right of the mud log
             positionPopupNav: function() {
                 const popupNav = elements.popupNav;
                 const mudOutput = elements.mudOutput;
@@ -141,7 +148,7 @@
             }
         };
 
-        // Event Handlers
+        // Event Handlers, duh
         const eventHandlers = {
             handlePointerDown: function(e) {
                 state.isDragging = true;
@@ -200,7 +207,7 @@
             }
         };
 
-        // Map rendering functions
+        // Map drawing functions
         const mapRendering = {
             updateCameraPosition: function(location) {
                 const contents = utils.getMapContents();
@@ -225,14 +232,12 @@
                 state.needsRedraw = true;
             },
 
-            // Main drawing function with performance optimizations
             draw: function() {
                 if (!state.needsRedraw) {
                     requestAnimationFrame(mapRendering.draw);
                     return;
                 }
 
-                state.needsRedraw = false;
                 const contents = utils.getMapContents();
                 const noMapText = document.getElementById("noMapPlaceholder");
                 state.storedMap = contents;
@@ -263,9 +268,11 @@
                     popupMap.appendChild(noMapText);
                     $(".center-icon").toggle(state.isPlayerSeen);
                     requestAnimationFrame(mapRendering.draw);
+                    state.needsRedraw = false;
                     return;
                 } else if (contents[0] === 'There is no map for this area') {
                     requestAnimationFrame(mapRendering.draw);
+                    state.needsRedraw = false;
                     return;
                 }
 
@@ -291,6 +298,7 @@
                 mapRendering.drawMapContents(contents);
 
                 requestAnimationFrame(mapRendering.draw);
+                state.needsRedraw = false;
 
                 if (state.playerMoved) {
                     mapRendering.centerPlayer();
@@ -341,7 +349,7 @@
             }
         };
 
-        // UI controls
+        // UI controls, could you have guessed?
         const uiControls = {
             showMap: function() {
                 elements.popupNav.style.display = "none";
@@ -398,6 +406,34 @@
                 elements.chat.style.display = "none";
             },
 
+            toggleZoom: function() {
+                const zoomControls = document.querySelector(".zoom-controls");
+                const toggleButton = document.querySelector(".zoom-icon");
+                const isVisible = zoomControls.style.display === "flex";
+
+                zoomControls.style.display = isVisible ? "none" : "flex";
+                toggleButton.textContent = isVisible ? "zoom_in" : "zoom_out"; 
+            },
+
+            toggleSettings: function(event) {
+                const settingsPopup = document.querySelector(".popup-settings");
+                const isInsideChat = event.target.closest(".popup-chat") !== null;
+                const isInsideMap = event.target.closest(".popup-map") !== null;
+                
+                // Toggle visibility of settings popup and settings icon
+                settingsPopup.style.display = (settingsPopup.style.display === "block") ? "none" : "block";
+                event.target.style.display = (toggleButton.style.display === "block") ? "none" : "block"; 
+
+                // Hide the other settings icon depending on which was clicked and display corresponding settings popup
+                if (isInsideChat) {
+                    document.querySelector(".popup-map .settings-button")?.style.display = "none";
+                    document.querySelector(".popup-chat .popup-settings")?.style.display = "block";
+                } else if (isInsideMap) {
+                    document.querySelector(".popup-chat .settings-button")?.style.display = "none";
+                    document.querySelector(".popup-map .popup-settings")?.style.display = "block";
+                }
+            },
+
             makeResizableDiv: function(selector) {
                 const element = document.querySelector(selector);
                 if (!element) return;
@@ -422,7 +458,6 @@
                     originalMouseX = e.pageX || (e.touches && e.touches[0].pageX);
                     originalMouseY = e.pageY || (e.touches && e.touches[0].pageY);
 
-                    // Use passive: false only for touch events
                     window.addEventListener("mousemove", resize);
                     window.addEventListener("mouseup", stopResize);
                     window.addEventListener("touchmove", resize, {
@@ -506,7 +541,7 @@
                     activeResizer = null;
                 }
 
-                // Add event listeners to each resizer - using event delegation would be better, but keeping original approach
+                // Add event listeners to each resizer
                 resizers.forEach(resizer => {
                     resizer.addEventListener("mousedown", initResize);
                     resizer.addEventListener("touchstart", initResize, {
@@ -603,10 +638,9 @@
                 // Create a single observer per target for better performance
                 const observer = new MutationObserver(() => callback());
 
-                // Observe only what's needed
+                // Observe if new elements are added or if text is changed
                 observer.observe(targetNode, {
                     childList: true,
-                    subtree: true,
                     characterData: true
                 });
 
@@ -738,6 +772,8 @@
             // UI controls using event delegation where possible
             $('.map-icon').on("click", uiControls.showMap);
             $('.chat-icon').on("click", uiControls.showChat);
+            $('.zoom-icon').on("click", uiControls.toggleZoom);
+            $('.settings-icon').on("click", uiControls.toggleSettings);
             $('.popup-map .exit-icon').on("click", uiControls.closeMap);
             $('.center-icon').on("click", mapRendering.centerPlayer);
             $('.popup-chat .exit-icon').on("click", uiControls.closeChat);
@@ -762,12 +798,5 @@
         setTimeout(initialize, 100);
     }
 
-    // Add options to load the script
-    // Option 1: Wait for DOMContentLoaded
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initMapExtension);
-    } else {
-        // Option 2: Execute immediately if document is already loaded
-        setTimeout(initMapExtension, 100);
-    }
+    setTimeout(initMapExtension, 100);
 })();
