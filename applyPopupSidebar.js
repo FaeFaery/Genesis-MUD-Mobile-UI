@@ -687,6 +687,7 @@
             }
         };
 
+        // Settings functions
         const settingsControls = {
             reset: function() {
                 // Map Settings
@@ -774,7 +775,7 @@
 
                 // Apply values to styling
                 settingsControls.apply();
-                
+
                 window.defaultZoom = allSettings.defaultZoom;
                 window.mapWidth = allSettings.mapWidth;
                 window.mapHeight = allSettings.mapHeight;
@@ -902,7 +903,7 @@
             // Set canvas sizes (both displayed and actual)
             elements.mapCanvas.style.height = `${elements.map.offsetHeight - 2}px`;
             elements.mapCanvas.style.width = `${elements.map.offsetWidth - 2}px`;
-            elements.mapCanvas.height = elements.map.offsetHeight * 2; // Double for better resolution
+            elements.mapCanvas.height = elements.map.offsetHeight * 2;
             elements.mapCanvas.width = elements.map.offsetWidth * 2;
 
             // Hide chat and map initially, apply default styling
