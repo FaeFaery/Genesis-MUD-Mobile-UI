@@ -1,4 +1,4 @@
-// Self-executing function for better scoping and performance
+// Self-executing function 
 (function() {
     // Initialize once DOM is ready
     function initMapExtension() {
@@ -12,7 +12,7 @@
         function injectMinifiedCSS() {
             try {
                 const style = document.createElement('style');
-                style.textContent = '#magicmap-canvas{display:relative;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;background:#000;width:100%;height:100%;opacity:.9}#magicmap-img{object-fit:cover}#popup-buttons{position:absolute;user-select:none;top:6px;right:0;z-index:1;display:flex;flex-direction:column;background-color:rgba(0,0,0,.3)}#popupnav-container{position:absolute;user-select:none;top:0;right:0;display:flex;padding:10px;flex-direction:row;gap:5px}#popupnav-container>*{margin-right:5px}#mobile-nav{position:absolute;top:100px;left:100px;display:flex;flex-direction:column}.popup-map{width:300px;height:300px;position:relative;border:1px solid #fff;background:#000;opacity:.9}.popup-chat{width:300px;height:100px;position:relative;overflow:hidden;border:1px solid #fff;background-color:rgba(0,0,0,.9)}.chat-content{height:calc(100% - 10px);width:100%;color:#d0d0d0;font-family:Source Code Pro,sans-serif;overflow-y:scroll;overflow-x:hidden;word-wrap:break-word;white-space:normal;overflow-wrap:break-word;font-size:14px;padding-right:10px;padding-left:10px;padding-top:10px;box-sizing:content-box}.resizable .resizers{width:100%;height:100%;box-sizing:border-box}.resizable .resizers .resizer{width:15px;height:15px;border-radius:50%;position:absolute}.resizable .resizers .resizer.top-left{left:-5px;top:-5px;cursor:nwse-resize}.resizable .resizers .resizer.top-right{right:-5px;top:-5px;cursor:nesw-resize}.resizable .resizers .resizer.bottom-left{left:-5px;bottom:-5px;cursor:nesw-resize}.resizable .resizers .resizer.bottom-right{right:-5px;bottom:-5px;cursor:nwse-resize}.exit-icon{cursor:pointer;user-select:none;width:30px;height:30px;color:#fff;font-size:30px;margin-bottom:-3px;font-variation-settings:\'FILL\' 0,\'wght\' 400,\'GRAD\' 0,\'opsz\' 24}.map-icon{cursor:pointer;display:block;user-select:none;color:#fff;font-size:20px;font-variation-settings:\'FILL\' 1,\'wght\' 300,\'GRAD\' 0,\'opsz\' 24}.center-icon{cursor:pointer;width:30px;height:30px;color:#fff;font-size:30px;font-variation-settings:\'FILL\' 0,\'wght\' 350,\'GRAD\' 0,\'opsz\' 24}.chat-icon{cursor:pointer;width:30px;height:30px;color:#fff;font-size:30px;font-variation-settings:\'FILL\' 1,\'wght\' 250,\'GRAD\' 0,\'opsz\' 24}.zoom-icon {cursor: pointer;width: 30px;height: 30px;color: #fff;font-size: 30px;font-variation-settings: \'FILL\' 0, \'wght\' 250, \'GRAD\' 0, \'opsz\' 24}.settings-icon{cursor: pointer;color: #999999;font-size: 30px;user-select: none;font-variation-settings: \'FILL\' 1, \'wght\' 250, \'GRAD\' 0, \'opsz\' 24}.chat-icon-container{position:relative;display:inline-block}.chat-badge{font-family:Source Code Pro,sans-serif;position:absolute;top:-5px;right:2px;background-color:red;color:#fff;border-radius:50%;width:15px;height:15px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;padding:0;line-height:1;box-sizing:border-box;text-align:center}.new-message-divider{position:relative;justify-content:center;padding-left:0;padding-right:0;box-sizing:border-box;padding-top:5px;width:calc(100% - 20px);margin-left:0;margin-right:0;display:flex;align-items:center;font-size:8px;font-weight:bold;text-transform:uppercase;color:#fff;font-family:Arial,sans-serif;color:white;user-select:none}.new-message-divider::before,.new-message-divider::after{content:"";flex-grow:0.7;height:1px;background:rgba(255,255,255,0.1);margin:0 8px}.new-message-divider>span{background-color:#ff2d2d;padding:4px 10px;border-radius:8px}#scroll-to-bottom{position:absolute;bottom:0;right:50%;padding:5px 10px;background:rgba(0,0,0,.5);color:#fff;border:none;border-radius:50%;cursor:pointer;-webkit-box-shadow:none;animation:bobbing 1s ease-in-out infinite}@keyframes bobbing{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}.zoom-controls{user-select:none;display:none;z-index:1;flex-direction:column;align-items:center;position:absolute;left:10px;top: 50%;transform: translateY(-50%);padding:5px 1px;background-color:rgba(255,255,255,.1);border-radius:4px}.zoom-slider{width:30px;height:100px;margin:10px 0}.zoom-btn{width:20px;height:20px;color:rgba(255,255,255);border-radius:4px;background-color:rgba(245,245,245,.3);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}.popup-settings{position:absolute;border:1px solid #fff;background:#000;font-family:Source Code Pro,sans-serif;top:50%;left:50%;transform:translate(-50%,-50%);font-size:14px;color:#d0d0d0;height:305px;width:340px;padding:10px;box-sizing:border-box;display:none;flex-direction:column;justify-content:space-between;}.popup-settings .sections-container{flex:1;}.popup-settings .section{margin-bottom:8px;}.popup-settings .section-title{user-select:none;font-weight:bold;border-bottom:1px solid #444;padding-bottom:2px;margin-bottom:4px;color:#fff;font-size:13px;}.popup-settings .input-rows{display:flex;flex-wrap:wrap;margin:0 -3px;}.popup-settings .input-group{width:50%;padding:0 3px;box-sizing:border-box;margin-bottom:4px;}.popup-settings label{user-select:none;display:block;margin-bottom:2px;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}.popup-settings input{width:100%;background:#222;border:1px solid #444;color:#d0d0d0;padding:2px 4px;font-family:Source Code Pro,sans-serif;font-size:11px;outline:none;box-sizing:border-box;height:22px;}.popup-settings input:focus{border-color:#666;}.popup-settings .button-row{user-select:none;display:flex;justify-content:space-between;padding-top:5px;border-top:1px solid #333;}.popup-settings .left-buttons,.popup-settings .right-buttons{display:flex;gap:5px;}.popup-settings button{background:#333;border:1px solid #555;color:#d0d0d0;padding:3px 3px;cursor:pointer;font-family:Source Code Pro,sans-serif;font-size:11px;transition:all 0.2s;min-width:48px;touch-action:manipulation;}.popup-settings #cancel-button{background:#8B0000;border-color:#5A002C;}.popup-settings #save-button{background:#006400;border-color:#06402B;}.popup-settings input[type="color"]{height:22px;padding:0;}';
+                style.textContent = '#magicmap-canvas{display:relative;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;background:#000;width:100%;height:100%;opacity:.9}#magicmap-img{object-fit:cover}#popup-buttons{position:absolute;user-select:none;top:6px;right:0;z-index:1;display:flex;flex-direction:column;background-color:rgba(0,0,0,.3)}#popupnav-container{position:absolute;user-select:none;top:0;right:0;display:flex;padding:10px;flex-direction:row;gap:5px}#popupnav-container .map-icon, #popupnav-container .chat-icon-container{margin-right:5px}#mobile-nav{position:absolute;top:100px;left:100px;display:flex;flex-direction:column}.popup-map{width:300px;height:300px;position:relative;border:1px solid #fff;background:#000;opacity:.9}.popup-chat{width:300px;height:100px;position:relative;overflow:hidden;border:1px solid #fff;background-color:rgba(0,0,0,.9)}.chat-content{height:calc(100% - 10px);width:100%;color:#d0d0d0;font-family:Source Code Pro,sans-serif;overflow-y:scroll;overflow-x:hidden;word-wrap:break-word;white-space:normal;overflow-wrap:break-word;font-size:14px;padding-right:10px;padding-left:10px;padding-top:10px;box-sizing:content-box}.resizable .resizers{width:100%;height:100%;box-sizing:border-box}.resizable .resizers .resizer{width:15px;height:15px;border-radius:50%;position:absolute}.resizable .resizers .resizer.top-left{left:-5px;top:-5px;cursor:nwse-resize}.resizable .resizers .resizer.top-right{right:-5px;top:-5px;cursor:nesw-resize}.resizable .resizers .resizer.bottom-left{left:-5px;bottom:-5px;cursor:nesw-resize}.resizable .resizers .resizer.bottom-right{right:-5px;bottom:-5px;cursor:nwse-resize}.exit-icon{cursor:pointer;user-select:none;width:30px;height:30px;color:#fff;font-size:30px;margin-bottom:-3px;font-variation-settings:\'FILL\' 0,\'wght\' 400,\'GRAD\' 0,\'opsz\' 24}.map-icon{cursor:pointer;display:block;user-select:none;color:#fff;font-size:20px;font-variation-settings:\'FILL\' 1,\'wght\' 300,\'GRAD\' 0,\'opsz\' 24}.center-icon{cursor:pointer;width:30px;height:30px;color:#fff;font-size:30px;font-variation-settings:\'FILL\' 0,\'wght\' 350,\'GRAD\' 0,\'opsz\' 24}.chat-icon{cursor:pointer;width:30px;height:30px;color:#fff;font-size:30px;font-variation-settings:\'FILL\' 1,\'wght\' 250,\'GRAD\' 0,\'opsz\' 24}.zoom-icon {cursor: pointer;width: 30px;height: 30px;color: #fff;font-size: 30px;font-variation-settings: \'FILL\' 0, \'wght\' 250, \'GRAD\' 0, \'opsz\' 24}.settings-icon{cursor: pointer;color: #999999;font-size: 30px;margin-right: 3px;user-select: none;font-variation-settings: \'FILL\' 1, \'wght\' 250, \'GRAD\' 0, \'opsz\' 24}.chat-icon-container{position:relative;display:inline-block}.chat-badge{font-family:Source Code Pro,sans-serif;position:absolute;top:-5px;right:2px;background-color:red;color:#fff;border-radius:50%;width:15px;height:15px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;padding:0;line-height:1;box-sizing:border-box;text-align:center}.new-message-divider{position:relative;justify-content:center;padding-left:0;padding-right:0;box-sizing:border-box;padding-top:5px;width:calc(100% - 20px);margin-left:0;margin-right:0;display:flex;align-items:center;font-size:8px;font-weight:bold;text-transform:uppercase;color:#fff;font-family:Arial,sans-serif;color:white;user-select:none}.new-message-divider::before,.new-message-divider::after{content:"";flex-grow:0.7;height:1px;background:rgba(255,255,255,0.1);margin:0 8px}.new-message-divider>span{background-color:#ff2d2d;padding:4px 10px;border-radius:8px}#scroll-to-bottom{position:absolute;bottom:0;right:50%;padding:5px 10px;background:rgba(0,0,0,.5);color:#fff;border:none;border-radius:50%;cursor:pointer;-webkit-box-shadow:none;animation:bobbing 1s ease-in-out infinite}@keyframes bobbing{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}.zoom-controls{user-select:none;display:none;z-index:1;flex-direction:column;align-items:center;position:absolute;left:10px;top: 50%;transform: translateY(-50%);padding:5px 1px;background-color:rgba(255,255,255,.1);border-radius:4px}.zoom-slider{width:30px;height:100px;margin:10px 0}.zoom-btn{width:20px;height:20px;color:rgba(255,255,255);border-radius:4px;background-color:rgba(245,245,245,.3);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}.popup-settings{position:absolute;border:1px solid #fff;background:#000;font-family:Source Code Pro,sans-serif;top:50%;left:50%;transform:translate(-50%,50%);font-size:14px;color:#d0d0d0;height:fit-content;width:340px;padding:10px;box-sizing:border-box;display:none;flex-direction:column;justify-content:space-between;}.popup-settings .sections-container{flex:1;}.popup-settings .section{margin-bottom:8px;}.popup-settings .section-title{user-select:none;font-weight:bold;border-bottom:1px solid #444;padding-bottom:2px;margin-bottom:4px;color:#fff;font-size:13px;}.popup-settings .input-rows{display:flex;flex-wrap:wrap;margin:0 -3px;}.popup-settings .input-group{width:50%;padding:0 3px;box-sizing:border-box;margin-bottom:4px;}.popup-settings label{user-select:none;display:block;margin-bottom:2px;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}.popup-settings input{width:100%;background:#222;border:1px solid #444;color:#d0d0d0;padding:2px 4px;font-family:Source Code Pro,sans-serif;font-size:11px;outline:none;box-sizing:border-box;height:22px;}.popup-settings input:focus{border-color:#666;}.popup-settings .button-row{user-select:none;display:flex;justify-content:space-between;padding-top:5px;border-top:1px solid #333;}.popup-settings .left-buttons,.popup-settings .right-buttons{display:flex;gap:5px;}.popup-settings button{background:#333;border:1px solid #555;color:#d0d0d0;padding:3px 3px;cursor:pointer;font-family:Source Code Pro,sans-serif;font-size:11px;transition:all 0.2s;min-width:48px;touch-action:manipulation;}.popup-settings #cancel-button{background:#8B0000;border-color:#5A002C;}.popup-settings #save-button{background:#006400;border-color:#06402B;}.popup-settings input[type="color"]{height:22px;padding:0;}.popup-settings .invalid {border: 2px solid red;}.popup-settings .error-message {color: red;font-size: 0.5em;margin-top: 5px;}';
                 document.head.appendChild(style);
             } catch (error) {
                 console.error('Failed to inject CSS:', error);
@@ -28,9 +28,10 @@
                 const container = document.createElement('div');
                 container.id = "mobileNav-wrapper";
                 container.style.zIndex = "0";
+                container.style.position = "relative";
 
                 // Use innerHTML once for better performance
-                container.innerHTML = `<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" /><div id="popupnav-container"><span class="settings-icon material-symbols-outlined">settings</span><span class='map-icon material-symbols-outlined'>explore</span><div class='chat-icon-container'><span class='chat-icon material-symbols-outlined'>chat_bubble</span></div></div><div id="mobile-nav"><div class='resizable popup-map'><div id="popup-buttons"><span class='exit-icon material-symbols-outlined'>close</span><span class='center-icon material-symbols-outlined'>center_focus_strong</span><div class='chat-icon-container'><span class='chat-icon material-symbols-outlined'>chat_bubble</span></div><span class="zoom-icon material-symbols-outlined">zoom_in</span></div><div class="zoom-controls"><button id="zoom-in" class="zoom-btn">+</button><input type="range" id="zoom-slider" class="zoom-slider" min="100" max="250" value="100" style="writing-mode: vertical-lr; direction: rtl"><button id="zoom-out" class="zoom-btn">−</button></div><div class='resizers'><canvas id='magicmap-canvas'></canvas><div class='resizer top-left'></div><div class='resizer top-right'></div><div class='resizer bottom-left'></div><div class='resizer bottom-right'></div></div></div><div class='resizable popup-chat'><div id="popup-buttons"><span class='exit-icon material-symbols-outlined' style="padding-top: 5px;">close</span><span class='map-icon material-symbols-outlined'>explore</span></div><div class='resizers'><div class='chat-content'></div><div class='resizer bottom-left'></div><div class='resizer bottom-right'></div></div></div></div><div class="popup-settings"><div class="sections-container"><div class="section"><div class="section-title">Map Settings</div><div class="input-rows"><div class="input-group"><label for="map-width">Width</label><input type="text" id="map-width" min="340"></div><div class="input-group"><label for="map-height" min="180">Height</label><input type="text" id="map-height"></div><div class="input-group"><label for="default-zoom">Default Zoom</label><input type="number" id="default-zoom" step="0.1" min="1.5" max="2"></div><div class="input-group"><label for="position-color">Position Color</label><input type="color" id="position-color"></div></div></div><div class="section"><div class="section-title">Chat Settings</div><div class="input-rows"><div class="input-group"><label for="text-size">Text Size</label><input type="text" id="text-size"></div><div class="input-group"><label for="chat-length">Chat Length</label><input type="text" id="chat-length" min="70"></div></div></div><div class="section"><div class="section-title">Popup Dimensions</div><div class="input-rows"><div class="input-group"><label for="position-x">Position X</label><input type="text" id="position-x" value="0px"></div><div class="input-group"><label for="position-y">Position Y</label><input type="text" id="position-y" value="0px"></div></div></div></div><div class="button-row"><div class="left-buttons"><button id="reset-button">Reset</button><button id="current-styling-button">Current Styles</button><button id="apply-button">Apply</button></div><div class="right-buttons"><button id="cancel-button">Cancel</button><button id="save-button">Save</button></div></div></div>`;
+                container.innerHTML = `<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" /><div id="popupnav-container"><span class="settings-icon material-symbols-outlined">settings</span><span class='map-icon material-symbols-outlined'>explore</span><div class='chat-icon-container'><span class='chat-icon material-symbols-outlined'>chat_bubble</span></div></div><div id="mobile-nav"><div class='resizable popup-map'><div id="popup-buttons"><span class='exit-icon material-symbols-outlined'>close</span><span class='center-icon material-symbols-outlined'>center_focus_strong</span><div class='chat-icon-container'><span class='chat-icon material-symbols-outlined'>chat_bubble</span></div><span class="zoom-icon material-symbols-outlined">zoom_in</span></div><div class="zoom-controls"><button id="zoom-in" class="zoom-btn">+</button><input type="range" id="zoom-slider" class="zoom-slider" min="100" max="250" value="100" style="writing-mode: vertical-lr; direction: rtl"><button id="zoom-out" class="zoom-btn">−</button></div><div class='resizers'><canvas id='magicmap-canvas'></canvas><div class='resizer top-left'></div><div class='resizer top-right'></div><div class='resizer bottom-left'></div><div class='resizer bottom-right'></div></div></div><div class='resizable popup-chat'><div id="popup-buttons"><span class='exit-icon material-symbols-outlined' style="padding-top: 5px;">close</span><span class='map-icon material-symbols-outlined'>explore</span></div><div class='resizers'><div class='chat-content'></div><div class='resizer bottom-left'></div><div class='resizer bottom-right'></div></div></div></div><div class="popup-settings"><div class="sections-container"><div class="section"><div class="section-title">Map Settings</div><div class="input-rows"><div class="input-group"><label for="map-width">Width</label><input type="text" id="map-width" min="340"></div><div class="input-group"><label for="map-height" min="180">Height</label><input type="text" id="map-height"></div><div class="input-group"><label for="default-zoom">Default Zoom</label><input type="number" id="default-zoom" step="0.1" min="1" max="2.5"></div><div class="input-group"><label for="position-color">Position Color</label><input type="color" id="position-color"></div></div></div><div class="section"><div class="section-title">Chat Settings</div><div class="input-rows"><div class="input-group"><label for="text-size">Text Size</label><input type="text" id="text-size"></div><div class="input-group"><label for="chat-length">Chat Length</label><input type="text" id="chat-length" min="70"></div></div></div><div class="section"><div class="section-title">Popup Dimensions</div><div class="input-rows"><div class="input-group"><label for="position-x">Position X</label><input type="text" id="position-x" value="0px"></div><div class="input-group"><label for="position-y">Position Y</label><input type="text" id="position-y" value="0px"></div></div></div></div><div class="button-row"><div class="left-buttons"><button id="reset-button">Reset</button><button id="current-styling-button">Current Styles</button><button id="apply-button">Apply</button></div><div class="right-buttons"><button id="cancel-button">Cancel</button><button id="save-button">Save</button></div></div></div>`;
 
                 document.body.appendChild(container);
             } catch (error) {
@@ -426,10 +427,8 @@
 
                 // Toggle visibility of settings popup and settings icon
                 settingsPopup.style.display = (settingsPopup.style.display === "block") ? "none" : "block";
-                event.target.style.display = (toggleButton.style.display === "block") ? "none" : "block";
-                elements.mobileNav.style.display = "flex";
-                $(".map-icon").hide();
-                $(".chat-icon-container").hide();
+                if (elements.map.style.display === "none") $(".map-icon:visible")[0].click();
+                if (elements.chat.style.display === "none") $(".chat-icon:visible")[0].click();
             },
 
             makeResizableDiv: function(selector) {
@@ -484,8 +483,8 @@
 
                     // Grab updated element information
                     const chat = document.querySelector(".popup-chat"),
-                          map = document.querySelector(".popup-map"),
-                          mobileNav = document.getElementById("mobile-nav");
+                        map = document.querySelector(".popup-map"),
+                        mobileNav = document.getElementById("mobile-nav");
 
                     // Minimum size based on element type
                     const minHeight = element.classList.contains('popup-map') ? 180 : 70;
@@ -515,7 +514,7 @@
                             newY = originalY + deltaY;
                             break;
                     }
-                
+
                     // Apply width constraints
                     if (newWidth >= 340 && newWidth <= maxWidth) {
                         $('.resizable').width(newWidth);
@@ -579,7 +578,7 @@
 
                 element.addEventListener("mousedown", (e) => {
                     if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
-                
+
                     isDragging = true;
                     offsetX = e.clientX - element.offsetLeft;
                     offsetY = e.clientY - element.offsetTop;
@@ -739,6 +738,8 @@
                 document.querySelector('.popup-settings #position-y').value = parseInt(getComputedStyle(mobileNav).top) || 0;
             },
             apply: function() {
+                if (!settingsControls.validate()) return;
+
                 const map = document.querySelector('.popup-map');
                 const chat = document.querySelector('.popup-chat');
                 const chatContent = document.querySelector('.chat-content');
@@ -749,6 +750,7 @@
                 // Map Settings - would update according to .popup-map elements
                 zoom.value = document.querySelector('.popup-settings #default-zoom').value * 100;
                 map.style.width = `${document.querySelector('.popup-settings #map-width').value}px`;
+                chat.style.width = `${document.querySelector('.popup-settings #map-width').value}px`;
                 map.style.height = `${document.querySelector('.popup-settings #map-height').value}px`;
                 window.positionColor = document.querySelector('.popup-settings #position-color').value;
                 canvas.width = document.querySelector('.popup-settings #map-width').value * 2;
@@ -770,7 +772,89 @@
                 document.querySelector('.popup-settings #map-height').max = window.innerHeight - ((parseInt(getComputedStyle(chat).height) || 0) + (parseInt(getComputedStyle(chat).top) || 0));
                 document.querySelector('.popup-settings #chat-length').max = window.innerHeight - ((parseInt(getComputedStyle(map).height) || 0) + (parseInt(getComputedStyle(map).top) || 0));
             },
+            validate: function() {
+                // Validation function to check against max values
+                const validationRules = {
+                    'default-zoom': {
+                        element: document.querySelector('.popup-settings #default-zoom'),
+                        validate: (value) => {
+                            const max = 2.5;
+                            const min = 1;
+                            return value >= min && value <= max;
+                        }
+                    },
+                    'map-width': {
+                        element: document.querySelector('.popup-settings #map-width'),
+                        validate: (value) => {
+                            const element = document.querySelector('.popup-settings #map-width');
+                            const max = parseInt(element.max);
+                            const min = 340;
+                            return value >= min && value <= max;
+                        }
+                    },
+                    'map-height': {
+                        element: document.querySelector('.popup-settings #map-height'),
+                        validate: (value) => {
+                            const element = document.querySelector('.popup-settings #map-height');
+                            const max = parseInt(element.max);
+                            const min = 180;
+                            return value >= min && value <= max;
+                        }
+                    },
+                    'chat-length': {
+                        element: document.querySelector('.popup-settings #chat-length'),
+                        validate: (value) => {
+                            const element = document.querySelector('.popup-settings #chat-length');
+                            const max = parseInt(element.max);
+                            const min = 70;
+                            return value >= min && value <= max;
+                        }
+                    }
+                };
+
+                // Perform validation
+                let isValid = true;
+                const errors = [];
+
+                // Clear any previous error states
+                $(".popup-settings .invalid").removeClass("invalid")
+                $(".popup-settings .error-message").remove();
+
+                Object.keys(validationRules).forEach(key => {
+                    const rule = validationRules[key];
+                    const value = parseFloat(rule.element.value);
+
+                    if (!rule.validate(value)) {
+                        isValid = false;
+                        errors.push({
+                            element: rule.element,
+                            message: `Value must be between ${rule.element.min} and ${rule.element.max}`
+                        });
+                    }
+                });
+
+                // Handle validation results
+                if (!isValid) {
+                    // Highlight invalid fields
+                    errors.forEach(error => {
+                        error.element.classList.add('invalid');
+                        let errorMsg = error.element.nextElementSibling;
+                        if (!errorMsg || !errorMsg.classList.contains('error-message')) {
+                            errorMsg = document.createElement('div');
+                            errorMsg.classList.add('error-message');
+                            error.element.parentNode.insertBefore(errorMsg, error.element.nextSibling);
+                        }
+                        errorMsg.textContent = error.message;
+                    });
+
+                    return false;
+                }
+
+                return true;
+            },
             save: function() {
+                if (!settingsControls.validate()) return;
+
                 // Collect current settings from input fields
                 const mapSettings = {
                     defaultZoom: document.querySelector('.popup-settings #default-zoom').value,
@@ -789,6 +873,18 @@
                     mobileNavTop: document.querySelector('.popup-settings #position-y').value
                 };
 
+                // Custom JSON stringify to preserve formatting in <applypops> alias
+                const formatSettings = (obj) => {
+                    const entries = Object.entries(obj);
+                    const formattedLines = entries.map(([key, value]) => {
+                        // Convert value to appropriate string representation
+                        const formattedValue = typeof value === 'string' ? `'${value}'` : value;
+                        return `    ${key}: ${formattedValue},`;
+                    });
+
+                    return '{\n' + formattedLines.join('\n') + '\n}';
+                };
+
                 // Combine all settings into a single object
                 const allSettings = {
                     ...mapSettings,
@@ -799,21 +895,21 @@
                 // Apply values to styling
                 settingsControls.apply();
 
+                // Save map settings as window variable
                 window.defaultZoom = allSettings.defaultZoom;
                 window.mapWidth = allSettings.mapWidth;
                 window.mapHeight = allSettings.mapHeight;
                 window.positionColor = allSettings.positionColor;
 
-                // Chat Settings
+                // Save chat settings as window variable
                 window.chatTextSize = allSettings.chatTextSize;
                 window.chatLength = allSettings.chatLength;
 
-                // Popup Dimensions
+                // Save popup dimensions as window variable
                 window.mobileNavLeft = allSettings.mobileNavLeft;
                 window.mobileNavTop = allSettings.mobileNavTop;
 
-                // Convert settings to a JSON string
-                const settingsString = JSON.stringify(allSettings);
+                uiControls.toggleSettings();
 
                 // Simulate the process of editing the alias
                 $("#opensettings").click();
@@ -836,7 +932,7 @@
                             const nextLine = doc.getLine(j);
                             if (nextLine.includes('// USER SETTINGS END')) {
                                 // Replace the entire block
-                                doc.replaceRange(`// USER SETTINGS START\nconst userSettings = ${settingsString};\n// USER SETTINGS END`, {
+                                doc.replaceRange(`// USER SETTINGS START\nconst userSettings = ${formatSettings(allSettings)};\n// USER SETTINGS END`, {
                                     line: i,
                                     ch: 1
                                 }, {
@@ -851,27 +947,27 @@
                     }
                 }
 
-                // If no existing settings block found, add a new one
+                // If no existing settings block found, add a new one (just in case)
                 if (!settingsLineFound) {
                     const lineEnd = {
                         line: 1,
                         ch: 1
                     };
 
-                    doc.replaceRange(`\n\n// USER SETTINGS START\nconst userSettings = ${settingsString};\n// USER SETTINGS END`,
+                    doc.replaceRange(`\n\n// USER SETTINGS START\nconst userSettings = ${formatSettings(allSettings)};\n// USER SETTINGS END`,
                         lineEnd
                     );
                 }
 
-                // Save the changes
+                // Save the changes, add imperceptible delay to close settings to properly set zIndex on the popups
                 $("button:contains('Save')").click();
-                $("#closesettings").click();
+                setTimeout(() => $("#closesettings").click(), 100);
             }
         };
 
         // Initialize everything
         function initialize() {
-            // Cache DOM elements for better performance
+            // Cache DOM elements
             elements = {
                 mobileNav: document.getElementById("mobile-nav"),
                 map: document.querySelector(".popup-map"),
