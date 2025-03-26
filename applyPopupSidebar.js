@@ -771,6 +771,9 @@
                     ...chatSettings,
                     ...popupDimensions
                 };
+
+                // Apply values to styling
+                settingsControls.apply();
                 
                 window.defaultZoom = allSettings.defaultZoom;
                 window.mapWidth = allSettings.mapWidth;
