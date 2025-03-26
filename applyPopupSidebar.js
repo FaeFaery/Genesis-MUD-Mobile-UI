@@ -74,7 +74,8 @@
             storedMap: null,
             isPlayerSeen: false,
             FONT_SIZE: 15,
-            FONT_FAMILY: "Source Code Pro, sans-serif"
+            FONT_FAMILY: "Source Code Pro, sans-serif",
+            positionColor: "#FF0000"
         };
 
         // DOM elements cache
@@ -323,7 +324,7 @@
                         // Handle player position (colored X)
                         const prevLineWidth = elements.mapContext.measureText(utils.decodeHTML(contents[i - 1])).width;
 
-                        elements.mapContext.fillStyle = window.positionColor;
+                        elements.mapContext.fillStyle = state.positionColor;
                         elements.mapContext.font = `bold ${state.FONT_SIZE}px ${state.FONT_FAMILY}`;
                         elements.mapContext.fillText(utils.decodeHTML(contents[i]), prevLineWidth, 21 * i);
 
@@ -728,7 +729,7 @@
                 document.querySelector('.popup-settings #default-zoom').value = zoom.value / 100;
                 document.querySelector('.popup-settings #map-width').value = map.clientWidth;
                 document.querySelector('.popup-settings #map-height').value = map.clientHeight;
-                document.querySelector('.popup-settings #position-color').value = window.positionColor;
+                document.querySelector('.popup-settings #position-color').value = state.positionColor;
 
                 // Chat Settings - would update according to .chat-content and .popup-chat
                 document.querySelector('.popup-settings #text-size').value = parseInt(getComputedStyle(chatContent).fontSize) || 0;
@@ -753,7 +754,7 @@
                 map.style.width = `${document.querySelector('.popup-settings #map-width').value}px`;
                 chat.style.width = `${document.querySelector('.popup-settings #map-width').value}px`;
                 map.style.height = `${document.querySelector('.popup-settings #map-height').value}px`;
-                window.positionColor = document.querySelector('.popup-settings #position-color').value;
+                state.positionColor = document.querySelector('.popup-settings #position-color').value;
                 canvas.width = document.querySelector('.popup-settings #map-width').value * 2;
                 canvas.style.width = `${document.querySelector('.popup-settings #map-width').value}px`;
                 canvas.height = document.querySelector('.popup-settings #map-height').value * 2;
@@ -1027,6 +1028,7 @@
             elements.zoomSlider.value = window.defaultZoom * 100;
             state.cameraZoom = window.defaultZoom;
             document.querySelector('.popup-settings #position-color').value = window.positionColor;
+            state.positionColor = window.positionColor;
             document.querySelector('.popup-settings #default-zoom').value = window.defaultZoom;
             document.querySelector('.popup-settings #map-width').max = window.innerWidth - (parseInt(getComputedStyle(elements.mobileNav).left) || 0);
             document.querySelector('.popup-settings #map-height').max = window.innerHeight - ((parseInt(getComputedStyle(elements.chat).height) || 0) + (parseInt(getComputedStyle(elements.chat).top) || 0));
