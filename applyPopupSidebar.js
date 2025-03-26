@@ -789,7 +789,6 @@
                 const settingsString = JSON.stringify(allSettings);
 
                 // Simulate the process of editing the alias
-                // This mimics the manual process you described
                 $("#opensettings").click();
                 $('a[href*="#aliases"]').click();
                 $("div:contains('applypops')").click();
@@ -874,7 +873,7 @@
             // Initialize event listeners
             initializeEventListeners();
 
-            // Set up initial layout based on viewport
+            // Set up initial layout based on defaults
             setupLayout();
 
             // Start the rendering loop
@@ -911,6 +910,9 @@
             // Set initial zoom
             elements.zoomSlider.value = window.defaultZoom * 100;
             state.cameraZoom = window.defaultZoom;
+
+            // Initialize settings values, has to be done after all default stylings are applied
+            settingsControls.update();
         }
 
         function initializeEventListeners() {
