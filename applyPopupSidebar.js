@@ -360,6 +360,7 @@
                 document.querySelectorAll(".map-icon").forEach(icon => {
                     icon.style.display = "none";
                 });
+                state.needsRedraw = true;
             },
 
             closeMap: function() {
@@ -394,7 +395,7 @@
                 // Remove justOpened class with a small delay
                 setTimeout(() => {
                     elements.chatContent.classList.remove("justOpened");
-                }, 100);
+                }, 200);
             },
 
             closeChat: function() {
