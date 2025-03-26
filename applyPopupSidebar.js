@@ -483,12 +483,12 @@
 
                     // Grab updated element information
                     const chat = document.querySelector(".popup-chat"),
-                        map = document.querySelector(".popup-map"),
-                        mobileNav = document.getElementById("mobile-nav");
+                          map = document.querySelector(".popup-map"),
+                          mobileNav = document.getElementById("mobile-nav");
 
                     // Minimum size based on element type
                     const minHeight = element.classList.contains('popup-map') ? 180 : 70;
-                    const maxHeight = element.classList.contains('popup-map') ? window.innerHeight - (parseInt(getComputedStyle(chat).height) + parseInt(getComputedStyle(chat).top)) : window.innerHeight - (parseInt(getComputedStyle(map).height) + parseInt(getComputedStyle(map).top));
+                    const maxHeight = element.classList.contains('popup-map') ? window.innerHeight - ((parseInt(getComputedStyle(chat).height) || 0) + (parseInt(getComputedStyle(chat).top) || 0)) : window.innerHeight - ((parseInt(getComputedStyle(map).height) || 0) + (parseInt(getComputedStyle(map).top) || 0));
                     const maxWidth = window.innerWidth - parseInt(getComputedStyle(mobileNav).left);
 
                     // Calculate new dimensions based on which resizer is active
