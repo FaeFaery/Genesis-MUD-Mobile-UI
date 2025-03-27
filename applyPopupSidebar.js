@@ -961,9 +961,9 @@ function initMapExtension() {
                 );
             }
 
-            // Save the changes, add imperceptible delay to close settings to properly set zIndex on the popups
+            // Save the changes
             $("button:contains('Save')").click();
-            setTimeout(() => $("#closesettings").click(), 100);
+            $("#closesettings").click();
         }
     };
 
