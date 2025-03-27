@@ -1006,7 +1006,7 @@ function initMapExtension() {
         observers.setupObservers();
 
         // Prevent page increase when resizing
-        document.body.style.overflowY = "hidden";
+        document.body.style.overflow = "hidden";
     }
 
     function setupLayout() {
