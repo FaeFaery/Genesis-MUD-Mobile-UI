@@ -40,7 +40,7 @@
         }
 
         // Bypass the webclient method to prevent map updates when map isn't visible hehe :3
-        const setupJQuery = () => {
+        let setupJQuery = () => {
             const originalIs = $.fn.is;
             $.fn.is = function(selector) {
                 if (this.attr("id") === "sidebar" && selector === ":visible") {
@@ -51,7 +51,7 @@
         };
 
         // Create a central state object
-        const state = {
+        let state = {
             cameraOffset: {
                 x: 0,
                 y: 0
@@ -80,9 +80,7 @@
 
         // DOM elements cache
         let elements = {};
-
-        // Functions
-        const utils = {
+        let utils = {
             // Use a single text decoder for HTML entities
             textDecoder: document.createElement("textarea"),
 
@@ -152,7 +150,7 @@
         };
 
         // Event Handlers, duh
-        const eventHandlers = {
+        let eventHandlers = {
             handlePointerDown: function(e) {
                 state.isDragging = true;
                 const location = utils.getEventLocation(e);
@@ -211,7 +209,7 @@
         };
 
         // Map drawing functions
-        const mapRendering = {
+        let mapRendering = {
             updateCameraPosition: function(location) {
                 const contents = utils.getMapContents();
                 state.maxOffsetX = elements.mapContext.measureText(utils.longestLine(contents)).width;
@@ -353,7 +351,7 @@
         };
 
         // UI controls, could you have guessed?
-        const uiControls = {
+        let uiControls = {
             showMap: function() {
                 elements.popupNav.style.display = "none";
                 elements.map.style.display = "block";
@@ -601,7 +599,7 @@
         };
 
         // Chat-related functions
-        const chatControls = {
+        let chatControls = {
             initChatPopup: function() {
                 if (!elements.communication || !elements.chatContent) return;
 
@@ -657,7 +655,7 @@
         };
 
         // Observer functions
-        const observers = {
+        let observers = {
             observeChildChanges: function(targetId, callback) {
                 const targetNode = document.getElementById(targetId);
                 if (!targetNode) return;
@@ -702,7 +700,7 @@
         };
 
         // Settings functions
-        const settingsControls = {
+        let settingsControls = {
             reset: function() {
                 // Map Settings
                 document.querySelector('.popup-settings #default-zoom').value = window.defaultZoom;
@@ -718,6 +716,7 @@
                 document.querySelector('.popup-settings #position-x').value = window.mobileNavLeft;
                 document.querySelector('.popup-settings #position-y').value = window.mobileNavTop;
             },
+            
             update: function() {
                 const map = document.querySelector('.popup-map');
                 const chat = document.querySelector('.popup-chat');
@@ -739,6 +738,7 @@
                 document.querySelector('.popup-settings #position-x').value = parseInt(getComputedStyle(mobileNav).left) || 0;
                 document.querySelector('.popup-settings #position-y').value = parseInt(getComputedStyle(mobileNav).top) || 0;
             },
+            
             apply: function() {
                 if (!settingsControls.validate()) return;
 
@@ -774,6 +774,7 @@
                 document.querySelector('.popup-settings #map-height').max = window.innerHeight - ((parseInt(getComputedStyle(chat).height) || 0) + (parseInt(getComputedStyle(chat).top) || 0));
                 document.querySelector('.popup-settings #chat-length').max = window.innerHeight - ((parseInt(getComputedStyle(map).height) || 0) + (parseInt(getComputedStyle(map).top) || 0));
             },
+            
             validate: function() {
                 // Validation function to check against max values
                 const validationRules = {
@@ -854,6 +855,7 @@
 
                 return true;
             },
+            
             save: function() {
                 if (!settingsControls.validate()) return;
 
@@ -916,7 +918,7 @@
                 // Simulate the process of editing the alias
                 $("#opensettings").click();
                 $('a[href*="#aliases"]').click();
-                $("div:contains('applypops')").click();
+                $(`div:contains('${window.mobilePopupAlias}')`).click();
                 $("button:contains('Edit')").click();
 
                 // Get the CodeMirror instance
