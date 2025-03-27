@@ -927,16 +927,16 @@ function initMapExtension() {
             let settingsLineFound = false;
             for (let i = 0; i < doc.lineCount(); i++) {
                 const line = doc.getLine(i);
-                if (line.includes('// USER SETTINGS START')) {
+                if (line.includes('userSettings')) {
                     // Find the end of settings block
                     let j;
                     for (j = i + 1; j < doc.lineCount(); j++) {
                         const nextLine = doc.getLine(j);
-                        if (nextLine.includes('// USER SETTINGS END')) {
+                        if (nextLine.includes('}')) {
                             // Replace the entire block
-                            doc.replaceRange(`// USER SETTINGS START\nconst userSettings = ${formatSettings(allSettings)};\n// USER SETTINGS END`, {
+                            doc.replaceRange(`const userSettings = ${formatSettings(allSettings)};`, {
                                 line: i,
-                                ch: 1
+                                ch: 0
                             }, {
                                 line: j,
                                 ch: nextLine.length
@@ -956,7 +956,7 @@ function initMapExtension() {
                     ch: 1
                 };
 
-                doc.replaceRange(`\n\n// USER SETTINGS START\nconst userSettings = ${formatSettings(allSettings)};\n// USER SETTINGS END`,
+                doc.replaceRange(`const userSettings = ${formatSettings(allSettings)};`,
                     lineEnd
                 );
             }
