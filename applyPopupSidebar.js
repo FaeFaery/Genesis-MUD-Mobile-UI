@@ -721,6 +721,9 @@ function initMapExtension() {
             const mobileNav = document.getElementById('mobile-nav');
             const zoom = document.getElementById("zoom-slider");
 
+            if (chat.style.display === "none") chat.style.display = "block";
+            if (map.style.display === "none") map.style.display = "block";
+
             // Map Settings - would update according to .popup-map elements
             document.querySelector('.popup-settings #default-zoom').value = zoom.value / 100;
             document.querySelector('.popup-settings #map-width').value = map.clientWidth;
@@ -746,6 +749,9 @@ function initMapExtension() {
             const mobileNav = document.getElementById('mobile-nav');
             const zoom = document.getElementById("zoom-slider");
 
+            if (chat.style.display === "none") chat.style.display = "block";
+            if (map.style.display === "none") map.style.display = "block";
+            
             // Map Settings - would update according to .popup-map elements
             zoom.value = document.querySelector('.popup-settings #default-zoom').value * 100;
             map.style.width = `${document.querySelector('.popup-settings #map-width').value}px`;
