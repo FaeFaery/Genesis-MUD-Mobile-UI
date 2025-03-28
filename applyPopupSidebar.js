@@ -1,10 +1,4 @@
 function initMapExtension() {
-    // Check for jQuery dependency
-    if (typeof $ === 'undefined') {
-        console.error('jQuery not found. Magic Map requires jQuery.');
-        return;
-    }
-
     // Inject minified CSS with one DOM operation
     function injectMinifiedCSS() {
         try {
@@ -37,7 +31,7 @@ function initMapExtension() {
     }
 
     // Bypass the webclient method to prevent map updates when map isn't visible hehe :3
-    let setupJQuery = () => {
+    let foolSourceCode = () => {
         const originalIs = $.fn.is;
         $.fn.is = function(selector) {
             if (this.attr("id") === "sidebar" && selector === ":visible") {
@@ -1100,8 +1094,8 @@ function initMapExtension() {
     injectMinifiedCSS();
     injectMinifiedHTML();
 
-    // Set up jQuery
-    setupJQuery();
+    // Apply bypass for continuous map updates
+    foolSourceCode();
 
     // Initialize with a small delay to ensure all elements are ready
     setTimeout(initialize, 100);
