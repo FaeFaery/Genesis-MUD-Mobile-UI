@@ -810,6 +810,7 @@ function initMapExtension() {
             if (map.style.display === "none") map.style.display = "block";
 
             // Map Settings - would update according to .popup-map elements
+            state.cameraZoom = document.querySelector('.popup-settings #default-zoom').value;
             zoom.value = document.querySelector('.popup-settings #default-zoom').value * 100;
             map.style.width = `${document.querySelector('.popup-settings #map-width').value}px`;
             chat.style.width = `${document.querySelector('.popup-settings #map-width').value}px`;
