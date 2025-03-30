@@ -1118,11 +1118,18 @@ function initMapExtension() {
         resizeObserver.observe(elements.mudOutput);
 
         // Prevent refresh gestures because that's also annoying as hell.
-        document.addEventListener("touchmove", function(event) {
-            if (window.scrollY === 0 && event.touches[0].clientY > 50) {
-                event.preventDefault();
-            }
-        }, { passive: false });
+        const container = document.createElement('div');
+        const bodyChildren = Array.from(document.body.children);
+
+        container.id = 'content-container';
+        bodyChildren.forEach(child => {
+            container.appendChild(child);
+        });
+        
+        document.body.appendChild(container);
+        const style = document.createElement('style');
+        style.textContent = `html, body {overscroll-behavior-y: contain;overflow: hidden;height: 100%;margin: 0;padding: 0;}#content-container {overflow-y: auto;height: 100%;overscroll-behavior-y: contain;}`;
+        document.head.appendChild(style);
 
         // Prevent focus on the input box unless clicked on
         const input = document.getElementById("input");
