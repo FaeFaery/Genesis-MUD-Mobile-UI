@@ -565,55 +565,90 @@ function initMapExtension() {
             const element = document.querySelector(selector);
             let offsetX = 0,
                 offsetY = 0,
-                isDragging = false;
+                isDragging = false,
+                startX = 0,
+                startY = 0,
+                hasMoved = false;
 
-            element.addEventListener("mousedown", (e) => {
-                if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
+            const isClickable = target => {
+                return target.closest('button, a, input, textarea, select, [role="button"]') || ['BUTTON', 'A', 'INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName) ||
+                    target.getAttribute('role') === 'button' ||
+                    target.onclick;
+            };
+
+            // Mouse events
+            element.addEventListener("mousedown", e => {
+                const target = e.target;
+                if (isClickable(target)) return;
+
                 isDragging = true;
+                hasMoved = false;
+                startX = e.clientX;
+                startY = e.clientY;
                 offsetX = e.clientX - element.offsetLeft;
                 offsetY = e.clientY - element.offsetTop;
                 element.style.cursor = "grabbing";
             });
 
-            document.addEventListener("mousemove", (e) => {
+            document.addEventListener("mousemove", e => {
                 if (!isDragging) return;
-                element.style.left = `${e.clientX - offsetX}px`;
-                element.style.top = `${e.clientY - offsetY}px`;
+
+                if (Math.abs(e.clientX - startX) > 5 || Math.abs(e.clientY - startY) > 5) {
+                    hasMoved = true;
+                    element.style.left = `${e.clientX - offsetX}px`;
+                    element.style.top = `${e.clientY - offsetY}px`;
+                }
             });
 
-            document.addEventListener("mouseup", () => {
+            document.addEventListener("mouseup", e => {
+                if (isDragging && !hasMoved) {
+                    const clickTarget = document.elementFromPoint(e.clientX, e.clientY);
+                    if (clickTarget) clickTarget.click();
+                }
                 isDragging = false;
                 element.style.cursor = "grab";
             });
 
-            element.addEventListener("touchstart", (e) => {
-                if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
-                isDragging = true;
-
+            // Touch events
+            element.addEventListener("touchstart", e => {
                 const touch = e.touches[0];
+                const target = document.elementFromPoint(touch.clientX, touch.clientY);
+                if (isClickable(target)) return;
+
+                isDragging = true;
+                hasMoved = false;
+                startX = touch.clientX;
+                startY = touch.clientY;
                 offsetX = touch.clientX - element.offsetLeft;
                 offsetY = touch.clientY - element.offsetTop;
-
-                e.preventDefault();
+            }, {
+                passive: true
             });
 
-            document.addEventListener("touchmove", (e) => {
+            document.addEventListener("touchmove", e => {
                 if (!isDragging) return;
 
                 const touch = e.touches[0];
-                element.style.left = `${touch.clientX - offsetX}px`;
-                element.style.top = `${touch.clientY - offsetY}px`;
-
-                e.preventDefault();
+                if (Math.abs(touch.clientX - startX) > 5 || Math.abs(touch.clientY - startY) > 5) {
+                    hasMoved = true;
+                    element.style.left = `${touch.clientX - offsetX}px`;
+                    element.style.top = `${touch.clientY - offsetY}px`;
+                    e.preventDefault();
+                }
+            }, {
+                passive: false
             });
 
-            document.addEventListener("touchend", () => {
+            document.addEventListener("touchend", e => {
+                if (isDragging && !hasMoved) {
+                    const touch = e.changedTouches[0];
+                    const clickTarget = document.elementFromPoint(touch.clientX, touch.clientY);
+                    if (clickTarget) clickTarget.click();
+                }
                 isDragging = false;
             });
 
-            document.addEventListener("touchcancel", () => {
-                isDragging = false;
-            });
+            document.addEventListener("touchcancel", () => isDragging = false);
         }
     };
 
@@ -1119,17 +1154,27 @@ function initMapExtension() {
 
         // Prevent refresh gestures because that's also annoying as hell.
         const container = document.createElement('div');
-        const bodyChildren = Array.from(document.body.children);
-
         container.id = 'content-container';
-        bodyChildren.forEach(child => {
-            container.appendChild(child);
-        });
-        
+
+        while (document.body.firstChild) {
+            container.appendChild(document.body.firstChild);
+        }
+
         document.body.appendChild(container);
+
         const style = document.createElement('style');
-        style.textContent = `html, body {overscroll-behavior-y: contain;overflow: hidden;height: 100%;margin: 0;padding: 0;}#content-container {overflow-y: auto;height: 100%;overscroll-behavior-y: contain;}`;
+        style.textContent = 'html,body{overscroll-behavior:contain;overflow:hidden;height:100%;margin:0;padding:0;position:fixed;width:100%;touch-action:pan-y pinch-zoom}#content-container{overflow-y:auto;height:100%;width:100%;overscroll-behavior:contain;touch-action:pan-y pinch-zoom}';
         document.head.appendChild(style);
+
+        document.addEventListener('touchstart', e => {
+            const x = e.touches[0].clientX;
+            if (x < 20 || x > window.innerWidth - 20) e.preventDefault();
+        }, {
+            passive: false
+        });
+
+        history.pushState(null, document.title, location.href);
+        window.addEventListener('popstate', () => history.pushState(null, document.title, location.href));
 
         // Prevent focus on the input box unless clicked on
         const input = document.getElementById("input");
