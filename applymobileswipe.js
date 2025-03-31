@@ -1,242 +1,212 @@
-// Configuration variables
-const SWIPE_CONFIG = {
-    THRESHOLD: 50,                 // Reduced threshold for easier detection
-    DIAGONAL_ANGLE_THRESHOLD: 25,  // Angle threshold for diagonal swipes
-    MULTI_TOUCH_TIME: 300,         // Max time between touches for multi-touch detection
-    SCROLLBAR_WIDTH: 30,           // Width of scrollbar area
-    PREDICTION_SIZE: 40,           // Size of the prediction indicator
-    ANIMATION_DURATION: 100        // ms for swipe animation
-};
+(() => {
+  // Configuration
+  const CONFIG = {
+    THRESHOLD: 50,
+    ANGLE_THRESHOLD: 25,
+    SCROLLBAR_WIDTH: 30,
+    INDICATOR_SIZE: 40
+  };
 
-// State tracking
-let touchState = {
+  // Direction symbols
+  const ARROWS = {
+    n: "↑", s: "↓", e: "→", w: "←",
+    ne: "↗", nw: "↖", se: "↘", sw: "↙",
+    u: "⇧", d: "⇩"
+  };
+
+  // State
+  let state = {
     startX: 0,
     startY: 0,
-    startTime: 0,
     direction: "",
-    isCancelled: false,
-    touchCount: 0,
-    lastTouchTime: 0
-};
+    isMultiTouch: false,
+    isProcessed: false
+  };
+  
+  let indicator = null;
 
-let predictionIndicator = null;
-
-// Arrow symbols for different directions
-const DIRECTION_ARROWS = {
-    "n": "↑", "s": "↓", "e": "→", "w": "←",
-    "ne": "↗", "nw": "↖", "se": "↘", "sw": "↙",
-    "u": "⇧", "d": "⇩"
-};
-
-// Create visual feedback element
-function createPredictionIndicator() {
-    if (predictionIndicator) removePredictionIndicator();
+  // Create direction indicator
+  function createIndicator() {
+    if (indicator) removeIndicator();
     
-    predictionIndicator = document.createElement("div");
-    Object.assign(predictionIndicator.style, {
-        position: "fixed",            // Changed to fixed for better positioning
-        width: `${SWIPE_CONFIG.PREDICTION_SIZE}px`,
-        height: `${SWIPE_CONFIG.PREDICTION_SIZE}px`,
-        background: "rgba(0, 0, 0, 0.5)",  // Semi-transparent background
-        borderRadius: "50%",                // Circular indicator
-        pointerEvents: "none",
-        transition: `all ${SWIPE_CONFIG.ANIMATION_DURATION}ms ease-out`,
-        fontSize: "30px",
-        textAlign: "center",
-        lineHeight: `${SWIPE_CONFIG.PREDICTION_SIZE}px`,
-        color: "white",
-        zIndex: "9999",                     // Ensure it's above other elements
-        opacity: "0.8"
+    indicator = document.createElement("div");
+    Object.assign(indicator.style, {
+      position: "fixed",
+      width: `${CONFIG.INDICATOR_SIZE}px`,
+      height: `${CONFIG.INDICATOR_SIZE}px`,
+      background: "rgba(0,0,0,0.5)",
+      borderRadius: "50%",
+      pointerEvents: "none",
+      transition: "all 0.1s ease-out",
+      fontSize: "30px",
+      textAlign: "center",
+      lineHeight: `${CONFIG.INDICATOR_SIZE}px`,
+      color: "#fff",
+      zIndex: "9999",
+      opacity: "0.8"
     });
     
-    document.body.appendChild(predictionIndicator);
-}
+    document.body.appendChild(indicator);
+    return indicator;
+  }
 
-// Update the indicator position and direction
-function updatePredictionIndicator(x, y, direction) {
-    if (!predictionIndicator) return;
+  // Update indicator
+  function updateIndicator(x, y, dir) {
+    if (!indicator) return;
     
-    const halfSize = SWIPE_CONFIG.PREDICTION_SIZE / 2;
-    predictionIndicator.style.transform = `translate(${x - halfSize}px, ${y - halfSize}px)`;
-    predictionIndicator.innerText = DIRECTION_ARROWS[direction] || "";
+    const half = CONFIG.INDICATOR_SIZE / 2;
+    indicator.style.transform = `translate(${x - half}px, ${y - half}px)`;
+    indicator.textContent = ARROWS[dir] || "";
     
-    // Add visual feedback based on direction
-    if (direction) {
-        predictionIndicator.style.opacity = "1";
-        predictionIndicator.style.boxShadow = "0 0 10px rgba(255, 255, 255, 0.7)";
+    if (dir) {
+      indicator.style.opacity = "1";
+      indicator.style.boxShadow = "0 0 10px rgba(255,255,255,0.7)";
     } else {
-        predictionIndicator.style.opacity = "0.5";
-        predictionIndicator.style.boxShadow = "none";
+      indicator.style.opacity = "0.5";
+      indicator.style.boxShadow = "none";
     }
-}
+  }
 
-// Remove the indicator
-function removePredictionIndicator() {
-    if (predictionIndicator) {
-        document.body.removeChild(predictionIndicator);
-        predictionIndicator = null;
+  // Remove indicator
+  function removeIndicator() {
+    if (indicator) {
+      document.body.removeChild(indicator);
+      indicator = null;
     }
-}
+  }
 
-// Handle the start of a touch event
-function handleTouchStart(event) {
-    // Skip if in settings menu or map popup
-    if ($("#settingscontent").is(":visible") || $(event.target).closest(".popup-map").length) {
-        return;
+  // Get swipe direction based on angle
+  function getDirection(dx, dy, isMultiTouch) {
+    if (isMultiTouch) {
+      return dy < 0 ? "u" : "d";
     }
     
-    const now = Date.now();
-    
-    // Track multi-touch with timing
-    if (now - touchState.lastTouchTime < SWIPE_CONFIG.MULTI_TOUCH_TIME) {
-        touchState.touchCount++;
-    } else {
-        touchState.touchCount = 1;
-    }
-    
-    touchState.lastTouchTime = now;
-    touchState.startTime = now;
-    touchState.startX = event.touches[0].clientX;
-    touchState.startY = event.touches[0].clientY;
-    touchState.isCancelled = false;
-    touchState.direction = "";
-    
-    createPredictionIndicator();
-    updatePredictionIndicator(touchState.startX, touchState.startY, "");
-}
-
-// Handle touch move for dynamic feedback
-function handleTouchMove(event) {
-    if (event.touches.length === 0) return;
-    
-    const currentX = event.touches[0].clientX;
-    const currentY = event.touches[0].clientY;
-    
-    const dx = currentX - touchState.startX;
-    const dy = currentY - touchState.startY;
     const distance = Math.sqrt(dx * dx + dy * dy);
+    if (distance < CONFIG.THRESHOLD) return "";
     
-    // Cancel if the movement is too small
-    if (distance < SWIPE_CONFIG.THRESHOLD) {
-        touchState.isCancelled = true;
-        if (predictionIndicator) predictionIndicator.style.display = "none";
-        return;
-    }
-    
-    // Determine direction based on angle and touch count
     const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+    const t = CONFIG.ANGLE_THRESHOLD;
     
-    // Handle multi-touch for up/down movement
-    if (touchState.touchCount >= 2) {
-        touchState.direction = dy < 0 ? "u" : "d";
-    } else {
-        // Single touch directions - improved angle detection
-        if (Math.abs(angle) <= SWIPE_CONFIG.DIAGONAL_ANGLE_THRESHOLD) {
-            touchState.direction = "e";
-        } else if (Math.abs(angle) >= 180 - SWIPE_CONFIG.DIAGONAL_ANGLE_THRESHOLD) {
-            touchState.direction = "w";
-        } else if (Math.abs(angle - 90) <= SWIPE_CONFIG.DIAGONAL_ANGLE_THRESHOLD) {
-            touchState.direction = "s";
-        } else if (Math.abs(angle + 90) <= SWIPE_CONFIG.DIAGONAL_ANGLE_THRESHOLD) {
-            touchState.direction = "n";
-        } else if (angle > 0 && angle < 90) {
-            touchState.direction = "se";
-        } else if (angle > 90 && angle < 180) {
-            touchState.direction = "sw";
-        } else if (angle < 0 && angle > -90) {
-            touchState.direction = "ne";
-        } else if (angle < -90 && angle > -180) {
-            touchState.direction = "nw";
-        }
-    }
+    // Optimized direction detection
+    if (Math.abs(angle) <= t) return "e";
+    if (Math.abs(angle) >= 180 - t) return "w";
+    if (Math.abs(angle - 90) <= t) return "s";
+    if (Math.abs(angle + 90) <= t) return "n";
     
-    touchState.isCancelled = false;
-    if (predictionIndicator) {
-        predictionIndicator.style.display = "block";
-        updatePredictionIndicator(currentX, currentY, touchState.direction);
-    }
-}
+    if (angle > 0 && angle < 90) return "se";
+    if (angle > 90 && angle < 180) return "sw";
+    if (angle < 0 && angle > -90) return "ne";
+    if (angle < -90 && angle > -180) return "nw";
+    
+    return "";
+  }
 
-// Handle the end of a touch event
-function handleTouchEnd(event) {
-    // If the touch was cancelled or too short, ignore
-    if (touchState.isCancelled || Date.now() - touchState.startTime < 100) {
-        removePredictionIndicator();
-        return;
-    }
+  // Send command to the game
+  function sendCommand(dir) {
+    // Set input and dispatch Enter key
+    const input = document.getElementById('input');
+    input.value = dir;
+    input.focus();
     
-    // Only process if we have a valid direction
-    if (touchState.direction) {
-        // Add visual feedback animation before submitting command
-        if (predictionIndicator) {
-            predictionIndicator.style.transform += " scale(1.5)";
-            predictionIndicator.style.opacity = "0";
-            
-            // Delay command submission for animation
-            setTimeout(() => {
-                sendDirectionCommand(touchState.direction);
-                removePredictionIndicator();
-            }, SWIPE_CONFIG.ANIMATION_DURATION);
-        } else {
-            sendDirectionCommand(touchState.direction);
-        }
-    } else {
-        removePredictionIndicator();
-    }
-}
-
-// Send the direction command to the game
-function sendDirectionCommand(direction) {
-    // Set input value
-    $("#input").val(direction);
-    
-    // Focus and trigger enter keypress
-    $("#input").focus();
-    
-    // Create and dispatch Enter key event
     const enterEvent = new KeyboardEvent('keydown', {
-        key: 'Enter',
-        code: 'Enter',
-        which: 13,
-        keyCode: 13,
-        bubbles: true,
-        cancelable: true
+      key: 'Enter',
+      code: 'Enter',
+      which: 13,
+      keyCode: 13,
+      bubbles: true,
+      cancelable: true
     });
     
-    document.getElementById('input').dispatchEvent(enterEvent);
+    input.dispatchEvent(enterEvent);
+    input.value = "";
+    input.blur();
     
-    // Clear and blur input
-    $("#input").val("");
-    $("#input").blur();
-    
-    // Add haptic feedback if available (iOS and Android)
-    if (navigator.vibrate) {
-        navigator.vibrate(50);
-    }
-}
+    // Vibration feedback
+    if (navigator.vibrate) navigator.vibrate(50);
+  }
 
-// Prevent default behavior except for scrollbar
-$("#mudoutput").on("touchstart touchmove touchend", function(event) {
-    const touch = event.originalEvent.touches[0] || event.originalEvent.changedTouches[0];
-    const rect = this.getBoundingClientRect();
-    const isOnScrollbar = touch.clientX > rect.right - SWIPE_CONFIG.SCROLLBAR_WIDTH;
+  // Handle touch start
+  function onTouchStart(e) {
+    // Skip if in settings or map popup
+    if ($("#settingscontent").is(":visible") || $(e.target).closest(".popup-map").length) {
+      return;
+    }
     
-    if (isOnScrollbar) {
-        event.stopPropagation();
+    state = {
+      startX: e.touches[0].clientX,
+      startY: e.touches[0].clientY,
+      direction: "",
+      isMultiTouch: e.touches.length >= 2,
+      isProcessed: false
+    };
+    
+    createIndicator();
+    updateIndicator(state.startX, state.startY, "");
+  }
+
+  // Handle touch move
+  function onTouchMove(e) {
+    if (state.isProcessed || !e.touches.length) return;
+    
+    const currentX = e.touches[0].clientX;
+    const currentY = e.touches[0].clientY;
+    const dx = currentX - state.startX;
+    const dy = currentY - state.startY;
+    
+    state.direction = getDirection(dx, dy, state.isMultiTouch);
+    
+    if (indicator) {
+      indicator.style.display = state.direction ? "block" : "none";
+      if (state.direction) updateIndicator(currentX, currentY, state.direction);
+    }
+  }
+
+  // Handle touch end
+  function onTouchEnd(e) {
+    if (state.isProcessed) return;
+    state.isProcessed = true;
+    
+    if (state.direction) {
+      if (indicator) {
+        indicator.style.transform += " scale(1.5)";
+        indicator.style.opacity = "0";
+        
+        setTimeout(() => {
+          sendCommand(state.direction);
+          removeIndicator();
+        }, 100);
+      } else {
+        sendCommand(state.direction);
+      }
     } else {
-        event.preventDefault();
+      removeIndicator();
     }
-});
+  }
 
-// Apply event handlers with proper cleanup
-function initSwipeGestures() {
-    // Clean up existing handlers first
-    $(window).off(".swipeDirections");
+  // Handle scrollbar vs. content
+  function onMudOutput(e) {
+    const touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
+    const rect = this.getBoundingClientRect();
+    const isScrollbar = touch.clientX > rect.right - CONFIG.SCROLLBAR_WIDTH;
+    
+    isScrollbar ? e.stopPropagation() : e.preventDefault();
+  }
+
+  // Initialize the system
+  function init() {
+    // Clean up existing handlers
+    $(window).off(".swipeGestures");
+    $("#mudoutput").off(".swipeGestures");
     
     // Apply new handlers
-    $(window).on("touchstart.swipeDirections", handleTouchStart);
-    $(window).on("touchmove.swipeDirections", handleTouchMove);
-    $(window).on("touchend.swipeDirections", handleTouchEnd);
-}
+    $(window).on("touchstart.swipeGestures", onTouchStart);
+    $(window).on("touchmove.swipeGestures", onTouchMove);
+    $(window).on("touchend.swipeGestures", onTouchEnd);
+    $("#mudoutput").on("touchstart.swipeGestures touchmove.swipeGestures touchend.swipeGestures", onMudOutput);
+    
+    console.log("Mobile swipe gestures initialized");
+  }
 
-initSwipeGestures();
+  // Initialize
+  init();
+})();
