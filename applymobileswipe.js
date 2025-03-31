@@ -120,9 +120,6 @@
     input.dispatchEvent(enterEvent);
     input.value = "";
     input.blur();
-    
-    // Vibration feedback
-    if (navigator.vibrate) navigator.vibrate(50);
   }
 
   // Handle touch start
