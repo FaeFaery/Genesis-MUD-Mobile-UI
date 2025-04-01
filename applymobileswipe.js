@@ -129,17 +129,16 @@
 
     if (!element) return false;
   
-    // Check for exit element - allow touch events on these
+    // Check for exit element - simulate click
     if (element.classList.contains('exit') || element.closest('.exit')) {
-      return 'exit';
+      element.click();
+      return true;
     }
   
     // Check for mobile-nav or resizer - prevent default behavior
     if (document.getElementById('mobile-nav')?.contains(element) ||
         element.classList.contains('resizer') || 
         element.closest('.resizer')) {
-      e.preventDefault();
-      e.stopPropagation();
       return true;
     }
   
@@ -361,7 +360,6 @@
     
     // Create custom scrollbar
     createCustomScrollbar();
-    $("#mudoutput").scrollTop($("#mudoutput")[0].scrollHeight);
     
     // Apply new handlers
     $(window).on("touchstart.swipeGestures", onTouchStart);
@@ -375,4 +373,7 @@
 
   // Initialize
   init();
+
+  // Fix scroll view
+  $("#mudoutput").scrollTop($("#mudoutput")[0].scrollHeight);
 })();
