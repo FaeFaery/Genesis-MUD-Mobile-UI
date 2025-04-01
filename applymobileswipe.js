@@ -3,7 +3,7 @@
   const CONFIG = {
     THRESHOLD: 50,
     ANGLE_THRESHOLD: 25,
-    SCROLLBAR_WIDTH: 30,
+    SCROLLBAR_WIDTH: 15,
     INDICATOR_SIZE: 40
   };
 
@@ -120,9 +120,7 @@
     input.dispatchEvent(enterEvent);
     input.value = "";
     input.blur();
-    
-    // Vibration feedback
-    if (navigator.vibrate) navigator.vibrate(50);
+
   }
 
   // Check if touch point is on the scrollbar area
@@ -140,9 +138,9 @@
     if (!output) return;
     
     // Add a wrapper for positioning the scrollbar properly
-    if (!output.parentElement.classList.contains('mud-container')) {
+    if (!output.parentElement.classList.contains('mud-scroll-container')) {
       const wrapper = document.createElement('div');
-      wrapper.className = 'mud-container';
+      wrapper.className = 'mud-scroll-container';
       wrapper.style.position = 'relative';
       wrapper.style.height = '100%';
       wrapper.style.overflow = 'hidden';
@@ -214,7 +212,7 @@
     if (!output || !thumb) return;
     
     const scrollRatio = output.clientHeight / output.scrollHeight;
-    const thumbHeight = Math.max(scrollRatio * output.clientHeight, 30); // Minimum height 30px
+    const thumbHeight = Math.max(scrollRatio * output.clientHeight, 15); // Minimum height 30px
     
     thumb.style.height = `${thumbHeight}px`;
     
