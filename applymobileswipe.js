@@ -129,16 +129,12 @@
 
     if (!element) return false;
   
-    // Check for exit element - simulate click
-    if (element.classList.contains('exit') || element.closest('.exit')) {
-      element.click();
-      return true;
-    }
-  
     // Check for mobile-nav or resizer - prevent default behavior
     if (document.getElementById('mobile-nav')?.contains(element) ||
         element.classList.contains('resizer') || 
-        element.closest('.resizer')) {
+        element.closest('.resizer') || 
+        element.classList.contains('exit') || 
+        element.closest('.exit')) {
       return true;
     }
   
