@@ -122,18 +122,28 @@
     return clientX > rect.right - CONFIG.SCROLLBAR_WIDTH;
   }
 
-  // Check if touch point is on mobile popups
-  function isTouchOnMobileNav(e) {
+  // Check if touch point is valid
+  function overrideTouch(e) {
     const touch = e.touches[0] || e.changedTouches[0];
-    const mobileNav = document.getElementById('mobile-nav');
-    
-    if (!mobileNav) return false;
+    const element = document.elementFromPoint(touch.clientX, touch.clientY);
 
-    const rect = mobileNav.getBoundingClientRect();
-    return touch.clientX >= rect.left && 
-           touch.clientX <= rect.right && 
-           touch.clientY >= rect.top && 
-           touch.clientY <= rect.bottom;
+    if (!element) return false;
+  
+    // Check for exit element - allow touch events on these
+    if (element.classList.contains('exit') || element.closest('.exit')) {
+      return 'exit';
+    }
+  
+    // Check for mobile-nav or resizer - prevent default behavior
+    if (document.getElementById('mobile-nav')?.contains(element) ||
+        element.classList.contains('resizer') || 
+        element.closest('.resizer')) {
+      e.preventDefault();
+      e.stopPropagation();
+      return true;
+    }
+  
+    return false;
   }
 
   function createCustomScrollbar() {
@@ -277,7 +287,7 @@
 
   function onTouchStart(e) {
     // Don't register if in settings or popup
-    if ($("#settingscontent").is(":visible") || isTouchOnMobileNav(e)) {
+    if ($("#settingscontent").is(":visible") || overrideTouch(e)) {
       return;
     }
     
@@ -300,7 +310,7 @@
   }
 
   function onTouchMove(e) {
-    if (!e.touches.length || state.isScrolling) return;
+    if (!e.touches.length || state.isScrolling || overrideTouch(e)) return;
     
     const currentX = e.touches[0].clientX;
     const currentY = e.touches[0].clientY;
@@ -316,7 +326,7 @@
   }
 
   function onTouchEnd(e) {
-    if (e.touches.length > 1) return;
+    if (e.touches.length > 1 || overrideTouch(e)) return;
     
     if (state.direction) {
       if (indicator) {
