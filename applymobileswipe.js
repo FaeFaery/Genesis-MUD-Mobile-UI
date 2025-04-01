@@ -19,8 +19,7 @@
     startX: 0,
     startY: 0,
     direction: "",
-    isMultiTouch: false,
-    isProcessed: false
+    isMultiTouch: false
   };
   
   let indicator = null;
@@ -125,7 +124,7 @@
   // Handle touch start
   function onTouchStart(e) {
     // Skip if in settings or map popup
-    if ($("#settingscontent").is(":visible") || $(e.target).closest(".popup-map").length) {
+    if ($("#settingscontent").is(":visible") || $(e.target).closest("#mobile-nav").length) {
       return;
     }
     
@@ -134,7 +133,6 @@
       startY: e.touches[0].clientY,
       direction: "",
       isMultiTouch: e.touches.length >= 2,
-      isProcessed: false
     };
     
     createIndicator();
@@ -142,9 +140,7 @@
   }
 
   // Handle touch move
-  function onTouchMove(e) {
-    if (state.isProcessed || !e.touches.length) return;
-    
+  function onTouchMove(e) {   
     const currentX = e.touches[0].clientX;
     const currentY = e.touches[0].clientY;
     const dx = currentX - state.startX;
@@ -160,9 +156,7 @@
 
   // Handle touch end
   function onTouchEnd(e) {
-    if (state.isProcessed) return;
-    state.isProcessed = true;
-    
+    if (e.touches.length > 1) return;
     if (state.direction) {
       if (indicator) {
         indicator.style.transform += " scale(1.5)";
