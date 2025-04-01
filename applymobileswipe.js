@@ -19,7 +19,8 @@
     startX: 0,
     startY: 0,
     direction: "",
-    isMultiTouch: false
+    isMultiTouch: false,
+    isScrolling: false
   };
   
   let indicator = null;
@@ -119,13 +120,173 @@
     input.dispatchEvent(enterEvent);
     input.value = "";
     input.blur();
+    
+    // Vibration feedback
+    if (navigator.vibrate) navigator.vibrate(50);
+  }
+
+  // Check if touch point is on the scrollbar area
+  function isTouchOnScrollbar(element, clientX) {
+    const rect = element.getBoundingClientRect();
+    return clientX > rect.right - CONFIG.SCROLLBAR_WIDTH;
+  }
+
+  // Create and append custom scrollbar
+  function createCustomScrollbar() {
+    // Check if the custom scrollbar already exists
+    if (document.getElementById('mudScrollbar')) return;
+    
+    const output = document.getElementById('mudoutput');
+    if (!output) return;
+    
+    // Add a wrapper for positioning the scrollbar properly
+    if (!output.parentElement.classList.contains('mud-container')) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'mud-container';
+      wrapper.style.position = 'relative';
+      wrapper.style.height = '100%';
+      wrapper.style.overflow = 'hidden';
+      output.parentNode.insertBefore(wrapper, output);
+      wrapper.appendChild(output);
+    }
+    
+    // Create the custom scrollbar
+    const scrollbar = document.createElement('div');
+    scrollbar.id = 'mudScrollbar';
+    Object.assign(scrollbar.style, {
+      position: 'absolute',
+      top: '0',
+      right: '0',
+      width: `${CONFIG.SCROLLBAR_WIDTH}px`,
+      height: '100%',
+      backgroundColor: 'rgba(200, 200, 200, 0.2)',
+      zIndex: '999',
+      cursor: 'pointer'
+    });
+    
+    // Create the scrollbar thumb
+    const thumb = document.createElement('div');
+    thumb.id = 'mudScrollThumb';
+    Object.assign(thumb.style, {
+      position: 'absolute',
+      top: '0',
+      right: '0',
+      width: '100%',
+      backgroundColor: 'rgba(150, 150, 150, 0.5)',
+      borderRadius: '4px',
+      transition: 'opacity 0.2s'
+    });
+    
+    scrollbar.appendChild(thumb);
+    output.parentElement.appendChild(scrollbar);
+    
+    // Update the thumb size and position based on content
+    updateScrollbarThumb();
+    
+    // Add event listeners for the custom scrollbar
+    scrollbar.addEventListener('touchstart', onScrollbarTouchStart);
+    scrollbar.addEventListener('touchmove', onScrollbarTouchMove);
+    scrollbar.addEventListener('touchend', onScrollbarTouchEnd);
+    
+    // Make sure the output element is scrollable
+    output.style.overflowY = 'auto';
+    output.style.overflowX = 'hidden';
+    
+    // Hide native scrollbar on mobile
+    output.style.scrollbarWidth = 'none'; // Firefox
+    output.style.msOverflowStyle = 'none'; // IE/Edge
+    
+    // Hide webkit scrollbar
+    const style = document.createElement('style');
+    style.textContent = '#mudoutput::-webkit-scrollbar { display: none; }';
+    document.head.appendChild(style);
+    
+    // Add scroll event listener to update thumb position
+    output.addEventListener('scroll', updateScrollbarThumb);
+    
+    return [scrollbar, thumb];
+  }
+  
+  // Update scrollbar thumb size and position
+  function updateScrollbarThumb() {
+    const output = document.getElementById('mudoutput');
+    const thumb = document.getElementById('mudScrollThumb');
+    if (!output || !thumb) return;
+    
+    const scrollRatio = output.clientHeight / output.scrollHeight;
+    const thumbHeight = Math.max(scrollRatio * output.clientHeight, 30); // Minimum height 30px
+    
+    thumb.style.height = `${thumbHeight}px`;
+    
+    const scrollPercentage = output.scrollTop / (output.scrollHeight - output.clientHeight);
+    const thumbTop = scrollPercentage * (output.clientHeight - thumbHeight);
+    
+    thumb.style.top = `${thumbTop}px`;
+    
+    // Show/hide thumb based on scrollability
+    thumb.style.opacity = scrollRatio < 1 ? '1' : '0';
+  }
+  
+  // Handle scroll bar touch start
+  function onScrollbarTouchStart(e) {
+    state.isScrolling = true;
+    state.startY = e.touches[0].clientY;
+    
+    const output = document.getElementById('mudoutput');
+    state.initialScrollTop = output.scrollTop;
+    
+    // Highlight the thumb while scrolling
+    const thumb = document.getElementById('mudScrollThumb');
+    if (thumb) thumb.style.backgroundColor = 'rgba(150, 150, 150, 0.8)';
+    
+    e.preventDefault();
+    e.stopPropagation();
+  }
+  
+  // Handle scroll bar touch move
+  function onScrollbarTouchMove(e) {
+    if (!state.isScrolling) return;
+    
+    const output = document.getElementById('mudoutput');
+    const currentY = e.touches[0].clientY;
+    const deltaY = currentY - state.startY;
+    
+    // Calculate the scrolling delta (reversed for natural feeling)
+    const scrollableHeight = output.scrollHeight - output.clientHeight;
+    const scrollRatio = output.clientHeight / output.scrollHeight;
+    const scrollDelta = deltaY / scrollRatio;
+    
+    // Apply the scroll (natural scrolling - drag down to scroll up)
+    output.scrollTop = Math.max(0, Math.min(scrollableHeight, state.initialScrollTop - scrollDelta));
+    
+    updateScrollbarThumb();
+    e.preventDefault();
+    e.stopPropagation();
+  }
+  
+  // Handle scroll bar touch end
+  function onScrollbarTouchEnd(e) {
+    state.isScrolling = false;
+    
+    // Return thumb to normal appearance
+    const thumb = document.getElementById('mudScrollThumb');
+    if (thumb) thumb.style.backgroundColor = 'rgba(150, 150, 150, 0.5)';
+    
+    e.preventDefault();
+    e.stopPropagation();
   }
 
   // Handle touch start
   function onTouchStart(e) {
     // Skip if in settings or map popup
-    if ($("#settingscontent").is(":visible") || $(e.target).closest("#mobile-nav").length) {
+    if ($("#settingscontent").is(":visible") || $(e.target).closest(".popup-map").length) {
       return;
+    }
+    
+    // Check if touch is on the scrollbar area
+    const output = document.getElementById('mudoutput');
+    if (output && isTouchOnScrollbar(output, e.touches[0].clientX)) {
+      return; // Let the scrollbar handle this
     }
     
     state = {
@@ -133,6 +294,7 @@
       startY: e.touches[0].clientY,
       direction: "",
       isMultiTouch: e.touches.length >= 2,
+      isScrolling: false
     };
     
     createIndicator();
@@ -140,7 +302,9 @@
   }
 
   // Handle touch move
-  function onTouchMove(e) {   
+  function onTouchMove(e) {
+    if (!e.touches.length || state.isScrolling) return;
+    
     const currentX = e.touches[0].clientX;
     const currentY = e.touches[0].clientY;
     const dx = currentX - state.startX;
@@ -157,6 +321,7 @@
   // Handle touch end
   function onTouchEnd(e) {
     if (e.touches.length > 1) return;
+    
     if (state.direction) {
       if (indicator) {
         indicator.style.transform += " scale(1.5)";
@@ -174,13 +339,18 @@
     }
   }
 
-  // Handle scrollbar vs. content
+  // Handle mudoutput touch events
   function onMudOutput(e) {
     const touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
-    const rect = this.getBoundingClientRect();
-    const isScrollbar = touch.clientX > rect.right - CONFIG.SCROLLBAR_WIDTH;
+    const element = this;
     
-    isScrollbar ? e.stopPropagation() : e.preventDefault();
+    if (isTouchOnScrollbar(element, touch.clientX)) {
+      // On scrollbar - pass through to scrollbar handlers
+      e.stopPropagation();
+    } else {
+      // In content area - use for swipe gestures
+      e.preventDefault();
+    }
   }
 
   // Initialize the system
@@ -189,13 +359,19 @@
     $(window).off(".swipeGestures");
     $("#mudoutput").off(".swipeGestures");
     
+    // Create custom scrollbar
+    createCustomScrollbar();
+    
     // Apply new handlers
     $(window).on("touchstart.swipeGestures", onTouchStart);
     $(window).on("touchmove.swipeGestures", onTouchMove);
     $(window).on("touchend.swipeGestures", onTouchEnd);
     $("#mudoutput").on("touchstart.swipeGestures touchmove.swipeGestures touchend.swipeGestures", onMudOutput);
     
-    console.log("Mobile swipe gestures initialized");
+    // Observe window resize to update scrollbar
+    window.addEventListener('resize', updateScrollbarThumb);
+    
+    console.log("Mobile swipe gestures");
   }
 
   // Initialize
