@@ -1,6 +1,6 @@
 (() => {
   const CONFIG = {
-    THRESHOLD: 50,
+    THRESHOLD: 70,
     ANGLE_THRESHOLD: 25,
     SCROLLBAR_WIDTH: 15,
     INDICATOR_SIZE: 40
@@ -132,9 +132,10 @@
     // Check for mobile-nav or resizer - prevent default behavior
     if (document.getElementById('mobile-nav')?.contains(element) ||
         element.classList.contains('resizer') || 
-        element.closest('.resizer') || 
-        element.classList.contains('exit') || 
-        element.closest('.exit')) {
+        element.closest('.resizer')) {
+      if (element.classList.contains('exit') || element.closest('.exit')) {
+        element.click();
+      }
       return true;
     }
   
