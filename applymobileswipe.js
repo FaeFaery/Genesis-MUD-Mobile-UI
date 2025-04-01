@@ -116,12 +116,6 @@
     input.blur();
   }
 
-  // Check if touch point is on the scrollbar area
-  function isTouchOnScrollbar(element, clientX) {
-    const rect = element.getBoundingClientRect();
-    return clientX > rect.right - CONFIG.SCROLLBAR_WIDTH;
-  }
-
   // Check if touch point is valid
   function overrideTouch(e) {
     const touch = e.touches[0] || e.changedTouches[0];
@@ -131,11 +125,10 @@
   
     // Check for mobile-nav or resizer - prevent default behavior
     if (document.getElementById('mobile-nav')?.contains(element) ||
+        document.getElementById('mudScrollbar')?.contains(element) ||
         element.classList.contains('resizer') || 
-        element.closest('.resizer')) {
-      if (element.classList.contains('exit') || element.closest('.exit')) {
-        element.click();
-      }
+        element.closest('.resizer') ||
+        element.classList.contains('exit')) {
       return true;
     }
   
@@ -235,6 +228,7 @@
     // Show/hide thumb based on scrollability
     thumb.style.opacity = scrollRatio < 1 ? '0.4' : '0';
   }
+  
   function onScrollbarTouchStart(e) {
     state.isScrolling = true;
     state.startY = e.touches[0].clientY;
@@ -245,9 +239,6 @@
     // Highlight the thumb while scrolling
     const thumb = document.getElementById('mudScrollThumb');
     if (thumb) thumb.style.backgroundColor = 'rgba(150, 150, 150, 0.8)';
-
-    e.preventDefault();
-    e.stopPropagation();
   }
   
   function onScrollbarTouchMove(e) {
@@ -266,8 +257,6 @@
     output.scrollTop = Math.max(0, Math.min(scrollableHeight, state.initialScrollTop + scrollDelta));
     
     updateScrollbarThumb();
-    e.preventDefault();
-    e.stopPropagation();
   }
   
   function onScrollbarTouchEnd(e) {
@@ -276,21 +265,12 @@
     // Return thumb to normal appearance
     const thumb = document.getElementById('mudScrollThumb');
     if (thumb) thumb.style.backgroundColor = 'rgba(150, 150, 150, 0.4)';
-    
-    e.preventDefault();
-    e.stopPropagation();
   }
 
   function onTouchStart(e) {
     // Don't register if in settings or popup
     if ($("#settingscontent").is(":visible") || overrideTouch(e)) {
       return;
-    }
-    
-    // Check if touch is on the scrollbar area
-    const output = document.getElementById('mudoutput');
-    if (output && isTouchOnScrollbar(output, e.touches[0].clientX)) {
-      return; // Let the scrollbar handle this event
     }
     
     state = {
@@ -345,7 +325,7 @@
     const touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
     const element = this;
     
-    if (!isTouchOnScrollbar(element, touch.clientX)) e.preventDefault();
+    if (!overrideTouch(e)) e.preventDefault();
 
   }
 
