@@ -122,6 +122,20 @@
     return clientX > rect.right - CONFIG.SCROLLBAR_WIDTH;
   }
 
+  // Check if touch point is on mobile popups
+  function isTouchOnMobileNav(e) {
+    const touch = e.touches[0] || e.changedTouches[0];
+    const mobileNav = document.getElementById('mobile-nav');
+    
+    if (!mobileNav) return false;
+
+    const rect = mobileNav.getBoundingClientRect();
+    return touch.clientX >= rect.left && 
+           touch.clientX <= rect.right && 
+           touch.clientY >= rect.top && 
+           touch.clientY <= rect.bottom;
+  }
+
   function createCustomScrollbar() {
     // Check if the custom scrollbar already exists
     if (document.getElementById('mudScrollbar')) return;
@@ -262,8 +276,8 @@
   }
 
   function onTouchStart(e) {
-    // Skip if in settings or map popup
-    if ($("#settingscontent").is(":visible") || $(e.target).closest(".popup-map").length) {
+    // Don't register if in settings or popup
+    if ($("#settingscontent").is(":visible") || isTouchOnMobileNav(e)) {
       return;
     }
     
