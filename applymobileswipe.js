@@ -39,8 +39,8 @@
       textAlign: "center",
       lineHeight: `${CONFIG.INDICATOR_SIZE}px`,
       color: "#fff",
-      zIndex: "9999",
-      opacity: "0.8"
+      zIndex: "2",
+      opacity: "1"
     });
     
     document.body.appendChild(indicator);
@@ -50,15 +50,14 @@
   function updateIndicator(x, y, dir) {
     if (!indicator) return;
     
-    const half = CONFIG.INDICATOR_SIZE / 2;
-    indicator.style.transform = `translate(${x - half}px, ${y - half}px)`;
+    indicator.style.transform = `translate(${x - CONFIG.INDICATOR_SIZE}px, ${y - CONFIG.INDICATOR_SIZE}px)`;
     indicator.textContent = ARROWS[dir] || "";
     
     if (dir) {
       indicator.style.opacity = "1";
       indicator.style.boxShadow = "0 0 10px rgba(255,255,255,0.7)";
     } else {
-      indicator.style.opacity = "0.5";
+      indicator.style.opacity = "0";
       indicator.style.boxShadow = "none";
     }
   }
@@ -93,7 +92,7 @@
     if (angle < 0 && angle > -90) return "ne";
     if (angle < -90 && angle > -180) return "nw";
     
-    return null;
+    return "";
   }
 
   // Send command to the game
@@ -124,9 +123,10 @@
 
     if (!element) return false;
   
-    // Check for mobile-nav or resizer - prevent default behavior
+    // Check for mobile-nav, popup settings or resizer - prevent default behavior
     if (document.getElementById('mobile-nav')?.contains(element) ||
         document.getElementById('mudScrollbar')?.contains(element) ||
+        document.querySelector('.popup-settings')?.contains(element) ||
         element.classList.contains('resizer') || 
         element.closest('.resizer') ||
         element.classList.contains('exit')) {
