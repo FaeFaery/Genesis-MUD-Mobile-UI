@@ -15,9 +15,10 @@
   let state = {
     startX: 0,
     startY: 0,
-    direction: "",
+    direction: null,
     isMultiTouch: false,
-    isScrolling: false
+    isScrolling: false,
+    disableGesture: false
   };
   
   let indicator = null;
@@ -92,7 +93,7 @@
     if (angle < 0 && angle > -90) return "ne";
     if (angle < -90 && angle > -180) return "nw";
     
-    return "";
+    return null;
   }
 
   // Send command to the game
@@ -270,15 +271,17 @@
   function onTouchStart(e) {
     // Don't register if in settings or popup
     if ($("#settingscontent").is(":visible") || overrideTouch(e)) {
+      state.disableGesture = true;
       return;
     }
     
     state = {
       startX: e.touches[0].clientX,
       startY: e.touches[0].clientY,
-      direction: "",
+      direction: null,
       isMultiTouch: e.touches.length >= 2,
-      isScrolling: false
+      isScrolling: false,
+      disableGesture: false
     };
     
     createIndicator();
@@ -286,7 +289,7 @@
   }
 
   function onTouchMove(e) {
-    if (!e.touches.length || state.isScrolling || overrideTouch(e)) return;
+    if (!e.touches.length || state.isScrolling || state.disableGesture) return;
     
     const currentX = e.touches[0].clientX;
     const currentY = e.touches[0].clientY;
@@ -302,22 +305,13 @@
   }
 
   function onTouchEnd(e) {
-    if (e.touches.length > 1 || overrideTouch(e)) return;
+    if (e.touches.length > 1 || state.disableGesture) return;
     
     if (state.direction) {
       if (indicator) {
-        indicator.style.transform += " scale(1.5)";
-        indicator.style.opacity = "0";
-        
-        setTimeout(() => {
-          sendCommand(state.direction);
-          removeIndicator();
-        }, 100);
-      } else {
         sendCommand(state.direction);
+        removeIndicator();
       }
-    } else {
-      removeIndicator();
     }
   }
 
@@ -351,6 +345,6 @@
   // Initialize
   init();
 
-  // Fix scroll view
+  // Fix scroll view to move to bottom
   $("#mudoutput").scrollTop($("#mudoutput")[0].scrollHeight);
 })();
