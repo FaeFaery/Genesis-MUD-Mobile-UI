@@ -1177,14 +1177,9 @@ function initMapExtension() {
         history.pushState(null, document.title, location.href);
         window.addEventListener('popstate', () => history.pushState(null, document.title, location.href));
 
-        // Prevent focus on the input box unless clicked on
+        // Change input id to prevent focus all the damn time
         const input = document.getElementById("input");
-        input.addEventListener("focus", function(event) {
-            if (!event.isTrusted) {
-                event.preventDefault();
-                input.blur();
-            }
-        });
+        input.id = "mud-input"
     }
 
     // Inject CSS and HTML
