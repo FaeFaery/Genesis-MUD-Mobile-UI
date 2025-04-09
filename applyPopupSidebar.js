@@ -1166,20 +1166,37 @@ function initMapExtension() {
         const style = document.createElement('style');
         style.textContent = 'html,body{overscroll-behavior:contain;overflow:hidden;height:100%;margin:0;padding:0;position:fixed;width:100%;touch-action:pan-y pinch-zoom}#content-container{overflow-y:auto;height:100%;width:100%;overscroll-behavior:contain;touch-action:pan-y pinch-zoom}';
         document.head.appendChild(style);
+        
+        document.addEventListener('touchmove', function(e) {
+            if (!e.target.closest('#content-container')) {
+                e.preventDefault();
+            }
+        }, { passive: false });
 
-        document.addEventListener('touchstart', e => {
-            const x = e.touches[0].clientX;
-            if (x < 20 || x > window.innerWidth - 20) e.preventDefault();
-        }, {
-            passive: false
-        });
-
-        history.pushState(null, document.title, location.href);
-        window.addEventListener('popstate', () => history.pushState(null, document.title, location.href));
+        document.addEventListener('touchstart', function(e) {
+            if (window.pageYOffset === 0) {
+                window.scrollTo(0, 1);
+            }
+        }, { passive: false });
 
         // Change input id to prevent focus all the damn time
-        const input = document.getElementById("input");
-        input.id = "mud-input"
+        const input = document.querySelector('#input');
+        let allowFocus = false;
+        
+        input.addEventListener('mousedown', () => {
+            allowFocus = true;
+        });
+        
+        input.addEventListener('touchend', () => {
+            allowFocus = true;
+        });
+        
+        input.addEventListener('focus', (e) => {
+            if (!allowFocus) {
+                e.target.blur();
+            }
+            allowFocus = false;
+        }, true);
     }
 
     // Inject CSS and HTML
