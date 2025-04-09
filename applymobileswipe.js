@@ -3,7 +3,7 @@
     THRESHOLD: 70,
     ANGLE_THRESHOLD: 25,
     SCROLLBAR_WIDTH: 15,
-    INDICATOR_SIZE: 40
+    INDICATOR_SIZE: 20
   };
 
   const ARROWS = {
@@ -35,7 +35,7 @@
       borderRadius: "50%",
       pointerEvents: "none",
       transition: "all 0.1s ease-out",
-      fontSize: "30px",
+      fontSize: "20px",
       textAlign: "center",
       lineHeight: `${CONFIG.INDICATOR_SIZE}px`,
       color: "#fff",
