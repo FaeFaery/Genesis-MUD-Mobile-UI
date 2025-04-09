@@ -1183,10 +1183,6 @@ function initMapExtension() {
         const input = document.querySelector('#input');
         let allowFocus = false;
         
-        input.addEventListener('mousedown', () => {
-            allowFocus = true;
-        });
-        
         input.addEventListener('touchend', () => {
             allowFocus = true;
         });
