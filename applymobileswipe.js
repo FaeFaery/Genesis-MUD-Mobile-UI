@@ -165,7 +165,8 @@
       height: '100%',
       backgroundColor: 'rgba(200, 200, 200, 0.07)',
       zIndex: '0',
-      cursor: 'pointer'
+      cursor: 'pointer',
+      userSelect: 'none'
     });
     
     // Create the scrollbar thumb
@@ -178,7 +179,8 @@
       width: '100%',
       backgroundColor: 'rgba(150, 150, 150, 0.4)',
       borderRadius: '4px',
-      transition: 'opacity 0.2s'
+      transition: 'opacity 0.2s',
+      userSelect: 'none'
     });
     
     scrollbar.appendChild(thumb);
