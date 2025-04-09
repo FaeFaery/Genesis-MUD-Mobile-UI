@@ -98,9 +98,9 @@
   // Send command to the game
   function sendCommand(dir) {
     // Set input and dispatch Enter key
-    const input = document.getElementById('mud-input');
+    const input = document.getElementById('input');
     input.value = dir;
-    input.focus();
+    input.click();
     
     const enterEvent = new KeyboardEvent('keydown', {
       key: 'Enter',
