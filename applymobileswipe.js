@@ -193,7 +193,7 @@
       textAlign: "center",
       lineHeight: `${CONFIG.INDICATOR_SIZE}px`,
       color: "#fff",
-      zIndex: "2",
+      zIndex: "9999",
       opacity: "0.8"
     });
     
