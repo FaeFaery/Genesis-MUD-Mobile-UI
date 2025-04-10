@@ -1028,6 +1028,7 @@ function initMapExtension() {
             // Save the changes
             $("button:contains('Save')").click();
             $("#closesettings").click();
+            $("#input").blur();
         }
     };
 
