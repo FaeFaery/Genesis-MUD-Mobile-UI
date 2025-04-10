@@ -194,7 +194,7 @@
       lineHeight: `${CONFIG.INDICATOR_SIZE}px`,
       color: "#fff",
       zIndex: "2",
-      opacity: "1"
+      opacity: "0.8"
     });
     
     document.body.appendChild(indicator);
@@ -203,17 +203,21 @@
 
   function updateIndicator(x, y, dir) {
     if (!indicator) return;
-    
-    indicator.style.transform = `translate(${x - CONFIG.INDICATOR_SIZE}px, ${y - CONFIG.INDICATOR_SIZE}px)`;
+  
+    // Calculate offset based on direction
+    const offset = CONFIG.INDICATOR_SIZE * 0.75;
+    const offsetX = (dir.includes('e') ? offset : dir.includes('w') ? -offset : 0);
+    const offsetY = (dir.includes('s') || dir === 'd' ? offset : 
+                     dir.includes('n') || dir === 'u' ? -offset : 0);
+  
+    // Set position and appearance
+    indicator.style.transform = `translate(${x - CONFIG.INDICATOR_SIZE/2 + offsetX}px, ${y - CONFIG.INDICATOR_SIZE/2 + offsetY}px)`;
     indicator.textContent = ARROWS[dir] || "";
-    
-    if (dir) {
-      indicator.style.opacity = "1";
-      indicator.style.boxShadow = "0 0 10px rgba(255,255,255,0.7)";
-    } else {
-      indicator.style.opacity = "0";
-      indicator.style.boxShadow = "none";
-    }
+  
+    // Set visibility and effects
+    const hasDirection = !!dir;
+    indicator.style.opacity = hasDirection ? "1" : "0";
+    indicator.style.boxShadow = hasDirection ? "0 0 10px rgba(255,255,255,0.7)" : "none";
   }
 
   function removeIndicator() {
