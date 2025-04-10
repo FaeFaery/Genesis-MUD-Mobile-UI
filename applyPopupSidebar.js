@@ -1153,33 +1153,7 @@ function initMapExtension() {
 
         resizeObserver.observe(elements.mudOutput);
 
-        // Prevent refresh gestures because that's also annoying as hell.
-        const container = document.createElement('div');
-        container.id = 'content-container';
-
-        while (document.body.firstChild) {
-            container.appendChild(document.body.firstChild);
-        }
-
-        document.body.appendChild(container);
-
-        const style = document.createElement('style');
-        style.textContent = 'html,body{overscroll-behavior:contain;overflow:hidden;height:100%;margin:0;padding:0;position:fixed;width:100%;touch-action:pan-y pinch-zoom}#content-container{overflow-y:auto;height:100%;width:100%;overscroll-behavior:contain;touch-action:pan-y pinch-zoom}';
-        document.head.appendChild(style);
-        
-        document.addEventListener('touchmove', function(e) {
-            if (!e.target.closest('#content-container')) {
-                e.preventDefault();
-            }
-        }, { passive: false });
-
-        document.addEventListener('touchstart', function(e) {
-            if (window.pageYOffset === 0) {
-                window.scrollTo(0, 1);
-            }
-        }, { passive: false });
-
-        // Change input id to prevent focus all the damn time
+        // Prevent focus on #input all the damn time
         const input = document.querySelector('#input');
         let allowFocus = false;
         
