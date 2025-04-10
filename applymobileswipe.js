@@ -3,7 +3,7 @@
     THRESHOLD: 70,
     ANGLE_THRESHOLD: 25,
     SCROLLBAR_WIDTH: 15,
-    INDICATOR_SIZE: 20
+    INDICATOR_SIZE: 35
   };
 
   const ARROWS = {
@@ -189,7 +189,7 @@
       borderRadius: "50%",
       pointerEvents: "none",
       transition: "all 0.1s ease-out",
-      fontSize: "20px",
+      fontSize: "30px",
       textAlign: "center",
       lineHeight: `${CONFIG.INDICATOR_SIZE}px`,
       color: "#fff",
@@ -204,7 +204,7 @@
   function updateIndicator(x, y, dir) {
     if (!indicator) return;
     
-    indicator.style.transform = `translate(${x - CONFIG.INDICATOR_SIZE/2}px, ${y - CONFIG.INDICATOR_SIZE/2}px)`;
+    indicator.style.transform = `translate(${x - CONFIG.INDICATOR_SIZE}px, ${y - CONFIG.INDICATOR_SIZE}px)`;
     indicator.textContent = ARROWS[dir] || "";
     
     if (dir) {
