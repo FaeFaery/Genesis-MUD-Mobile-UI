@@ -23,99 +23,6 @@
   
   let indicator = null;
   
-  function createIndicator() {
-    if (indicator) removeIndicator();
-    
-    indicator = document.createElement("div");
-    Object.assign(indicator.style, {
-      position: "fixed",
-      width: `${CONFIG.INDICATOR_SIZE}px`,
-      height: `${CONFIG.INDICATOR_SIZE}px`,
-      background: "rgba(0,0,0,0.5)",
-      borderRadius: "50%",
-      pointerEvents: "none",
-      transition: "all 0.1s ease-out",
-      fontSize: "20px",
-      textAlign: "center",
-      lineHeight: `${CONFIG.INDICATOR_SIZE}px`,
-      color: "#fff",
-      zIndex: "2",
-      opacity: "1"
-    });
-    
-    document.body.appendChild(indicator);
-    return indicator;
-  }
-
-  function updateIndicator(x, y, dir) {
-    if (!indicator) return;
-    
-    indicator.style.transform = `translate(${x - CONFIG.INDICATOR_SIZE}px, ${y - CONFIG.INDICATOR_SIZE}px)`;
-    indicator.textContent = ARROWS[dir] || "";
-    
-    if (dir) {
-      indicator.style.opacity = "1";
-      indicator.style.boxShadow = "0 0 10px rgba(255,255,255,0.7)";
-    } else {
-      indicator.style.opacity = "0";
-      indicator.style.boxShadow = "none";
-    }
-  }
-
-  function removeIndicator() {
-    if (indicator) {
-      document.body.removeChild(indicator);
-      indicator = null;
-    }
-  }
-
-  function getDirection(dx, dy, isMultiTouch) {
-    // To detect two-finger swipe up and down
-    if (isMultiTouch) {
-      return dy < 0 ? "u" : "d";
-    }
-    
-    const distance = Math.sqrt(dx * dx + dy * dy);
-    if (distance < CONFIG.THRESHOLD) return "";
-    
-    const angle = Math.atan2(dy, dx) * (180 / Math.PI);
-    const t = CONFIG.ANGLE_THRESHOLD;
-    
-    // Detect which direction
-    if (Math.abs(angle) <= t) return "e";
-    if (Math.abs(angle) >= 180 - t) return "w";
-    if (Math.abs(angle - 90) <= t) return "s";
-    if (Math.abs(angle + 90) <= t) return "n";
-    
-    if (angle > 0 && angle < 90) return "se";
-    if (angle > 90 && angle < 180) return "sw";
-    if (angle < 0 && angle > -90) return "ne";
-    if (angle < -90 && angle > -180) return "nw";
-    
-    return "";
-  }
-
-  // Send command to the game
-  function sendCommand(dir) {
-    // Set input and dispatch Enter key
-    const input = document.getElementById('input');
-    input.value = dir;
-    input.click();
-    
-    const enterEvent = new KeyboardEvent('keydown', {
-      key: 'Enter',
-      code: 'Enter',
-      which: 13,
-      keyCode: 13,
-      bubbles: true,
-      cancelable: true
-    });
-    
-    input.dispatchEvent(enterEvent);
-    input.value = "";
-    input.blur();
-  }
-
   // Check if touch point is valid
   function overrideTouch(e) {
     const touch = e.touches[0] || e.changedTouches[0];
@@ -268,6 +175,99 @@
     // Return thumb to normal appearance
     const thumb = document.getElementById('mudScrollThumb');
     if (thumb) thumb.style.backgroundColor = 'rgba(150, 150, 150, 0.4)';
+  }
+
+  function createIndicator() {
+    if (indicator) removeIndicator();
+    
+    indicator = document.createElement("div");
+    Object.assign(indicator.style, {
+      position: "fixed",
+      width: `${CONFIG.INDICATOR_SIZE}px`,
+      height: `${CONFIG.INDICATOR_SIZE}px`,
+      background: "rgba(0,0,0,0.5)",
+      borderRadius: "50%",
+      pointerEvents: "none",
+      transition: "all 0.1s ease-out",
+      fontSize: "20px",
+      textAlign: "center",
+      lineHeight: `${CONFIG.INDICATOR_SIZE}px`,
+      color: "#fff",
+      zIndex: "2",
+      opacity: "1"
+    });
+    
+    document.body.appendChild(indicator);
+    return indicator;
+  }
+
+  function updateIndicator(x, y, dir) {
+    if (!indicator) return;
+    
+    indicator.style.transform = `translate(${x - CONFIG.INDICATOR_SIZE/2}px, ${y - CONFIG.INDICATOR_SIZE/2}px)`;
+    indicator.textContent = ARROWS[dir] || "";
+    
+    if (dir) {
+      indicator.style.opacity = "1";
+      indicator.style.boxShadow = "0 0 10px rgba(255,255,255,0.7)";
+    } else {
+      indicator.style.opacity = "0";
+      indicator.style.boxShadow = "none";
+    }
+  }
+
+  function removeIndicator() {
+    if (indicator) {
+      document.body.removeChild(indicator);
+      indicator = null;
+    }
+  }
+
+  function getDirection(dx, dy, isMultiTouch) {
+    // To detect two-finger swipe up and down
+    if (isMultiTouch) {
+      return dy < 0 ? "u" : "d";
+    }
+    
+    const distance = Math.sqrt(dx * dx + dy * dy);
+    if (distance < CONFIG.THRESHOLD) return "";
+    
+    const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+    const t = CONFIG.ANGLE_THRESHOLD;
+    
+    // Detect which direction
+    if (Math.abs(angle) <= t) return "e";
+    if (Math.abs(angle) >= 180 - t) return "w";
+    if (Math.abs(angle - 90) <= t) return "s";
+    if (Math.abs(angle + 90) <= t) return "n";
+    
+    if (angle > 0 && angle < 90) return "se";
+    if (angle > 90 && angle < 180) return "sw";
+    if (angle < 0 && angle > -90) return "ne";
+    if (angle < -90 && angle > -180) return "nw";
+    
+    return "";
+  }
+
+  // Send command to the game
+  function sendCommand(dir) {
+    // Set input and dispatch Enter key
+    const input = document.getElementById('input');
+    input.value = dir;
+    input.click();
+    
+    const enterEvent = new KeyboardEvent('keydown', {
+      key: 'Enter',
+      code: 'Enter',
+      which: 13,
+      keyCode: 13,
+      bubbles: true,
+      cancelable: true
+    });
+    
+    input.dispatchEvent(enterEvent);
+    input.value = "";
+    input.blur();
   }
 
   function onTouchStart(e) {
