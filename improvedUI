@@ -1,0 +1,63 @@
+// Cleaner Aliases and Triggers Format //
+$("a[href='#general']").remove();
+$("a[href='#triggers']").css({"border-left": "1px solid #999"});
+$(".tabs .content").css("position", "absolute");
+
+function setupSelectionViews() {
+  document.querySelectorAll('#aliases, #triggers').forEach(parent => {
+    const selection = parent.querySelector('.selection');
+    const data = parent.querySelector('.data');
+
+    if (!selection || !data) return;
+
+    selection.style.width = "calc(100% - 1px)";
+    data.style.width = "calc(100% - 1px)";
+    data.style.display = "none";
+
+    let closeIcon = parent.querySelector('.close-icon');
+    if (!closeIcon) {
+      closeIcon = document.createElement('span');
+      closeIcon.className = 'close-icon';
+      closeIcon.textContent = '✖';
+      Object.assign(closeIcon.style, {
+        position: 'absolute',
+        top: '6px',
+        right: '8px',
+        cursor: 'pointer',
+        fontSize: '14px',
+        fontWeight: 'bold',
+        display: 'none',
+        zIndex: '10',
+        color: '#fff',
+        backgroundColor: 'rgba(0, 0, 0, 0.6)',
+        padding: '2px 6px',
+        borderRadius: '4px',
+      });
+      parent.style.position = 'relative';
+      parent.appendChild(closeIcon);
+    }
+
+    const listItems = selection.querySelectorAll('.list > div');
+    listItems.forEach(item => {
+      item.addEventListener('click', () => {
+        selection.style.display = 'none';
+        data.style.display = 'block';
+        closeIcon.style.display = 'block';
+      });
+    });
+
+    closeIcon.addEventListener('click', () => {
+      data.style.display = 'none';
+      selection.style.display = 'block';
+      closeIcon.style.display = 'none';
+    });
+  });
+}
+
+const observer = new MutationObserver(() => {
+  setupSelectionViews(); // Run whenever .list changes
+});
+
+document.querySelectorAll('#aliases .list, #triggers .list').forEach(list => {
+  observer.observe(list, { childList: true });
+});
