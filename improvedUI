@@ -8,8 +8,6 @@ function setupSelectionViews() {
     const selection = parent.querySelector('.selection');
     const data = parent.querySelector('.data');
 
-    if (!selection || !data) return;
-
     selection.style.width = "calc(100% - 1px)";
     data.style.width = "calc(100% - 1px)";
     data.style.display = "none";
@@ -35,6 +33,8 @@ function setupSelectionViews() {
       });
       parent.style.position = 'relative';
       parent.appendChild(closeIcon);
+    } else if (closeIcon.style.display !== "none"){
+      closeIcon.click();
     }
 
     const listItems = selection.querySelectorAll('.list > div');
