@@ -3,6 +3,12 @@ $("a[href='#general']").remove();
 $("a[href='#triggers']").css({
     "border-left": "1px solid #999"
 });
+$("#settingscontent .filler").css({
+    "border-bottom": "1px solid #999",
+    "width": "calc(100% - 219px)",
+    "margin-left": "219px"
+});
+$("#settingscontent .idTabs a").width('100px');
 $(".tabs .content").css("position", "absolute");
 
 function setupSelectionViews() {
