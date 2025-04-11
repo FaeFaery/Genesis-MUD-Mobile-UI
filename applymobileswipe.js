@@ -214,7 +214,7 @@
     if (!indicator) return;
   
     // Calculate offset based on direction
-    const offset = CONFIG.INDICATOR_SIZE * 0.75;
+    const offset = CONFIG.INDICATOR_SIZE * 1.25;
     const offsetX = (dir.includes('e') ? offset : dir.includes('w') ? -offset : 0);
     const offsetY = (dir.includes('s') || dir === 'd' ? offset : 
                      dir.includes('n') || dir === 'u' ? -offset : 0);
