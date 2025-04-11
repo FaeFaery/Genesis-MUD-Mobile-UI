@@ -29,7 +29,7 @@ function initMapExtension() {
             document.fonts.ready.then(() => {
                 const nav = document.getElementById("popupnav-container");
                 if (nav) nav.style.display = "flex";
-                elements.mudOutput?.appendChild(Object.assign(document.createElement("div"), { textContent: "Mobile Popups have been loaded!", style: "color: lime; font-weight: bold;" }));
+                document.getElementById("mudoutput").appendChild(Object.assign(document.createElement("div"), { textContent: "Mobile Popups have been loaded!", style: "color: lime; font-weight: bold;" }));
             });
         } catch (error) {
             console.error('Failed to inject HTML:', error);
