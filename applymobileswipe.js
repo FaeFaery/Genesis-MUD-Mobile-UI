@@ -30,7 +30,7 @@
   document.head.appendChild(link);
 
   document.fonts.ready.then(() => {
-    document.getElementById("mudoutput")?.appendChild(Object.assign(document.createElement("div"), {
+    document.getElementById("mudoutput").appendChild(Object.assign(document.createElement("div"), {
       textContent: "Mobile Swipe Gestures have been loaded!",
       style: "color: lime; font-weight: bold;"
     }));
