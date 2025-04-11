@@ -22,7 +22,13 @@
   };
   
   let indicator = null;
-  
+
+  // Inject Google Font for arrow indicator
+  const link = document.createElement('link');
+  link.href = "https://fonts.googleapis.com/css2?family=B612:ital,wght@0,400;0,700;1,400;1,700&display=swap";
+  link.rel = "stylesheet";
+  document.head.appendChild(link);
+
   // Check if touch point is valid
   function overrideTouch(e) {
     const touch = e.touches[0] || e.changedTouches[0];
@@ -194,7 +200,10 @@
       lineHeight: `${CONFIG.INDICATOR_SIZE}px`,
       color: "#fff",
       zIndex: "9999",
-      opacity: "0.8"
+      opacity: "0.8",
+      fontFamily: "B612, sans-serif",
+      fontWeight: "400",
+      fontStyle: "normal"
     });
     
     document.body.appendChild(indicator);
