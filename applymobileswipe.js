@@ -29,6 +29,13 @@
   link.rel = "stylesheet";
   document.head.appendChild(link);
 
+  document.fonts.ready.then(() => {
+    document.getElementById("mudoutput")?.appendChild(Object.assign(document.createElement("div"), {
+      textContent: "Mobile Swipe Gestures have been loaded!",
+      style: "color: lime; font-weight: bold;"
+    }));
+  });
+
   // Check if touch point is valid
   function overrideTouch(e) {
     const touch = e.touches[0] || e.changedTouches[0];
