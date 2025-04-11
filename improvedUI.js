@@ -1,4 +1,4 @@
-// Cleaner Aliases and Triggers Format //
+// <3 Cleaner Aliases and Triggers Format <3 //
 $("a[href='#general']").remove();
 $("a[href='#triggers']").css({
     "border-left": "1px solid #999"
@@ -58,7 +58,7 @@ function setupSelectionViews() {
 }
 
 const observer = new MutationObserver(() => {
-    setupSelectionViews(); // Run whenever .list changes
+    setupSelectionViews();
 });
 
 document.querySelectorAll('#aliases .list, #triggers .list').forEach(list => {
@@ -66,3 +66,54 @@ document.querySelectorAll('#aliases .list, #triggers .list').forEach(list => {
         childList: true
     });
 });
+
+// <3 Prevent Device From Turning Off <3 //
+let wakeLock = null;
+let noSleep = null;
+
+// Load NoSleep.js from CDN
+function loadNoSleep(callback) {
+  const script = document.createElement('script');
+  script.src = "https://cdnjs.cloudflare.com/ajax/libs/nosleep/0.12.0/NoSleep.min.js";
+  script.onload = callback;
+  script.onerror = () => console.error("Failed to load NoSleep.js");
+  document.head.appendChild(script);
+}
+
+// Request Wake Lock
+async function requestWakeLock() {
+  if ("wakeLock" in navigator) {
+    try {
+      wakeLock = await navigator.wakeLock.request("screen");
+      wakeLock.addEventListener("release", () => {
+        console.log("Wake Lock released");
+      });
+      console.log("Wake Lock active");
+    } catch (err) {
+      console.error("Wake Lock failed:", err);
+      enableNoSleep(); // fallback if request fails
+    }
+  } else {
+    enableNoSleep(); // fallback if not supported
+  }
+}
+
+// Fallback using NoSleep.js
+function enableNoSleep() {
+  if (!noSleep) {
+    loadNoSleep(() => {
+      noSleep = new NoSleep();
+      noSleep.enable();
+      console.log("NoSleep.js enabled");
+    });
+  } else {
+    noSleep.enable();
+    console.log("NoSleep.js already loaded and enabled");
+  }
+}
+
+// Trigger on first user interaction (required by most APIs)
+document.addEventListener("click", () => {
+  requestWakeLock();
+}, { once: true });
+
