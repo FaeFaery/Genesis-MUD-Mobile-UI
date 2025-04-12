@@ -255,13 +255,14 @@
   }
 
   function getDirection(dx, dy, isMultiTouch) {
-    // To detect two-finger swipe up and down
+    // Verify that the distance is over the threshold
+    const distance = Math.sqrt(dx * dx + dy * dy);
+    if (distance < CONFIG.THRESHOLD) return "";
+    
+    // To detect two-finger swipe for up and down
     if (isMultiTouch) {
       return dy < 0 ? "u" : "d";
     }
-    
-    const distance = Math.sqrt(dx * dx + dy * dy);
-    if (distance < CONFIG.THRESHOLD) return "";
     
     const angle = Math.atan2(dy, dx) * (180 / Math.PI);
     const t = CONFIG.ANGLE_THRESHOLD;
