@@ -29,6 +29,11 @@
   link.rel = "stylesheet";
   document.head.appendChild(link);
 
+  // Inject keyframe animation for arrow indicator
+  const neonStyle = document.createElement('style');
+  neonStyle.textContent = `@keyframes neon{from{text-shadow:0 0 10px #fff,0 0 20px #fff,0 0 30px #fff,0 0 40px var(--neon-color),0 0 70px var(--neon-color),0 0 80px var(--neon-color),0 0 100px var(--neon-color),0 0 150px var(--neon-color)}to{text-shadow:0 0 5px #fff,0 0 10px #fff,0 0 15px #fff,0 0 20px var(--neon-color),0 0 35px var(--neon-color),0 0 40px var(--neon-color),0 0 50px var(--neon-color),0 0 75px var(--neon-color)}}`;
+  document.head.appendChild(neonStyle);
+
   document.fonts.ready.then(() => {
     document.getElementById("mudoutput").appendChild(Object.assign(document.createElement("div"), {
       textContent: "Mobile Swipe Gestures have been loaded!",
