@@ -6,18 +6,18 @@
     INDICATOR_SIZE: 45
   };
 
-  const ARROWS = {
-    n:  { symbol: "↑", color: "#ff4d4d" },
-    s:  { symbol: "↓", color: "#4da6ff" },
-    e:  { symbol: "→", color: "#ffa64d" },
-    w:  { symbol: "←", color: "#33cc33" },
-    ne: { symbol: "↗", color: "#ffff66" },
-    nw: { symbol: "↖", color: "#ff66cc" },
-    se: { symbol: "↘", color: "#cc99ff" },
-    sw: { symbol: "↙", color: "#66ffff" },
-    u:  { symbol: "⇧", color: "#66ffcc" },
-    d:  { symbol: "⇩", color: "#ff66ff" }
-  };
+const ARROWS = {
+  n:  { symbol: "↑",  color: "#ff0000" }, // Red
+  s:  { symbol: "↓",  color: "#0048ff" }, // Blue
+  e:  { symbol: "→",  color: "#ff8000" }, // Orange
+  w:  { symbol: "←",  color: "#00bd03" }, // Green
+  ne: { symbol: "↗",  color: "#eded02" }, // Yellow
+  nw: { symbol: "↖",  color: "#ff0099" }, // Pink
+  se: { symbol: "↘",  color: "#8802d6" }, // Purple
+  sw: { symbol: "↙",  color: "#02cccc" }, // Cyan
+  u:  { symbol: "⇧",  color: "#ff0000" }, // Red
+  d:  { symbol: "⇩",  color: "#0048ff" } // Blue
+};
 
   let state = {
     startX: 0,
@@ -32,7 +32,7 @@
 
   // Inject Google Font for arrow indicator
   const link = document.createElement('link');
-  link.href = "https://fonts.googleapis.com/css2?family=B612:ital,wght@0,400;0,700;1,400;1,700&display=swap";
+  link.href = "https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap";
   link.rel = "stylesheet";
   document.head.appendChild(link);
 
@@ -218,8 +218,8 @@
       color: "#fff",
       zIndex: "9999",
       opacity: "0.8",
-      fontFamily: "B612",
-      fontWeight: "400",
+      fontFamily: "Noto Sans JP",
+      fontWeight: "800",
       fontStyle: "normal"
     });
     
@@ -240,7 +240,7 @@
     // Set position and appearance
     indicator.style.transform = `translate(${x - CONFIG.INDICATOR_SIZE/2 + offsetX}px, ${y - CONFIG.INDICATOR_SIZE/2 + offsetY}px)`;
     indicator.textContent = arrow.symbol;
-    indicator.style.setProperty("--neon-color", info.color);
+    indicator.style.setProperty("--neon-color", arrow.color);
 
     // Set visibility
     const hasDirection = !!dir;
