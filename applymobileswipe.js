@@ -38,7 +38,7 @@
 
   // Inject keyframe animation for arrow indicator
   const neonStyle = document.createElement('style');
-  neonStyle.textContent = `@keyframes neon{from{text-shadow:0 0 10px #fff,0 0 20px #fff,0 0 30px #fff,0 0 40px var(--neon-color),0 0 70px var(--neon-color),0 0 80px var(--neon-color),0 0 100px var(--neon-color),0 0 150px var(--neon-color)}to{text-shadow:0 0 5px #fff,0 0 10px #fff,0 0 15px #fff,0 0 20px var(--neon-color),0 0 35px var(--neon-color),0 0 40px var(--neon-color),0 0 50px var(--neon-color),0 0 75px var(--neon-color)}}`;
+  neonStyle.textContent = `@keyframes neon-arrow{from{text-shadow:0 0 10px #fff,0 0 20px #fff,0 0 30px #fff,0 0 40px var(--neon-color),0 0 70px var(--neon-color),0 0 80px var(--neon-color),0 0 100px var(--neon-color),0 0 150px var(--neon-color)}to{text-shadow:0 0 5px #fff,0 0 10px #fff,0 0 15px #fff,0 0 20px var(--neon-color),0 0 35px var(--neon-color),0 0 40px var(--neon-color),0 0 50px var(--neon-color),0 0 75px var(--neon-color)}}`;
   document.head.appendChild(neonStyle);
 
   document.fonts.ready.then(() => {
@@ -211,14 +211,14 @@
       width: `${CONFIG.INDICATOR_SIZE}px`,
       height: `${CONFIG.INDICATOR_SIZE}px`,
       pointerEvents: "none",
-      transition: "neon 1.5s ease-in-out infinite alternate",
+      animation: "neon-arrow 1.5s ease-in-out infinite alternate",
       fontSize: "30px",
       textAlign: "center",
       lineHeight: `${CONFIG.INDICATOR_SIZE}px`,
       color: "#fff",
       zIndex: "9999",
       opacity: "0.8",
-      fontFamily: "B612, sans-serif",
+      fontFamily: "B612",
       fontWeight: "400",
       fontStyle: "normal"
     });
