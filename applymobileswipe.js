@@ -7,9 +7,16 @@
   };
 
   const ARROWS = {
-    n: "↑", s: "↓", e: "→", w: "←",
-    ne: "↗", nw: "↖", se: "↘", sw: "↙",
-    u: "⇧", d: "⇩"
+    n:  { symbol: "↑", color: "#ff4d4d" },
+    s:  { symbol: "↓", color: "#4da6ff" },
+    e:  { symbol: "→", color: "#ffa64d" },
+    w:  { symbol: "←", color: "#33cc33" },
+    ne: { symbol: "↗", color: "#ffff66" },
+    nw: { symbol: "↖", color: "#ff66cc" },
+    se: { symbol: "↘", color: "#cc99ff" },
+    sw: { symbol: "↙", color: "#66ffff" },
+    u:  { symbol: "⇧", color: "#66ffcc" },
+    d:  { symbol: "⇩", color: "#ff66ff" }
   };
 
   let state = {
@@ -203,10 +210,8 @@
       position: "fixed",
       width: `${CONFIG.INDICATOR_SIZE}px`,
       height: `${CONFIG.INDICATOR_SIZE}px`,
-      background: "rgba(0,0,0,0.5)",
-      borderRadius: "50%",
       pointerEvents: "none",
-      transition: "all 0.1s ease-out",
+      transition: "neon 1.5s ease-in-out infinite alternate",
       fontSize: "30px",
       textAlign: "center",
       lineHeight: `${CONFIG.INDICATOR_SIZE}px`,
@@ -230,15 +235,16 @@
     const offsetX = (dir.includes('e') ? offset : dir.includes('w') ? -offset : 0);
     const offsetY = (dir.includes('s') || dir === 'd' ? offset : 
                      dir.includes('n') || dir === 'u' ? -offset : 0);
+    const arrow = ARROWS[dir] || { symbol: "", color: "white" };
   
     // Set position and appearance
     indicator.style.transform = `translate(${x - CONFIG.INDICATOR_SIZE/2 + offsetX}px, ${y - CONFIG.INDICATOR_SIZE/2 + offsetY}px)`;
-    indicator.textContent = ARROWS[dir] || "";
-  
-    // Set visibility and effects
+    indicator.textContent = arrow.symbol;
+    indicator.style.setProperty("--neon-color", info.color);
+
+    // Set visibility
     const hasDirection = !!dir;
     indicator.style.opacity = hasDirection ? "1" : "0";
-    indicator.style.boxShadow = hasDirection ? "0 0 10px rgba(255,255,255,0.7)" : "none";
   }
 
   function removeIndicator() {
