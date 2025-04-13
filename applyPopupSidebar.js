@@ -1086,8 +1086,8 @@ function initMapExtension() {
         // Apply default dimensions
         elements.mobileNav.style.top = `${window.mobileNavTop}px`;
         elements.mobileNav.style.left = `${window.mobileNavLeft}px`;
-        elements.map.style.width = `${window.mapWidth}px`;
-        elements.chat.style.width = `${window.mapWidth}px`;
+        elements.map.style.width = `${Math.min(window.mapWidth, window.innerWidth - (parseInt(getComputedStyle(elements.mobileNav).left) || 0))}px`;
+        elements.chat.style.width = `${Math.min(window.mapWidth, window.innerWidth - (parseInt(getComputedStyle(elements.mobileNav).left) || 0))}px`;
         elements.map.style.height = `${window.mapHeight}px`;
         elements.chat.style.height = `${window.chatLength}px`;
 
