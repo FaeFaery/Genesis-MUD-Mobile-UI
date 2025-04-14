@@ -1,5 +1,5 @@
 function initMapExtension() {
-    // Inject minified CSS with one DOM operation
+    // Inject CSS with
     function injectMinifiedCSS() {
         try {
             const style = document.createElement('style');
@@ -10,7 +10,7 @@ function initMapExtension() {
         }
     }
 
-    // Inject HTML using createDocumentFragment for better performance
+    // Inject HTML 
     function injectMinifiedHTML() {
         try {
             const existingWrapper = document.getElementById("mobileNav-wrapper");
@@ -20,8 +20,6 @@ function initMapExtension() {
             container.id = "mobileNav-wrapper";
             container.style.zIndex = "0";
             container.style.position = "relative";
-
-            // Use innerHTML once for better performance
             container.innerHTML = `<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" /><div id="popupnav-container"><span class="settings-icon material-symbols-outlined">settings</span><span class='map-icon material-symbols-outlined'>explore</span><div class='chat-icon-container'><span class='chat-icon material-symbols-outlined'>chat_bubble</span></div></div><div id="mobile-nav"><div class='resizable popup-map'><div id="popup-buttons"><span class='exit-icon material-symbols-outlined'>close</span><span class='center-icon material-symbols-outlined'>center_focus_strong</span><div class='chat-icon-container'><span class='chat-icon material-symbols-outlined'>chat_bubble</span></div><span class="zoom-icon material-symbols-outlined">zoom_in</span></div><div class="zoom-controls"><button id="zoom-in" class="zoom-btn">+</button><input type="range" id="zoom-slider" class="zoom-slider" min="100" max="250" value="100" style="writing-mode: vertical-lr; direction: rtl"><button id="zoom-out" class="zoom-btn">−</button></div><div class='resizers'><canvas id='magicmap-canvas'></canvas><div class='resizer top-left'></div><div class='resizer top-right'></div><div class='resizer bottom-left'></div><div class='resizer bottom-right'></div></div></div><div class='resizable popup-chat'><div id="popup-buttons"><span class='exit-icon material-symbols-outlined' style="padding-top: 5px;">close</span><span class='map-icon material-symbols-outlined'>explore</span></div><div class='resizers'><div class='chat-content'></div><div class='resizer bottom-left'></div><div class='resizer bottom-right'></div></div></div></div><div class="popup-settings"><div class="sections-container"><div class="section"><div class="section-title">Map Settings</div><div class="input-rows"><div class="input-group"><label for="map-width">Width</label><input type="text" id="map-width" min="340"></div><div class="input-group"><label for="map-height" min="180">Height</label><input type="text" id="map-height"></div><div class="input-group"><label for="default-zoom">Default Zoom</label><input type="number" id="default-zoom" step="0.1" min="1" max="2.5"></div><div class="input-group"><label for="position-color">Position Color</label><input type="color" id="position-color"></div></div></div><div class="section"><div class="section-title">Chat Settings</div><div class="input-rows"><div class="input-group"><label for="text-size">Text Size</label><input type="text" id="text-size"></div><div class="input-group"><label for="chat-length">Chat Length</label><input type="text" id="chat-length" min="70"></div></div></div><div class="section"><div class="section-title">Popup Dimensions</div><div class="input-rows"><div class="input-group"><label for="position-x">Position X</label><input type="text" id="position-x" value="0px"></div><div class="input-group"><label for="position-y">Position Y</label><input type="text" id="position-y" value="0px"></div></div></div></div><div class="button-row"><div class="left-buttons"><button id="reset-button">Reset</button><button id="current-styling-button">Current Styles</button><button id="apply-button">Apply</button></div><div class="right-buttons"><button id="cancel-button">Cancel</button><button id="save-button">Save</button></div></div></div>`;
 
             document.body.appendChild(container);
@@ -78,9 +76,10 @@ function initMapExtension() {
     // DOM elements cache
     let elements = {};
     let utils = {
-        // Use a single text decoder for HTML entities
+        // Use a single text decoder for the map
         textDecoder: document.createElement("textarea"),
 
+        // Decode any ascii values from the map
         decodeHTML: function(html) {
             this.textDecoder.innerHTML = html;
             return this.textDecoder.value;
@@ -111,10 +110,7 @@ function initMapExtension() {
             return null;
         },
 
-        // Grab map contents
-        // Add a space in between player highlight and new line just in case
-        // Split into an array of map lines and isolate player highlight
-        // Exclude any empty objects
+        // Grab map contents and split in array for formatting html
         getMapContents: function() {
             if (!elements.magicMapElement) return [];
             const contents = elements.magicMapElement.innerHTML;
@@ -146,7 +142,6 @@ function initMapExtension() {
         }
     };
 
-    // Event Handlers, duh
     let eventHandlers = {
         handlePointerDown: function(e) {
             state.isDragging = true;
@@ -215,7 +210,6 @@ function initMapExtension() {
             const deltaX = (location.x - state.dragStart.x) * 0.07;
             const deltaY = (location.y - state.dragStart.y) * 0.07;
 
-            // Calculate potential new positions
             let newX = state.cameraOffset.x + deltaX;
             let newY = state.cameraOffset.y + deltaY;
 
@@ -243,13 +237,10 @@ function initMapExtension() {
             if (contents[0] === 'There is no map for this area' && !noMapText) {
                 elements.mapCanvas.style.display = "none";
                 const popupMap = elements.map;
-
-                // Create the text element only once
                 const noMapText = document.createElement("div");
                 noMapText.id = "noMapPlaceholder";
                 noMapText.textContent = "There is no map for this area";
 
-                // Apply styles with Object.assign
                 Object.assign(noMapText.style, {
                     color: "#d0d0d0",
                     fontFamily: "'Source Code Pro', sans-serif",
@@ -262,7 +253,6 @@ function initMapExtension() {
                     whiteSpace: "nowrap"
                 });
 
-                // Append to the parent
                 popupMap.appendChild(noMapText);
                 $(".center-icon").toggle(state.isPlayerSeen);
                 requestAnimationFrame(mapRendering.draw);
@@ -279,7 +269,7 @@ function initMapExtension() {
                 elements.mapCanvas.style.display = "block";
             }
 
-            // Clear canvas
+            // Reset map drawing to identity matrix
             elements.mapContext.setTransform(1, 0, 0, 1, 0, 0);
             elements.mapContext.clearRect(0, 0, elements.mapCanvas.width, elements.mapCanvas.height);
 
@@ -307,13 +297,11 @@ function initMapExtension() {
         drawMapContents: function(contents) {
             state.isPlayerSeen = false;
             elements.mapContext.fillStyle = "white";
-
-            // Cache the decoder and reuse
             for (let i = 0; i < contents.length; i++) {
                 if (contents[i] !== 'X') {
                     elements.mapContext.fillText(utils.decodeHTML(contents[i]), 0, 21 * (i + 1));
                 } else {
-                    // Handle when there is no highlight of player position
+                    // Handle as player seen (sometimes there isn't an X position on the map)
                     state.isPlayerSeen = true;
 
                     // Handle player position (colored X)
@@ -347,7 +335,6 @@ function initMapExtension() {
         }
     };
 
-    // UI controls, could you have guessed?
     let uiControls = {
         showMap: function() {
             elements.popupNav.style.display = "none";
@@ -388,7 +375,6 @@ function initMapExtension() {
             chatControls.initChatPopup();
             elements.chat.style.display = "block";
 
-            // Remove justOpened class with a small delay
             setTimeout(() => {
                 elements.chatContent.classList.remove("justOpened");
             }, 200);
@@ -422,7 +408,6 @@ function initMapExtension() {
         toggleSettings: function(event) {
             const settingsPopup = document.querySelector(".popup-settings");
 
-            // Toggle visibility of settings popup and settings icon
             settingsPopup.style.display = (settingsPopup.style.display === "block") ? "none" : "block";
             if (elements.map.style.display === "none") $(".map-icon:visible")[0].click();
             if (elements.chat.style.display === "none") $(".chat-icon:visible")[0].click();
@@ -441,7 +426,6 @@ function initMapExtension() {
             let originalWidth, originalHeight, originalX, originalY, originalMouseX, originalMouseY;
             let activeResizer = null;
 
-            // Define handlers within the correct scope
             function initResize(e) {
                 e.preventDefault();
                 activeResizer = e.target;
@@ -472,7 +456,6 @@ function initMapExtension() {
                 const deltaX = pageX - originalMouseX;
                 const deltaY = pageY - originalMouseY;
 
-                // Default values
                 let newWidth = originalWidth;
                 let newHeight = originalHeight;
                 let newX = originalX;
@@ -542,7 +525,6 @@ function initMapExtension() {
                 activeResizer = null;
             }
 
-            // Add event listeners to each resizer
             resizers.forEach(resizer => {
                 resizer.addEventListener("mousedown", initResize);
                 resizer.addEventListener("touchstart", initResize, {
@@ -582,7 +564,6 @@ function initMapExtension() {
                     target.onclick;
             };
 
-            // Mouse events
             element.addEventListener("mousedown", e => {
                 const target = e.target;
                 if (isClickable(target)) return;
@@ -615,7 +596,6 @@ function initMapExtension() {
                 element.style.cursor = "grab";
             });
 
-            // Touch events
             element.addEventListener("touchstart", e => {
                 const touch = e.touches[0];
                 const target = document.elementFromPoint(touch.clientX, touch.clientY);
@@ -658,7 +638,6 @@ function initMapExtension() {
         }
     };
 
-    // Chat-related functions
     let chatControls = {
         initChatPopup: function() {
             if (!elements.communication || !elements.chatContent) return;
@@ -666,9 +645,6 @@ function initMapExtension() {
             // Determine where new messages start
             const oldMessageCount = elements.chatContent.children.length;
             const newMessageCount = elements.communication.children.length;
-
-            // Use the most efficient approach - replaceAll is faster than regex in modern browsers
-            elements.chatContent.innerHTML = elements.communication.innerHTML.replaceAll(` class="hanging-indent"`, "");
 
             // Only add divider if there are unread messages and only if chat was just opened
             if (newMessageCount > oldMessageCount && elements.chatContent.classList.contains("justOpened")) {
@@ -683,6 +659,7 @@ function initMapExtension() {
 
                     firstUnreadMessage.parentNode.insertBefore(divider, firstUnreadMessage);
 
+                    // Scroll to where new messages start
                     setTimeout(() => {
                         divider.scrollIntoView({
                             behavior: "smooth", 
@@ -716,13 +693,11 @@ function initMapExtension() {
         }
     };
 
-    // Observer functions
     let observers = {
         observeChildChanges: function(targetId, callback) {
             const targetNode = document.getElementById(targetId);
             if (!targetNode) return;
 
-            // Create a single observer per target for better performance
             const observer = new MutationObserver(() => callback());
 
             // Observe if new elements are added or if text is changed
@@ -789,17 +764,17 @@ function initMapExtension() {
             if (chat.style.display === "none") chat.style.display = "block";
             if (map.style.display === "none") map.style.display = "block";
 
-            // Map Settings - would update according to .popup-map elements
+            // Map Settings
             document.querySelector('.popup-settings #default-zoom').value = zoom.value / 100;
             document.querySelector('.popup-settings #map-width').value = map.clientWidth;
             document.querySelector('.popup-settings #map-height').value = map.clientHeight;
             document.querySelector('.popup-settings #position-color').value = state.positionColor;
 
-            // Chat Settings - would update according to .chat-content and .popup-chat
+            // Chat Settings
             document.querySelector('.popup-settings #text-size').value = parseInt(getComputedStyle(chatContent).fontSize) || 0;
             document.querySelector('.popup-settings #chat-length').value = chat.clientHeight;
 
-            // Popup Dimensions - would update according to #mobile-nav
+            // Popup Dimensions
             document.querySelector('.popup-settings #position-x').value = parseInt(getComputedStyle(mobileNav).left) || 0;
             document.querySelector('.popup-settings #position-y').value = parseInt(getComputedStyle(mobileNav).top) || 0;
         },
@@ -817,7 +792,7 @@ function initMapExtension() {
             if (chat.style.display === "none") chat.style.display = "block";
             if (map.style.display === "none") map.style.display = "block";
 
-            // Map Settings - would update according to .popup-map elements
+            // Map Settings
             state.cameraZoom = document.querySelector('.popup-settings #default-zoom').value;
             zoom.value = document.querySelector('.popup-settings #default-zoom').value * 100;
             map.style.width = `${document.querySelector('.popup-settings #map-width').value}px`;
@@ -830,11 +805,11 @@ function initMapExtension() {
             canvas.style.height = `${document.querySelector('.popup-settings #map-height').value}px`;
             state.needsRedraw = true;
 
-            // Chat Settings - would update according to .chat-content and .popup-chat
+            // Chat Settings
             chatContent.style.fontSize = `${document.querySelector('.popup-settings #text-size').value}px`;
             chat.style.height = `${document.querySelector('.popup-settings #chat-length').value}px`;
 
-            // Popup Dimensions - would update according to #mobile-nav
+            // Popup Dimensions
             mobileNav.style.left = `${document.querySelector('.popup-settings #position-x').value}px`;
             mobileNav.style.top = `${document.querySelector('.popup-settings #position-y').value}px`;
 
@@ -855,6 +830,7 @@ function initMapExtension() {
                         return value >= min && value <= max;
                     }
                 },
+                
                 'map-width': {
                     element: document.querySelector('.popup-settings #map-width'),
                     validate: (value) => {
@@ -864,6 +840,7 @@ function initMapExtension() {
                         return value >= min && value <= max;
                     }
                 },
+                
                 'map-height': {
                     element: document.querySelector('.popup-settings #map-height'),
                     validate: (value) => {
@@ -873,6 +850,7 @@ function initMapExtension() {
                         return value >= min && value <= max;
                     }
                 },
+                
                 'chat-length': {
                     element: document.querySelector('.popup-settings #chat-length'),
                     validate: (value) => {
@@ -884,7 +862,7 @@ function initMapExtension() {
                 }
             };
 
-            // Perform validation
+            // Initialize validation
             let isValid = true;
             const errors = [];
 
@@ -892,6 +870,7 @@ function initMapExtension() {
             $(".popup-settings .invalid").removeClass("invalid")
             $(".popup-settings .error-message").remove();
 
+            // Validate each value
             Object.keys(validationRules).forEach(key => {
                 const rule = validationRules[key];
                 const value = parseFloat(rule.element.value);
@@ -946,7 +925,7 @@ function initMapExtension() {
                 mobileNavTop: document.querySelector('.popup-settings #position-y').value
             };
 
-            // Custom JSON stringify to preserve formatting in <applypops> alias
+            // Custom JSON stringify to preserve formatting in the webclient alias
             const formatSettings = (obj) => {
                 const entries = Object.entries(obj);
                 const formattedLines = entries.map(([key, value]) => {
@@ -1040,7 +1019,6 @@ function initMapExtension() {
         }
     };
 
-    // Initialize everything
     function initialize() {
         // Cache DOM elements
         elements = {
@@ -1155,7 +1133,7 @@ function initMapExtension() {
             document.querySelector('.popup-settings').style.display = "none";
         });
 
-        // Use ResizeObserver for better performance
+        // Use ResizeObserver to keep the icons in place
         const resizeObserver = new ResizeObserver(() => {
             utils.positionPopupNav();
         });
@@ -1185,7 +1163,7 @@ function initMapExtension() {
     // Apply bypass for continuous map updates
     foolSourceCode();
 
-    // Initialize with a small delay to ensure all elements are ready
+    // Initialize with a small delay (just in case)
     setTimeout(initialize, 100);
 }
 
