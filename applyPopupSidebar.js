@@ -646,6 +646,9 @@ function initMapExtension() {
             const oldMessageCount = elements.chatContent.children.length;
             const newMessageCount = elements.communication.children.length;
 
+            // Update popup chat content by cloning the innerHTML of #communication
+            elements.chatContent.innerHTML = elements.communication.innerHTML;
+
             // Only add divider if there are unread messages and only if chat was just opened
             if (newMessageCount > oldMessageCount && elements.chatContent.classList.contains("justOpened")) {
                 const firstUnreadMessage = elements.chatContent.children[oldMessageCount];
