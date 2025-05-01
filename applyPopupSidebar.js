@@ -1067,8 +1067,8 @@ function initMapExtension() {
         // Apply default dimensions
         elements.mobileNav.style.top = `${window.mobileNavTop}px`;
         elements.mobileNav.style.left = `${window.mobileNavLeft}px`;
-        elements.map.style.width = `${Math.min(window.mapWidth, window.innerWidth - (parseInt(getComputedStyle(elements.mobileNav).left) || 0))}px`;
-        elements.chat.style.width = `${Math.min(window.mapWidth, window.innerWidth - (parseInt(getComputedStyle(elements.mobileNav).left) || 0))}px`;
+        elements.map.style.width = `${Math.min(window.mapWidth, window.innerWidth + 5 -(parseInt(getComputedStyle(elements.mobileNav).left) || 0))}px`;
+        elements.chat.style.width = `${Math.min(window.mapWidth, window.innerWidth + 5 - (parseInt(getComputedStyle(elements.mobileNav).left) || 0))}px`;
         elements.map.style.height = `${window.mapHeight}px`;
         elements.chat.style.height = `${window.chatLength}px`;
 
@@ -1084,7 +1084,7 @@ function initMapExtension() {
         document.querySelector('.popup-settings #position-color').value = window.positionColor;
         state.positionColor = window.positionColor;
         document.querySelector('.popup-settings #default-zoom').value = window.defaultZoom;
-        document.querySelector('.popup-settings #map-width').max = window.innerWidth - (parseInt(getComputedStyle(elements.mobileNav).left) || 0);
+        document.querySelector('.popup-settings #map-width').max = window.innerWidth + 5 - (parseInt(getComputedStyle(elements.mobileNav).left) || 0);
         document.querySelector('.popup-settings #map-height').max = window.innerHeight - ((parseInt(getComputedStyle(elements.chat).height) || 0) + (parseInt(getComputedStyle(elements.chat).top) || 0));
         document.querySelector('.popup-settings #chat-length').max = window.innerHeight - ((parseInt(getComputedStyle(elements.map).height) || 0) + (parseInt(getComputedStyle(elements.map).top) || 0));
         settingsControls.update();
@@ -1145,17 +1145,17 @@ function initMapExtension() {
 
         // Prevent focus on #input all the damn time
         const input = document.querySelector('#input');
-        let allowFocus = false;
+        window.allowFocus = false;
         
         input.addEventListener('touchend', () => {
-            allowFocus = true;
+            window.allowFocus = true;
         });
         
         input.addEventListener('focus', (e) => {
-            if (!allowFocus) {
+            if (!window.allowFocus) {
                 e.target.blur();
             }
-            allowFocus = false;
+            window.allowFocus = false;
         }, true);
     }
 
