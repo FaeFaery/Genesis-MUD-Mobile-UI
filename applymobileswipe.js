@@ -95,7 +95,7 @@ const ARROWS = {
       right: '0',
       width: `${CONFIG.SCROLLBAR_WIDTH}px`,
       height: '100%',
-      backgroundColor: 'rgba(200, 200, 200, 0.07)',
+      backgroundColor: 'rgba(255, 255, 255, 0.4)',
       zIndex: '0',
       cursor: 'pointer',
       userSelect: 'none'
@@ -109,8 +109,8 @@ const ARROWS = {
       top: '0',
       right: '0',
       width: '100%',
-      backgroundColor: 'rgba(150, 150, 150, 0.4)',
-      borderRadius: '4px',
+      backgroundColor: 'rgba(0, 0, 0, 0.7)',
+      borderRadius: '8px',
       transition: 'opacity 0.2s',
       userSelect: 'none'
     });
@@ -161,7 +161,7 @@ const ARROWS = {
     thumb.style.top = `${thumbTop}px`;
     
     // Show/hide thumb based on scrollability
-    thumb.style.opacity = scrollRatio < 1 ? '0.4' : '0';
+    thumb.style.opacity = scrollRatio < 1 ? '0.7' : '0';
   }
   
   function onScrollbarTouchStart(e) {
@@ -173,7 +173,7 @@ const ARROWS = {
     
     // Highlight the thumb while scrolling
     const thumb = document.getElementById('mudScrollThumb');
-    if (thumb) thumb.style.backgroundColor = 'rgba(150, 150, 150, 0.8)';
+    if (thumb) thumb.style.backgroundColor = 'rgba(0, 0, 0, 0.9)';
   }
   
   function onScrollbarTouchMove(e) {
@@ -199,7 +199,7 @@ const ARROWS = {
     
     // Return thumb to normal appearance
     const thumb = document.getElementById('mudScrollThumb');
-    if (thumb) thumb.style.backgroundColor = 'rgba(150, 150, 150, 0.4)';
+    if (thumb) thumb.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
   }
 
   function createIndicator() {
