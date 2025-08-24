@@ -415,30 +415,57 @@
     // Observe window resize to update scrollbar (useful for split screen)
     window.addEventListener('resize', updateScrollbarThumb);
 
-    // Create the toggle button element
-    let $swipeIcon = $('<span class="swipe-icon material-symbols-outlined">swipe_down</span>');
+    //  Waits for an element to exist in the DOM and then executes a callback.
+    function waitForElement(selector) {
+        return new Promise(resolve => {
+            // Check if element already exists
+            if (document.querySelector(selector)) {
+                return resolve(document.querySelector(selector));
+            }
 
-    // Append the element to the container and map
-    $('#popupnav-container').append($swipeIcon.clone());
-    $('.popup-map > #popup-buttons').append($swipeIcon.clone());
-    $('#popup-buttons > .swipe-icon').css('margin-left', '0');
+            // If not, create an observer to watch for changes
+            const observer = new MutationObserver(mutations => {
+                if (document.querySelector(selector)) {
+                    resolve(document.querySelector(selector));
+                    observer.disconnect(); // Stop observing once found
+                }
+            });
 
-    $('.swipe-icon').on('click', function() {
-        // Toggle the gestures state
-        gesturesOn = !gesturesOn;
+            // Start observing the document body for added nodes
+            observer.observe(document.body, {
+                childList: true,
+                subtree: true
+            });
+        });
+    }
 
-        if (gesturesOn) {
-            $(window).on("touchstart.swipeGestures", onTouchStart);
-            $(window).on("touchmove.swipeGestures", onTouchMove);
-            $(window).on("touchend.swipeGestures", onTouchEnd);
-            $("#mudoutput").on("touchstart.swipeGestures touchmove.swipeGestures touchend.swipeGestures", onMudOutput);
+    waitForElement('#popupnav-container').then((containerElement) => {
 
-            $('.swipe-icon').css('color', '#5CE65C');
-        } else {
-            $(window).off(".swipeGestures");
-            $("#mudoutput").off(".swipeGestures");
-            $('.swipe-icon').css('color', '#ff4c4c');
-        }
+        // Create the toggle button element
+        let $swipeIcon = $('<span class="swipe-icon material-symbols-outlined">swipe_down</span>');
+
+        // Append the element to the container and map
+        $('#popupnav-container').append($swipeIcon.clone());
+        $('.popup-map > #popup-buttons').append($swipeIcon.clone());
+        $('#popup-buttons > .swipe-icon').css('margin-left', '0');
+
+        $('.swipe-icon').on('click', function() {
+            // Toggle the gestures state
+            gesturesOn = !gesturesOn;
+
+            if (gesturesOn) {
+                $(window).on("touchstart.swipeGestures", onTouchStart);
+                $(window).on("touchmove.swipeGestures", onTouchMove);
+                $(window).on("touchend.swipeGestures", onTouchEnd);
+                $("#mudoutput").on("touchstart.swipeGestures touchmove.swipeGestures touchend.swipeGestures", onMudOutput);
+
+                $('.swipe-icon').css('color', '#5CE65C'); // Green for 'on'
+            } else {
+                $(window).off(".swipeGestures");
+                $("#mudoutput").off(".swipeGestures");
+                $('.swipe-icon').css('color', '#ff4c4c'); // Red for 'off'
+            }
+        });
     });
 
     init();
